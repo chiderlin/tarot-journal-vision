@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { JournalEditor } from '@/components/JournalEditor';
 import { JournalList } from '@/components/JournalList';
+import { JournalCalendar } from '@/components/JournalCalendar';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { JournalEntry, Category, DEFAULT_CATEGORIES } from '@/types/tarot';
 import { Plus, BookOpen, Sparkles, TrendingUp } from 'lucide-react';
@@ -37,6 +38,18 @@ const Index = () => {
     
     setCurrentView('list');
     setEditingEntry(undefined);
+  };
+
+  const handleCreateEntryForDate = (date: string) => {
+    const newEntry: Partial<JournalEntry> = {
+      title: '',
+      content: '',
+      category: '綜合',
+      date: `${date}T${new Date().toTimeString().slice(0, 8)}`,
+      cards: [],
+    };
+    setEditingEntry(newEntry as JournalEntry);
+    setCurrentView('create');
   };
 
   const handleEditEntry = (entry: JournalEntry) => {
@@ -174,6 +187,14 @@ const Index = () => {
           categories={categories}
           onEdit={handleEditEntry}
           onDelete={handleDeleteEntry}
+        />
+
+        {/* Calendar */}
+        <JournalCalendar
+          entries={entries}
+          categories={categories}
+          onCreateEntry={handleCreateEntryForDate}
+          onEditEntry={handleEditEntry}
         />
 
         {entries.length === 0 && (
