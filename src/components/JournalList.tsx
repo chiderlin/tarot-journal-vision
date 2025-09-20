@@ -173,7 +173,7 @@ export const JournalList: React.FC<JournalListProps> = ({
                   {/* Content preview */}
                   <div className="prose prose-sm max-w-none text-foreground">
                     <div className="leading-relaxed">
-                      {truncateContent(entry.content.replace(/#[a-zA-Z]+(-reversed)?/g, ''))}
+                      {parseTarotSyntax(truncateContent(entry.content))}
                     </div>
                   </div>
                 </CardContent>
