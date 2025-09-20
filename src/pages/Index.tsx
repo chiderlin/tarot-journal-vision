@@ -74,7 +74,7 @@ const Index = () => {
 
   if (currentView === 'create' || currentView === 'edit') {
     return (
-      <div className="min-h-screen stars-bg p-4">
+      <div className="min-h-screen simple-bg p-4">
         <div className="container mx-auto py-8">
           <JournalEditor
             entry={editingEntry}
@@ -88,11 +88,11 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen stars-bg">
+    <div className="min-h-screen simple-bg">
       <div className="container mx-auto p-4 space-y-8">
         {/* Header */}
         <div className="text-center py-12">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold mb-4 text-primary">
             <Sparkles className="inline w-12 h-12 mr-4 text-primary" />
             塔羅日記
           </h1>
@@ -100,10 +100,9 @@ const Index = () => {
             記錄你的塔羅旅程，用 # 語法輕鬆插入牌卡圖片
           </p>
           <Button 
-            variant="mystical" 
+            variant="default" 
             size="lg"
             onClick={() => setCurrentView('create')}
-            className="shadow-lg hover:shadow-xl transform hover:scale-105"
           >
             <Plus className="w-5 h-5 mr-2" />
             開始新的日記
@@ -185,7 +184,7 @@ const Index = () => {
               記錄你的塔羅解讀、靈感和成長。使用 # 語法快速插入牌卡圖片，讓你的日記更加生動。
             </p>
             <Button 
-              variant="mystical" 
+              variant="default" 
               size="lg"
               onClick={() => setCurrentView('create')}
             >

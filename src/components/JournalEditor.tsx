@@ -132,44 +132,61 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
             </label>
             
             {!showPreview ? (
-              <div className="relative">
-                <Textarea
-                  ref={textareaRef}
-                  value={content}
-                  onChange={handleTextareaChange}
-                  placeholder="開始記錄你的塔羅日記... 使用 #fool 插入愚人牌，#fool-reverse 插入逆位愚人牌"
-                  className="min-h-[300px] bg-background/50 resize-none"
-                />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="relative">
+                  <Textarea
+                    ref={textareaRef}
+                    value={content}
+                    onChange={handleTextareaChange}
+                    placeholder="開始記錄你的塔羅日記... 使用 #fool 插入愚人牌，#fool-reverse 插入逆位愚人牌"
+                    className="min-h-[300px] bg-background/50 resize-none"
+                  />
+                  
+                  {showSuggestions && (
+                    <Card className="absolute top-full left-0 right-0 z-10 mt-1 max-h-48 overflow-y-auto">
+                      <CardContent className="p-2">
+                        <div className="text-xs text-muted-foreground mb-2">可用的塔羅牌:</div>
+                        <div className="grid grid-cols-2 gap-1">
+                          {availableCards.map((cardName) => (
+                            <div key={cardName} className="space-y-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="w-full justify-start text-xs h-auto p-1"
+                                onClick={() => insertCardSyntax(cardName)}
+                              >
+                                #{cardName}
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="w-full justify-start text-xs h-auto p-1 text-destructive"
+                                onClick={() => insertCardSyntax(cardName, true)}
+                              >
+                                #{cardName}-reverse
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
                 
-                {showSuggestions && (
-                  <Card className="absolute top-full left-0 right-0 z-10 mt-1 max-h-48 overflow-y-auto">
-                    <CardContent className="p-2">
-                      <div className="text-xs text-muted-foreground mb-2">可用的塔羅牌:</div>
-                      <div className="grid grid-cols-2 gap-1">
-                        {availableCards.map((cardName) => (
-                          <div key={cardName} className="space-y-1">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-full justify-start text-xs h-auto p-1"
-                              onClick={() => insertCardSyntax(cardName)}
-                            >
-                              #{cardName}
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-full justify-start text-xs h-auto p-1 text-destructive"
-                              onClick={() => insertCardSyntax(cardName, true)}
-                            >
-                              #{cardName}-reverse
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+                {/* Real-time preview */}
+                <div className="min-h-[300px] p-4 border rounded-md bg-muted/30 overflow-auto">
+                  <div className="text-sm font-medium mb-2 text-muted-foreground">即時預覽</div>
+                  <div className="prose prose-sm max-w-none text-foreground">
+                    {content.split('\n').map((line, index) => (
+                      <p key={index} className="mb-2 leading-relaxed">
+                        {parseTarotSyntax(line)}
+                      </p>
+                    ))}
+                    {!content && (
+                      <p className="text-muted-foreground italic">開始輸入以查看預覽...</p>
+                    )}
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="min-h-[300px] p-4 border rounded-md bg-background/30 overflow-auto">
@@ -188,7 +205,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
             <Button variant="outline" onClick={onCancel}>
               取消
             </Button>
-            <Button variant="mystical" onClick={handleSave}>
+            <Button variant="default" onClick={handleSave}>
               <Save className="w-4 h-4 mr-2" />
               儲存日記
             </Button>
