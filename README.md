@@ -1,73 +1,51 @@
-# Welcome to your Lovable project
+# Tarot Journal Vision (塔羅日記)
 
-## Project info
+一個現代化的塔羅牌日記網頁應用程式，讓使用者可以記錄每日的抽牌、撰寫心得並透過視覺化的方式回顧。
 
-**URL**: https://lovable.dev/projects/fee4ceb5-9279-4487-a588-629b5a41ec4e
+TODO
 
-## How can I edit this code?
+- 完成每個牌的基本解釋
+- 不同主題對不同主題的牌有相對應解釋(LLM)
+- 更多可以分析的內容
 
-There are several ways of editing your application.
+## ✨ 功能特色
 
-**Use Lovable**
+- **每日抽牌與記錄**: 輕鬆記錄你的每日塔羅牌，並寫下你的想法與感受。
+- **日記編輯器**: 提供一個功能豐富的編輯器來撰寫和格式化你的日記內容。
+- **日曆視圖**: 透過日曆快速瀏覽過去的抽牌記錄與日記。
+- **塔羅牌庫**: 內建完整的偉特塔羅牌圖庫，方便查閱。
+- **響應式設計**: 在桌面和行動裝置上都有良好的使用體驗。
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/fee4ceb5-9279-4487-a588-629b5a41ec4e) and start prompting.
+## 技術棧
 
-Changes made via Lovable will be committed automatically to this repo.
+- **前端框架**: [React](https://react.dev/)
+- **建構工具**: [Vite](https://vitejs.dev/)
+- **程式語言**: [TypeScript](https://www.typescriptlang.org/)
+- **CSS 框架**: [Tailwind CSS](https://tailwindcss.com/)
+- **UI 元件庫**: [shadcn/ui](https://ui.shadcn.com/)
+- **路由**: [React Router](https://reactrouter.com/)
+- **表單處理**: [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/)
+- **非同步狀態管理**: [TanStack Query](https://tanstack.com/query)
 
-**Use your preferred IDE**
+## 🚀 快速開始
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1.  **安裝依賴**
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+    ```bash
+    npm install
+    ```
 
-Follow these steps:
+2.  **啟動本地開發伺服器**
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+    ```bash
+    npm run dev
+    ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+3.  在瀏覽器中打開 Vite 提供的本地網址 (通常是 `http://localhost:5173`)。
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 📜 可用腳本
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/fee4ceb5-9279-4487-a588-629b5a41ec4e) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- `npm run dev`: 在開發模式下啟動應用程式。
+- `npm run build`: 將應用程式打包成生產環境的靜態檔案。
+- `npm run lint`: 執行 ESLint 檢查程式碼風格。
+- `npm run preview`: 在本地預覽生產環境的打包結果。
