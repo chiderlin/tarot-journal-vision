@@ -41,7 +41,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       title: title || '無標題日記',
       content,
       category,
-      date: new Date().toISOString().split('T')[0],
+      date: entry?.date || new Date().toISOString().split('T')[0],
       cards,
     });
   };
@@ -173,8 +173,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                   )}
                 </div>
                 
-                {/* Real-time preview */}
-                <div className="min-h-[300px] p-4 border rounded-md bg-muted/30 overflow-auto">
+                {/* Real-time preview */}                <div className="min-h-[300px] p-4 border rounded-md bg-muted/30 overflow-auto">
                   <div className="text-sm font-medium mb-2 text-muted-foreground">即時預覽</div>
                   <div className="prose prose-sm max-w-none text-foreground">
                     {content.split('\n').map((line, index) => (
@@ -213,8 +212,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
         </CardContent>
       </Card>
 
-      {/* Quick card reference */}
-      <Card>
+      {/* Quick card reference */}      <Card>
         <CardHeader>
           <CardTitle className="text-lg">快速參考</CardTitle>
         </CardHeader>
