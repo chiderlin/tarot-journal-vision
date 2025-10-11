@@ -1,8 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import {
   Select,
   SelectContent,
@@ -17,7 +19,7 @@ import {
   DEFAULT_CATEGORIES,
   TAROT_CARDS,
 } from '@/types/tarot';
-import { Save, Eye, EyeOff } from 'lucide-react';
+import { Save, Eye, EyeOff, Sparkles, Loader2 } from 'lucide-react';
 
 interface JournalEditorProps {
   entry?: JournalEntry;
@@ -40,7 +42,10 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
   const [showPreview, setShowPreview] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [cursorPosition, setCursorPosition] = useState(0);
+  const [aiInterpretation, setAiInterpretation] = useState('');
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { toast } = useToast();
 
   // Extract card names from content
   const extractCards = (text: string): string[] => {
@@ -93,6 +98,45 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
         );
       }
     }, 0);
+  };
+
+  const handleAIInterpretation = async () => {
+    const cards = extractCards(content);
+    
+    if (cards.length === 0) {
+      toast({
+        title: '無法解牌',
+        description: '請先在內容中添加塔羅牌標籤（例如：#fool, #magician）',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsLoadingAI(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('tarot-interpretation', {
+        body: { cards, category },
+      });
+
+      if (error) throw error;
+
+      if (data?.interpretation) {
+        setAiInterpretation(data.interpretation);
+        toast({
+          title: 'AI 解牌完成',
+          description: '已生成塔羅牌解析建議',
+        });
+      }
+    } catch (error) {
+      console.error('AI interpretation error:', error);
+      toast({
+        title: '解牌失敗',
+        description: error instanceof Error ? error.message : '請稍後再試',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoadingAI(false);
+    }
   };
 
   const availableCards = Object.keys(TAROT_CARDS);
@@ -230,19 +274,48 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
             )}
           </div>
 
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={onCancel}>
-              取消
-            </Button>
+          <div className="flex justify-between items-center gap-2">
             <Button
-              className="bg-purple-700 hover:bg-purple-800"
-              variant="default"
-              onClick={handleSave}
+              variant="outline"
+              onClick={handleAIInterpretation}
+              disabled={isLoadingAI || extractCards(content).length === 0}
+              className="border-purple-500 text-purple-700 hover:bg-purple-50"
             >
-              <Save className="w-4 h-4 mr-2" />
-              儲存日記
+              {isLoadingAI ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Sparkles className="w-4 h-4 mr-2" />
+              )}
+              AI 解牌建議
             </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={onCancel}>
+                取消
+              </Button>
+              <Button
+                className="bg-purple-700 hover:bg-purple-800"
+                variant="default"
+                onClick={handleSave}
+              >
+                <Save className="w-4 h-4 mr-2" />
+                儲存日記
+              </Button>
+            </div>
           </div>
+
+          {aiInterpretation && (
+            <Card className="bg-purple-50/50 border-purple-200">
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2 text-purple-700">
+                  <Sparkles className="w-4 h-4" />
+                  AI 解牌建議
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-foreground/90 whitespace-pre-wrap">
+                {aiInterpretation}
+              </CardContent>
+            </Card>
+          )}
         </CardContent>
       </Card>
       {/* Quick card reference */}{' '}
