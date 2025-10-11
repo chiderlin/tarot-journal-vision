@@ -1,16 +1,25 @@
 import React, { useState, useMemo } from 'react';
-import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { JournalEntry } from '@/types/tarot';
-import { format, isSameDay } from 'date-fns';
-import { Plus, Edit, Trash2, Calendar as CalendarIcon } from 'lucide-react';
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
+  format,
+  isSameDay,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  startOfWeek,
+  endOfWeek,
+  addMonths,
+  subMonths,
+} from 'date-fns';
+import { Plus, Edit, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { parseTarotSyntax } from './TarotCardRenderer';
 
 interface CalendarViewProps {
@@ -26,138 +35,216 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   onEntryEdit,
   onEntryDelete,
 }) => {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date()
-  );
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const daysWithEntries = useMemo(() => {
-    const dates = new Set<string>();
-    entries.forEach((entry) => {
-      const entryDate = new Date(entry.date + 'T00:00:00');
-      dates.add(format(entryDate, 'yyyy-MM-dd'));
-    });
-    return Array.from(dates).map((dateStr) => new Date(dateStr + 'T00:00:00'));
-  }, [entries]);
+  const calendarDays = useMemo(() => {
+    const monthStart = startOfMonth(currentMonth);
+    const monthEnd = endOfMonth(currentMonth);
+    const calendarStart = startOfWeek(monthStart);
+    const calendarEnd = endOfWeek(monthEnd);
 
-  const modifiers = {
-    hasEntry: daysWithEntries,
+    return eachDayOfInterval({ start: calendarStart, end: calendarEnd });
+  }, [currentMonth]);
+
+  const getEntriesForDate = (date: Date) => {
+    return entries.filter((entry) =>
+      isSameDay(new Date(entry.date + 'T00:00:00'), date)
+    );
   };
 
   const entriesForSelectedDate = useMemo(() => {
     if (!selectedDate) return [];
-    return entries.filter((entry) =>
-      isSameDay(new Date(entry.date + 'T00:00:00'), selectedDate)
-    );
+    return getEntriesForDate(selectedDate);
   }, [entries, selectedDate]);
 
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+    setIsDialogOpen(true);
+  };
+
+  const handleAddEntry = () => {
+    if (selectedDate) {
+      onDateSelect(selectedDate);
+      setIsDialogOpen(false);
+    }
+  };
+
+  const isCurrentMonth = (date: Date) => {
+    return date.getMonth() === currentMonth.getMonth();
+  };
+
+  const isToday = (date: Date) => {
+    return isSameDay(date, new Date());
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
-      {/* Left Column: Calendar */}
-      <div className="lg:col-span-1 flex justify-center">
-        <Card>
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={setSelectedDate}
-            modifiers={modifiers}
-            components={{
-              DayContent: (props) => {
-                const isModified = modifiers.hasEntry.some((date) =>
-                  isSameDay(props.date, date)
-                );
-                return (
-                  <div className="relative flex items-center justify-center h-full w-full">
-                    {props.date.getDate()}
-                    {isModified && (
-                      <span className="absolute bottom-1 w-1.5 h-1.5 bg-primary rounded-full bg-black"></span>
-                    )}
-                  </div>
-                );
-              },
-            }}
-            className="w-full"
-          />
-        </Card>
+    <div className="space-y-4">
+      {/* Calendar Header */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold">
+          {format(currentMonth, 'yyyy年 M月')}
+        </h2>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setCurrentMonth(new Date())}
+          >
+            今天
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
-      {/* Right Column: Day Details */}
-
-      <div className="space-y-4 col-span-2">
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">
-            {selectedDate ? format(selectedDate, 'M月d日') : '請選擇日期'}
-          </h2>
-
-          {/* 限制篇數，一天最多五篇，把+新增關掉 */}
-          <p className="text-gray-700 italic">一日最多五篇</p>
-          {entriesForSelectedDate.length < 5 && (
-            <Button
-              className="bg-purple-800 hover:bg-purple-700"
-              onClick={() => onDateSelect(selectedDate || new Date())}
+      {/* Calendar Grid */}
+      <Card className="overflow-hidden">
+        <div className="bg-muted/50 grid grid-cols-7 border-b">
+          {['日', '一', '二', '三', '四', '五', '六'].map((day) => (
+            <div
+              key={day}
+              className="p-3 text-center text-sm font-medium text-muted-foreground"
             >
-              <Plus className="w-4 h-4 mr-2" /> 新增
-            </Button>
-          )}
-        </div>
-
-        <div className="space-y-4 min-h-[400px]">
-          {selectedDate ? (
-            entriesForSelectedDate.length > 0 ? (
-              <Accordion type="single" collapsible className="w-full">
-                {entriesForSelectedDate.map((entry) => (
-                  <AccordionItem value={entry.id} key={entry.id}>
-                    <AccordionTrigger>
-                      <div className="flex justify-between items-center w-full pr-4">
-                        <p className="font-semibold truncate text-left">
-                          {entry.title}
-                        </p>
-                        <div
-                          className="flex gap-1 flex-shrink-0"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => onEntryEdit(entry)}
-                            className="h-8 w-8"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => onEntryDelete(entry.id)}
-                            className="h-8 w-8 text-destructive hover:text-destructive"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="prose prose-sm max-w-none text-foreground">
-                        {entry.content.split('\n').map((line, index) => (
-                          <div key={index}>{parseTarotSyntax(line)}</div>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed rounded-lg p-8">
-                <CalendarIcon className="w-12 h-12 mb-4" />
-                <p className="font-bold">這天沒有日記</p>
-                <p className="text-sm">點擊上方按鈕來新增一篇吧！</p>
-              </div>
-            )
-          ) : (
-            <div className="h-full flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed rounded-lg p-8">
-              <p>請從左側選擇一天來查看日記。</p>
+              {day}
             </div>
-          )}
+          ))}
         </div>
-      </div>
+        <div className="grid grid-cols-7">
+          {calendarDays.map((day, index) => {
+            const dayEntries = getEntriesForDate(day);
+            const isOtherMonth = !isCurrentMonth(day);
+            const isTodayDate = isToday(day);
+
+            return (
+              <div
+                key={index}
+                onClick={() => handleDateClick(day)}
+                className={`min-h-[120px] border-b border-r p-2 cursor-pointer hover:bg-muted/30 transition-colors ${
+                  isOtherMonth ? 'bg-muted/10' : ''
+                } ${index % 7 === 6 ? 'border-r-0' : ''} ${
+                  index >= calendarDays.length - 7 ? 'border-b-0' : ''
+                }`}
+              >
+                <div className="flex justify-between items-start mb-1">
+                  <span
+                    className={`text-sm font-medium ${
+                      isOtherMonth
+                        ? 'text-muted-foreground/50'
+                        : isTodayDate
+                        ? 'bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center'
+                        : ''
+                    }`}
+                  >
+                    {format(day, 'd')}
+                  </span>
+                </div>
+                <div className="space-y-1">
+                  {dayEntries.slice(0, 3).map((entry) => (
+                    <div
+                      key={entry.id}
+                      className="text-xs p-1.5 bg-primary/10 rounded truncate hover:bg-primary/20 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEntryEdit(entry);
+                      }}
+                    >
+                      {entry.title}
+                    </div>
+                  ))}
+                  {dayEntries.length > 3 && (
+                    <div className="text-xs text-muted-foreground pl-1.5">
+                      +{dayEntries.length - 3} 更多
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
+      {/* Date Detail Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedDate && format(selectedDate, 'yyyy年 M月d日')}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <p className="text-sm text-muted-foreground">
+                {entriesForSelectedDate.length}/5 篇日記
+              </p>
+              {entriesForSelectedDate.length < 5 && (
+                <Button onClick={handleAddEntry}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  新增日記
+                </Button>
+              )}
+            </div>
+
+            {entriesForSelectedDate.length > 0 ? (
+              <div className="space-y-3">
+                {entriesForSelectedDate.map((entry) => (
+                  <Card key={entry.id} className="p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-semibold">{entry.title}</h3>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            onEntryEdit(entry);
+                            setIsDialogOpen(false);
+                          }}
+                          className="h-8 w-8"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => onEntryDelete(entry.id)}
+                          className="h-8 w-8 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="text-sm space-y-1">
+                      {entry.content.split('\n').slice(0, 3).map((line, index) => (
+                        <div key={index}>{parseTarotSyntax(line)}</div>
+                      ))}
+                      {entry.content.split('\n').length > 3 && (
+                        <p className="text-muted-foreground italic">...</p>
+                      )}
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+                <p className="text-sm">這天還沒有日記</p>
+                <p className="text-xs mt-2">點擊上方按鈕來新增一篇吧！</p>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
