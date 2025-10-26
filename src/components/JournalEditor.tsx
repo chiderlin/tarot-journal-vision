@@ -68,10 +68,12 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
     });
   };
 
+  // 顯示建議清單並追蹤游標位置
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
     setContent(newContent);
     setCursorPosition(e.target.selectionStart);
+    console.log('Cursor position:', e.target.selectionStart);
 
     // Show suggestions if typing # followed by letters
     const textBeforeCursor = newContent.substring(0, e.target.selectionStart);
@@ -81,8 +83,10 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 
   const insertCardSyntax = (cardName: string, isReverse: boolean = false) => {
     const syntax = `#${cardName}${isReverse ? '-reverse' : ''}`;
+
+    // 解決插入語法有兩個#的問題
     const newContent =
-      content.substring(0, cursorPosition) +
+      content.substring(0, cursorPosition - 1) +
       syntax +
       content.substring(cursorPosition);
     setContent(newContent);
@@ -100,9 +104,10 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
     }, 0);
   };
 
+  // AI 解牌功能
   const handleAIInterpretation = async () => {
     const cards = extractCards(content);
-    
+
     if (cards.length === 0) {
       toast({
         title: '無法解牌',
@@ -114,9 +119,12 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 
     setIsLoadingAI(true);
     try {
-      const { data, error } = await supabase.functions.invoke('tarot-interpretation', {
-        body: { cards, category },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'tarot-interpretation',
+        {
+          body: { cards, category },
+        }
+      );
 
       if (error) throw error;
 

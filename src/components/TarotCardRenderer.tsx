@@ -1,89 +1,89 @@
 import React from 'react';
 import { TAROT_CARDS } from '@/types/tarot';
 // import all the tarot card images
-import tarotFool from '@/assets/cards/major_arcana/fool.png';
-import tarotMagician from '@/assets/cards/major_arcana/magician.png';
-import tarotHighPriestess from '@/assets/cards/major_arcana/priestess.png';
-import tarotEmpress from '@/assets/cards/major_arcana/empress.png';
-import tarotEmperor from '@/assets/cards/major_arcana/emperor.png';
-import tarotHierophant from '@/assets/cards/major_arcana/hierophant.png';
-import tarotLovers from '@/assets/cards/major_arcana/lovers.png';
-import tarotChariot from '@/assets/cards/major_arcana/chariot.png';
-import tarotJustice from '@/assets/cards/major_arcana/justice.png';
-import tarotHermit from '@/assets/cards/major_arcana/hermit.png';
-import tarotWheelOfFortune from '@/assets/cards/major_arcana/fortune.png';
-import tarotStrength from '@/assets/cards/major_arcana/strength.png';
-import tarotHangedMan from '@/assets/cards/major_arcana/hanged.png';
-import tarotTemperance from '@/assets/cards/major_arcana/temperance.png';
-import tarotDevil from '@/assets/cards/major_arcana/devil.png';
-import tarotTower from '@/assets/cards/major_arcana/tower.png';
-import tarotSun from '@/assets/cards/major_arcana/sun.png';
-import tarotJudgement from '@/assets/cards/major_arcana/judgement.png';
-import tarotWorld from '@/assets/cards/major_arcana/world.png';
-import tarotDeath from '@/assets/cards/major_arcana/death.png';
-import tarotStar from '@/assets/cards/major_arcana/star.png';
-import tarotMoon from '@/assets/cards/major_arcana/moon.png';
+import tarotFool from '@/assets/tarot/major_arcana/fool.png';
+import tarotMagician from '@/assets/tarot/major_arcana/magician.png';
+import tarotHighPriestess from '@/assets/tarot/major_arcana/priestess.png';
+import tarotEmpress from '@/assets/tarot/major_arcana/empress.png';
+import tarotEmperor from '@/assets/tarot/major_arcana/emperor.png';
+import tarotHierophant from '@/assets/tarot/major_arcana/hierophant.png';
+import tarotLovers from '@/assets/tarot/major_arcana/lovers.png';
+import tarotChariot from '@/assets/tarot/major_arcana/chariot.png';
+import tarotJustice from '@/assets/tarot/major_arcana/justice.png';
+import tarotHermit from '@/assets/tarot/major_arcana/hermit.png';
+import tarotWheelOfFortune from '@/assets/tarot/major_arcana/fortune.png';
+import tarotStrength from '@/assets/tarot/major_arcana/strength.png';
+import tarotHangedMan from '@/assets/tarot/major_arcana/hanged.png';
+import tarotTemperance from '@/assets/tarot/major_arcana/temperance.png';
+import tarotDevil from '@/assets/tarot/major_arcana/devil.png';
+import tarotTower from '@/assets/tarot/major_arcana/tower.png';
+import tarotSun from '@/assets/tarot/major_arcana/sun.png';
+import tarotJudgement from '@/assets/tarot/major_arcana/judgement.png';
+import tarotWorld from '@/assets/tarot/major_arcana/world.png';
+import tarotDeath from '@/assets/tarot/major_arcana/death.png';
+import tarotStar from '@/assets/tarot/major_arcana/star.png';
+import tarotMoon from '@/assets/tarot/major_arcana/moon.png';
 
-// add all other cards imports here...
-import tarotAceOfWands from '@/assets/cards/wands/wands_ace.png';
-import tarotTwoOfWands from '@/assets/cards/wands/wands_2.png';
-import tarotThreeOfWands from '@/assets/cards/wands/wands_3.png';
-import tarotFourOfWands from '@/assets/cards/wands/wands_4.png';
-import tarotFiveOfWands from '@/assets/cards/wands/wands_5.png';
-import tarotSixOfWands from '@/assets/cards/wands/wands_6.png';
-import tarotSevenOfWands from '@/assets/cards/wands/wands_7.png';
-import tarotEightOfWands from '@/assets/cards/wands/wands_8.png';
-import tarotNineOfWands from '@/assets/cards/wands/wands_9.png';
-import tarotTenOfWands from '@/assets/cards/wands/wands_10.png';
-import tarotPageOfWands from '@/assets/cards/wands/wands_page.png';
-import tarotKnightOfWands from '@/assets/cards/wands/wands_knight.png';
-import tarotQueebOfWands from '@/assets/cards/wands/wands_queen.png';
-import tarotKingOfWands from '@/assets/cards/wands/wands_king.png';
+// add all other tarot imports here...
+import tarotAceOfWands from '@/assets/tarot/wands/wands_ace.png';
+import tarotTwoOfWands from '@/assets/tarot/wands/wands_2.png';
+import tarotThreeOfWands from '@/assets/tarot/wands/wands_3.png';
+import tarotFourOfWands from '@/assets/tarot/wands/wands_4.png';
+import tarotFiveOfWands from '@/assets/tarot/wands/wands_5.png';
+import tarotSixOfWands from '@/assets/tarot/wands/wands_6.png';
+import tarotSevenOfWands from '@/assets/tarot/wands/wands_7.png';
+import tarotEightOfWands from '@/assets/tarot/wands/wands_8.png';
+import tarotNineOfWands from '@/assets/tarot/wands/wands_9.png';
+import tarotTenOfWands from '@/assets/tarot/wands/wands_10.png';
+import tarotPageOfWands from '@/assets/tarot/wands/wands_page.png';
+import tarotKnightOfWands from '@/assets/tarot/wands/wands_knight.png';
+import tarotQueebOfWands from '@/assets/tarot/wands/wands_queen.png';
+import tarotKingOfWands from '@/assets/tarot/wands/wands_king.png';
 
-import tarotAceOfCups from '@/assets/cards/cups/cups_ace.png';
-import tarotTwoOfCups from '@/assets/cards/cups/cups_2.png';
-import tarotThreeOfCups from '@/assets/cards/cups/cups_3.png';
-import tarotFourOfCups from '@/assets/cards/cups/cups_4.png';
-import tarotFiveOfCups from '@/assets/cards/cups/cups_5.png';
-import tarotSixOfCups from '@/assets/cards/cups/cups_6.png';
-import tarotSevenOfCups from '@/assets/cards/cups/cups_7.png';
-import tarotEightOfCups from '@/assets/cards/cups/cups_8.png';
-import tarotNineOfCups from '@/assets/cards/cups/cups_9.png';
-import tarotTenOfCups from '@/assets/cards/cups/cups_10.png';
-import tarotPageOfCups from '@/assets/cards/cups/cups_page.png';
-import tarotKnightOfCups from '@/assets/cards/cups/cups_knight.png';
-import tarotQueenOfCups from '@/assets/cards/cups/cups_queen.png';
-import tarotKingOfCups from '@/assets/cards/cups/cups_king.png';
+import tarotAceOfCups from '@/assets/tarot/cups/cups_ace.png';
+import tarotTwoOfCups from '@/assets/tarot/cups/cups_2.png';
+import tarotThreeOfCups from '@/assets/tarot/cups/cups_3.png';
+import tarotFourOfCups from '@/assets/tarot/cups/cups_4.png';
+import tarotFiveOfCups from '@/assets/tarot/cups/cups_5.png';
+import tarotSixOfCups from '@/assets/tarot/cups/cups_6.png';
+import tarotSevenOfCups from '@/assets/tarot/cups/cups_7.png';
+import tarotEightOfCups from '@/assets/tarot/cups/cups_8.png';
+import tarotNineOfCups from '@/assets/tarot/cups/cups_9.png';
+import tarotTenOfCups from '@/assets/tarot/cups/cups_10.png';
+import tarotPageOfCups from '@/assets/tarot/cups/cups_page.png';
+import tarotKnightOfCups from '@/assets/tarot/cups/cups_knight.png';
+import tarotQueenOfCups from '@/assets/tarot/cups/cups_queen.png';
+import tarotKingOfCups from '@/assets/tarot/cups/cups_king.png';
 
-import tarotAceOfSwords from '@/assets/cards/swords/swords_ace.png';
-import tarotTwoOfSwords from '@/assets/cards/swords/swords_2.png';
-import tarotThreeOfSwords from '@/assets/cards/swords/swords_3.png';
-import tarotFourOfSwords from '@/assets/cards/swords/swords_4.png';
-import tarotFiveOfSwords from '@/assets/cards/swords/swords_5.png';
-import tarotSixOfSwords from '@/assets/cards/swords/swords_6.png';
-import tarotSevenOfSwords from '@/assets/cards/swords/swords_7.png';
-import tarotEightOfSwords from '@/assets/cards/swords/swords_8.png';
-import tarotNineOfSwords from '@/assets/cards/swords/swords_9.png';
-import tarotTenOfSwords from '@/assets/cards/swords/swords_10.png';
-import tarotPageOfSwords from '@/assets/cards/swords/swords_page.png';
-import tarotKnightOfSwords from '@/assets/cards/swords/swords_knight.png';
-import tarotQueenOfSwords from '@/assets/cards/swords/swords_queen.png';
-import tarotKingOfSwords from '@/assets/cards/swords/swords_king.png';
+import tarotAceOfSwords from '@/assets/tarot/swords/swords_ace.png';
+import tarotTwoOfSwords from '@/assets/tarot/swords/swords_2.png';
+import tarotThreeOfSwords from '@/assets/tarot/swords/swords_3.png';
+import tarotFourOfSwords from '@/assets/tarot/swords/swords_4.png';
+import tarotFiveOfSwords from '@/assets/tarot/swords/swords_5.png';
+import tarotSixOfSwords from '@/assets/tarot/swords/swords_6.png';
+import tarotSevenOfSwords from '@/assets/tarot/swords/swords_7.png';
+import tarotEightOfSwords from '@/assets/tarot/swords/swords_8.png';
+import tarotNineOfSwords from '@/assets/tarot/swords/swords_9.png';
+import tarotTenOfSwords from '@/assets/tarot/swords/swords_10.png';
+import tarotPageOfSwords from '@/assets/tarot/swords/swords_page.png';
+import tarotKnightOfSwords from '@/assets/tarot/swords/swords_knight.png';
+import tarotQueenOfSwords from '@/assets/tarot/swords/swords_queen.png';
+import tarotKingOfSwords from '@/assets/tarot/swords/swords_king.png';
 
-import tarotAceOfPentacles from '@/assets/cards/pentacles/pentacles_ace.png';
-import tarotTwoOfPentacles from '@/assets/cards/pentacles/pentacles_2.png';
-import tarotThreeOfPentacles from '@/assets/cards/pentacles/pentacles_3.png';
-import tarotFourOfPentacles from '@/assets/cards/pentacles/pentacles_4.png';
-import tarotFiveOfPentacles from '@/assets/cards/pentacles/pentacles_5.png';
-import tarotSixOfPentacles from '@/assets/cards/pentacles/pentacles_6.png';
-import tarotSevenOfPentacles from '@/assets/cards/pentacles/pentacles_7.png';
-import tarotEightOfPentacles from '@/assets/cards/pentacles/pentacles_8.png';
-import tarotNineOfPentacles from '@/assets/cards/pentacles/pentacles_9.png';
-import tarotTenOfPentacles from '@/assets/cards/pentacles/pentacles_10.png';
-import tarotPageOfPentacles from '@/assets/cards/pentacles/pentacles_page.png';
-import tarotKnightOfPentacles from '@/assets/cards/pentacles/pentacles_knight.png';
-import tarotQueenOfPentacles from '@/assets/cards/pentacles/pentacles_queen.png';
-import tarotKingOfPentacles from '@/assets/cards/pentacles/pentacles_king.png';
+import tarotAceOfPentacles from '@/assets/tarot/pentacles/pentacles_ace.png';
+import tarotTwoOfPentacles from '@/assets/tarot/pentacles/pentacles_2.png';
+import tarotThreeOfPentacles from '@/assets/tarot/pentacles/pentacles_3.png';
+import tarotFourOfPentacles from '@/assets/tarot/pentacles/pentacles_4.png';
+import tarotFiveOfPentacles from '@/assets/tarot/pentacles/pentacles_5.png';
+import tarotSixOfPentacles from '@/assets/tarot/pentacles/pentacles_6.png';
+import tarotSevenOfPentacles from '@/assets/tarot/pentacles/pentacles_7.png';
+import tarotEightOfPentacles from '@/assets/tarot/pentacles/pentacles_8.png';
+import tarotNineOfPentacles from '@/assets/tarot/pentacles/pentacles_9.png';
+import tarotTenOfPentacles from '@/assets/tarot/pentacles/pentacles_10.png';
+import tarotPageOfPentacles from '@/assets/tarot/pentacles/pentacles_page.png';
+import tarotKnightOfPentacles from '@/assets/tarot/pentacles/pentacles_knight.png';
+import tarotQueenOfPentacles from '@/assets/tarot/pentacles/pentacles_queen.png';
+import tarotKingOfPentacles from '@/assets/tarot/pentacles/pentacles_king.png';
 
 // Map card names to their images
 
@@ -111,7 +111,7 @@ const cardImages: Record<string, string> = {
   star: tarotStar,
   moon: tarotMoon,
 
-  // Add all other cards images here
+  // Add all other tarot images here
   wands_ace: tarotAceOfWands,
   wands_2: tarotTwoOfWands,
   wands_3: tarotThreeOfWands,
