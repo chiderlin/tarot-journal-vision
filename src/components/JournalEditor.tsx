@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { TarotCardRenderer } from './TarotCardRenderer';
+import { LenormandCardRenderer } from './LenormandCardRenderer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -12,13 +14,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { parseTarotSyntax, TarotCardRenderer } from './TarotCardRenderer';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { parseSyntax } from './SyntaxRenderer';
 import {
   JournalEntry,
   Category,
   DEFAULT_CATEGORIES,
   TAROT_CARDS,
 } from '@/types/tarot';
+import { LENORMAND_CARDS } from '@/types/lenormand';
 import { Save, Eye, EyeOff, Sparkles, Loader2 } from 'lucide-react';
 
 interface JournalEditorProps {
@@ -147,7 +152,11 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
     }
   };
 
-  const availableCards = Object.keys(TAROT_CARDS);
+  const availableCards = [];
+  const tarotCards = Object.keys(TAROT_CARDS);
+  const lenormandCards = Object.keys(LENORMAND_CARDS);
+  availableCards.push(...tarotCards);
+  availableCards.push(...lenormandCards);
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -203,7 +212,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
             <label className="text-sm font-medium mb-2 block">
               內容
               <span className="text-xs text-muted-foreground ml-2">
-                使用 #cardname 插入牌卡，#cardname-reverse 插入逆位牌
+                使用 #t-cardname (塔羅) 或 #l-cardname (雷諾曼) 插入牌卡
               </span>
             </label>
 
@@ -214,7 +223,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                     ref={textareaRef}
                     value={content}
                     onChange={handleTextareaChange}
-                    placeholder="開始記錄你的塔羅日記... 使用 #fool 插入愚人牌，#fool-reverse 插入逆位愚人牌"
+                    placeholder="開始記錄你的塔羅日記... 使用 #t-fool 插入愚人牌，#l-rider 插入騎士牌"
                     className="min-h-[300px] bg-background/50 resize-none"
                   />
 
@@ -258,7 +267,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                   <div className="prose prose-sm max-w-none text-foreground">
                     {content.split('\n').map((line, index) => (
                       <p key={index} className="mb-2 leading-relaxed">
-                        {parseTarotSyntax(line)}
+                        {parseSyntax(line)}
                       </p>
                     ))}
                     {!content && (
@@ -274,7 +283,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                 <div className="prose prose-sm max-w-none text-foreground">
                   {content.split('\n').map((line, index) => (
                     <p key={index} className="mb-2 leading-relaxed">
-                      {parseTarotSyntax(line)}
+                      {parseSyntax(line)}
                     </p>
                   ))}
                 </div>
@@ -332,21 +341,43 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
           <CardTitle className="text-lg">快速參考</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {availableCards.map((cardName) => (
-              <div key={cardName} className="text-center space-y-2">
-                <TarotCardRenderer cardName={cardName} size="small" />
-                <div className="text-xs space-y-1">
-                  <div className="font-mono bg-muted px-2 py-1 rounded">
-                    #{cardName}
+          <Tabs defaultValue="tarot" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="tarot">Tarot</TabsTrigger>
+              <TabsTrigger value="lenormand">Lenormand</TabsTrigger>
+            </TabsList>
+            <TabsContent value="tarot">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+                {Object.keys(TAROT_CARDS).map((cardName) => (
+                  <div key={cardName} className="text-center space-y-2">
+                    <TarotCardRenderer cardName={cardName} size="small" />
+                    <div className="text-xs space-y-1">
+                      <div className="font-mono bg-muted px-2 py-1 rounded">
+                        #t-{cardName}
+                      </div>
+                      <div className="font-mono bg-destructive/20 px-2 py-1 rounded text-destructive">
+                        #t-{cardName}-reverse
+                      </div>
+                    </div>
                   </div>
-                  <div className="font-mono bg-destructive/20 px-2 py-1 rounded text-destructive">
-                    #{cardName}-reverse
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </TabsContent>
+            <TabsContent value="lenormand">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+                {Object.keys(LENORMAND_CARDS).map((cardName) => (
+                  <div key={cardName} className="text-center space-y-2">
+                    <LenormandCardRenderer cardName={cardName} size="small" />
+                    <div className="text-xs space-y-1">
+                      <div className="font-mono bg-muted px-2 py-1 rounded">
+                        #l-{cardName}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>

@@ -20,7 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { parseTarotSyntax } from './TarotCardRenderer';
+import { parseSyntax } from './SyntaxRenderer';
 
 interface CalendarViewProps {
   entries: JournalEntry[];
@@ -227,7 +227,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                     </div>
                     <div className="text-sm space-y-1">
                       {entry.content.split('\n').slice(0, 3).map((line, index) => (
-                        <div key={index}>{parseTarotSyntax(line)}</div>
+                        <div key={index}>{parseSyntax(line)}</div>
                       ))}
                       {entry.content.split('\n').length > 3 && (
                         <p className="text-muted-foreground italic">...</p>

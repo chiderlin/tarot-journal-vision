@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { TarotCardRenderer, parseTarotSyntax } from './TarotCardRenderer';
+import { parseSyntax } from './SyntaxRenderer';
 import { JournalEntry, Category } from '@/types/tarot';
 import { Edit, Trash2, Search, Calendar, Tag } from 'lucide-react';
 
@@ -186,7 +186,7 @@ export const JournalList: React.FC<JournalListProps> = ({
                   <div className="text-sm text-foreground">
                     {truncateContent(entry.content).split('\n').map((line, index) => (
                       <div key={index}>
-                        {parseTarotSyntax(line)}
+                        {parseSyntax(line)}
                       </div>
                     ))}
                   </div>
