@@ -16,9 +16,6 @@ export const LenormandCardRenderer: React.FC<LenormandCardRendererProps> = ({
   const cardKey = cardName.toLowerCase().replace(/ /g, '_');
   const card = LENORMAND_CARDS[cardKey];
 
-  console.log('cardName', cardName);
-  console.log('cardKey', cardKey);
-  console.log('card', card);
   if (!card) {
     return (
       <span className="inline-flex items-center px-2 py-1 rounded bg-muted text-muted-foreground text-xs">

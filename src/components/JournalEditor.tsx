@@ -54,12 +54,16 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 
   // Extract card names from content
   const extractCards = (text: string): string[] => {
-    const matches = text.match(/#(\w+)(-reverse)?/g) || [];
-    return [
-      ...new Set(
-        matches.map((match) => match.replace('#', '').replace('-reverse', ''))
-      ),
-    ];
+    const regex = /#(?:t|l)-([\w-]+)/g;
+    const matches = Array.from(text.matchAll(regex));
+    const cardNames = matches.map((match) => {
+      const cardName = match[1];
+      if (cardName.endsWith('-reverse')) {
+        return cardName.slice(0, -'-reverse'.length);
+      }
+      return cardName;
+    });
+    return [...new Set(cardNames)];
   };
 
   const handleSave = () => {
@@ -112,7 +116,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
   // AI 解牌功能
   const handleAIInterpretation = async () => {
     const cards = extractCards(content);
-
+    console.log('Extracted cards for AI interpretation:', cards);
     if (cards.length === 0) {
       toast({
         title: '無法解牌',

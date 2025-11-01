@@ -25,3 +25,7 @@ dist-ssr
 *.sw?
 
 */assets/lenormand
+
+# supabase config
+.temp
+config.toml

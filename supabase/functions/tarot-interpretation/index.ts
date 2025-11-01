@@ -46,18 +46,18 @@ serve(async (req) => {
     };
 
     const systemPrompt = `你是一位專業的塔羅牌解讀師。請根據抽到的牌卡和分類提供深入的解析。
-解析應該包括：
-1. 牌卡的基本含義
-2. 在${category}方面的具體解讀
-3. 實用的建議和行動方向
-4. 需要注意的事項
+      解析應該包括：
+      1. 牌卡的基本含義
+      2. 在${category}方面的具體解讀
+      3. 實用的建議和行動方向
+      4. 需要注意的事項
 
-請用溫暖、專業且易懂的語言，給出約50-100字的解析。
-注意：傳回來的text不要有任何的markdown語法。
-`;
+      請用溫暖、專業且易懂的語言，給出約50-100字的解析。
+      注意：傳回來的text不要有任何的markdown語法。
+    `;
 
     const userPrompt = `抽到的牌：${cards.join(', ')}
-分類：${category} (${
+      分類：${category} (${
       categoryContext[category as keyof typeof categoryContext] || '綜合運勢'
     })
 
