@@ -82,22 +82,32 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
     const newContent = e.target.value;
     setContent(newContent);
     setCursorPosition(e.target.selectionStart);
-    console.log('Cursor position:', e.target.selectionStart);
 
     // Show suggestions if typing # followed by letters
     const textBeforeCursor = newContent.substring(0, e.target.selectionStart);
-    const hashMatch = textBeforeCursor.match(/#(\w*)$/);
+    const hashMatch = textBeforeCursor.match(/#([\w-]*)$/);
     setShowSuggestions(!!hashMatch);
   };
 
   const insertCardSyntax = (cardName: string, isReverse: boolean = false) => {
-    const syntax = `#${cardName}${isReverse ? '-reverse' : ''}`;
+    const syntax = `#${cardName}${isReverse ? '-reverse' : ''} `;
 
-    // 解決插入語法有兩個#的問題
+    const textBeforeCursor = content.substring(0, cursorPosition);
+    const hashMatch = textBeforeCursor.match(/#([\w-]*)$/);
+
+    if (!hashMatch) {
+      setShowSuggestions(false);
+      return;
+    }
+
+    const startOfHash = cursorPosition - hashMatch[0].length;
     const newContent =
-      content.substring(0, cursorPosition - 1) +
+      content.substring(0, startOfHash) +
       syntax +
       content.substring(cursorPosition);
+
+    const newCursorPosition = startOfHash + syntax.length;
+
     setContent(newContent);
     setShowSuggestions(false);
 
@@ -106,8 +116,8 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       if (textareaRef.current) {
         textareaRef.current.focus();
         textareaRef.current.setSelectionRange(
-          cursorPosition + syntax.length,
-          cursorPosition + syntax.length
+          newCursorPosition,
+          newCursorPosition
         );
       }
     }, 0);
@@ -156,11 +166,11 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
     }
   };
 
-  const availableCards = [];
-  const tarotCards = Object.keys(TAROT_CARDS);
-  const lenormandCards = Object.keys(LENORMAND_CARDS);
-  availableCards.push(...tarotCards);
-  availableCards.push(...lenormandCards);
+  const tarotCardsWithPrefix = Object.keys(TAROT_CARDS).map((c) => `t-${c}`);
+  const lenormandCardsWithPrefix = Object.keys(LENORMAND_CARDS).map(
+    (c) => `l-${c}`
+  );
+  const availableCards = [...tarotCardsWithPrefix, ...lenormandCardsWithPrefix];
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -232,32 +242,49 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                   />
 
                   {showSuggestions && (
-                    <Card className="absolute top-full left-0 right-0 z-10 mt-1 max-h-48 overflow-y-auto">
+                    <Card className="absolute bottom-full left-0 right-0 z-50 mb-1 max-h-48 overflow-y-auto">
                       <CardContent className="p-2">
                         <div className="text-xs text-muted-foreground mb-2">
-                          可用的塔羅牌:
+                          可用的牌卡:
                         </div>
                         <div className="grid grid-cols-2 gap-1">
-                          {availableCards.map((cardName) => (
-                            <div key={cardName} className="space-y-1">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="w-full justify-start text-xs h-auto p-1"
-                                onClick={() => insertCardSyntax(cardName)}
-                              >
-                                #{cardName}
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="w-full justify-start text-xs h-auto p-1 text-destructive"
-                                onClick={() => insertCardSyntax(cardName, true)}
-                              >
-                                #{cardName}-reverse
-                              </Button>
-                            </div>
-                          ))}
+                          {availableCards
+                            .filter((cardName) => {
+                              const textBeforeCursor = content.substring(
+                                0,
+                                cursorPosition
+                              );
+                              const hashMatch =
+                                textBeforeCursor.match(/#([\w-]*)$/);
+                              if (hashMatch && hashMatch[1]) {
+                                return cardName.startsWith(hashMatch[1]);
+                              }
+                              return true;
+                            })
+                            .map((cardName) => (
+                              <div key={cardName} className="space-y-1">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="w-full justify-start text-xs h-auto p-1"
+                                  onClick={() => insertCardSyntax(cardName)}
+                                >
+                                  #{cardName}
+                                </Button>
+                                {cardName.startsWith('t-') && (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="w-full justify-start text-xs h-auto p-1 text-destructive"
+                                    onClick={() =>
+                                      insertCardSyntax(cardName, true)
+                                    }
+                                  >
+                                    #{cardName}-reverse
+                                  </Button>
+                                )}
+                              </div>
+                            ))}
                         </div>
                       </CardContent>
                     </Card>
