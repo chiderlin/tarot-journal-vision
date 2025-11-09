@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { TAROT_LANG_MAPPING } from '@/types/lang_map';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 const Index = () => {
   const [entries, setEntries] = useLocalStorage<JournalEntry[]>(
@@ -136,6 +137,9 @@ const Index = () => {
   return (
     <div className="min-h-screen simple-bg">
       <div className="container mx-auto p-4 space-y-8">
+        <div className="flex justify-end">
+          <LanguageSwitcher />
+        </div>
         {/* Header */}
         <div className="text-center py-12">
           <h1 className="text-5xl font-bold mb-4 text-gray-600 ">

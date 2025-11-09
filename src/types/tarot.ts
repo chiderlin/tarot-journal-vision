@@ -26,11 +26,11 @@ export interface Category {
 }
 
 export const DEFAULT_CATEGORIES: Category[] = [
-  { id: '1', name: '事業', color: 'hsl(45 100% 65%)' }, //icon: '💼'
-  { id: '2', name: '感情', color: 'hsl(280 60% 45%)' }, //icon: '💕'
-  { id: '3', name: '人際', color: 'hsl(200 60% 45%)' }, //icon: '👥'
-  { id: '4', name: '綜合', color: 'hsl(270 60% 45%)' }, // icon: '🌟'
-  { id: '5', name: '日抽', color: 'hsl(30 60% 45%)' }, // icon: '🌅'
+  { id: '1', name: 'career', color: 'hsl(45 100% 65%)' }, //icon: '💼'
+  { id: '2', name: 'love', color: 'hsl(280 60% 45%)' }, //icon: '💕'
+  { id: '3', name: 'relationships', color: 'hsl(200 60% 45%)' }, //icon: '👥'
+  { id: '4', name: 'general', color: 'hsl(270 60% 45%)' }, // icon: '🌟'
+  { id: '5', name: 'dailyDraw', color: 'hsl(30 60% 45%)' }, // icon: '🌅'
 ];
 
 const majorArcanaPath = '/src/assets/cards/major_arcana/';

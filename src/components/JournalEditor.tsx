@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useTranslation } from 'react-i18next';
 import {
   Select,
   SelectContent,
@@ -41,9 +42,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 }) => {
   const [title, setTitle] = useState(entry?.title || '');
   const [content, setContent] = useState(entry?.content || '');
-  const [category, setCategory] = useState(
-    entry?.category || categories[0]?.name || ''
-  );
+
   const [showPreview, setShowPreview] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [cursorPosition, setCursorPosition] = useState(0);
@@ -51,6 +50,10 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { toast } = useToast();
+  const { t } = useTranslation();
+  const [category, setCategory] = useState(
+    entry?.category || categories[0]?.name || ''
+  );
 
   // Extract card names from content
   const extractCards = (text: string): string[] => {
@@ -69,7 +72,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
   const handleSave = () => {
     const cards = extractCards(content);
     onSave({
-      title: title || '無標題日記',
+      title: title || `${t('journalEditor.untitledJournal')}`,
       content,
       category,
       date: entry?.date || new Date().toISOString().split('T')[0],
@@ -129,8 +132,8 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
     console.log('Extracted cards for AI interpretation:', cards);
     if (cards.length === 0) {
       toast({
-        title: '無法解牌',
-        description: '請先在內容中添加塔羅牌標籤（例如：#fool, #magician）',
+        title: t('journalEditor.toast.unableToInterpret'),
+        description: t('journalEditor.toast.addTagsFirst'),
         variant: 'destructive',
       });
       return;
@@ -150,15 +153,18 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       if (data?.interpretation) {
         setAiInterpretation(data.interpretation);
         toast({
-          title: 'AI 解牌完成',
-          description: '已生成塔羅牌解析建議',
+          title: t('journalEditor.toast.aiSuccessTitle'),
+          description: t('journalEditor.toast.aiSuccessDescription'),
         });
       }
     } catch (error) {
       console.error('AI interpretation error:', error);
       toast({
-        title: '解牌失敗',
-        description: error instanceof Error ? error.message : '請稍後再試',
+        title: t('journalEditor.toast.aiErrorTitle'),
+        description:
+          error instanceof Error
+            ? error.message
+            : t('journalEditor.toast.aiErrorDescription'),
         variant: 'destructive',
       });
     } finally {
@@ -177,7 +183,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            {entry ? '編輯塔羅日記' : '新增塔羅日記'}
+            {entry ? t('journalEditor.editTitle') : t('journalEditor.addTitle')}
             <div className="flex gap-2">
               <Button
                 variant="outline"
@@ -189,7 +195,9 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                 ) : (
                   <Eye className="w-4 h-4" />
                 )}
-                {showPreview ? '編輯' : '預覽'}
+                {showPreview
+                  ? t('journalEditor.edit')
+                  : t('journalEditor.preview')}
               </Button>
             </div>
           </CardTitle>
@@ -197,24 +205,30 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium mb-2 block">標題</label>
+              <label className="text-sm font-medium mb-2 block">
+                {t('journalEditor.titleLabel')}
+              </label>
               <Input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="輸入日記標題..."
+                placeholder={t('journalEditor.titlePlaceholder')}
                 className="bg-background/50"
               />
             </div>
             <div>
-              <label className="text-sm font-medium mb-2 block">分類</label>
+              <label className="text-sm font-medium mb-2 block">
+                {t('journalEditor.categoryLabel')}
+              </label>
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className="bg-background/50">
-                  <SelectValue placeholder="選擇分類" />
+                  <SelectValue
+                    placeholder={t('journalEditor.categoryPlaceholder')}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.name}>
-                      {cat.icon} {cat.name}
+                      {cat.icon} {t(`journalEditor.categories.${cat.name}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -224,9 +238,9 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 
           <div className="relative">
             <label className="text-sm font-medium mb-2 block">
-              內容
+              {t('journalEditor.contentLabel')}
               <span className="text-xs text-muted-foreground ml-2">
-                使用 #t-cardname (塔羅) 或 #l-cardname (雷諾曼) 插入牌卡
+                {t('journalEditor.contentHint')}
               </span>
             </label>
 
@@ -237,7 +251,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                     ref={textareaRef}
                     value={content}
                     onChange={handleTextareaChange}
-                    placeholder="開始記錄你的塔羅日記... 使用 #t-fool 插入愚人牌，#l-rider 插入騎士牌"
+                    placeholder={t('journalEditor.contentPlaceholder')}
                     className="min-h-[300px] bg-background/50 resize-none"
                   />
 
@@ -245,7 +259,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                     <Card className="absolute bottom-full left-0 right-0 z-50 mb-1 max-h-48 overflow-y-auto">
                       <CardContent className="p-2">
                         <div className="text-xs text-muted-foreground mb-2">
-                          可用的牌卡:
+                          {t('journalEditor.availableCards')}
                         </div>
                         <div className="grid grid-cols-2 gap-1">
                           {availableCards
@@ -293,7 +307,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                 {/* Real-time preview */}{' '}
                 <div className="min-h-[300px] p-4 border rounded-md bg-muted/30 overflow-auto">
                   <div className="text-sm font-medium mb-2 text-muted-foreground">
-                    即時預覽
+                    {t('journalEditor.realtimePreview')}
                   </div>
                   <div className="prose prose-sm max-w-none text-foreground">
                     {content.split('\n').map((line, index) => (
@@ -303,7 +317,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                     ))}
                     {!content && (
                       <p className="text-muted-foreground italic">
-                        開始輸入以查看預覽...
+                        {t('journalEditor.startTyping')}
                       </p>
                     )}
                   </div>
@@ -334,11 +348,11 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
               ) : (
                 <Sparkles className="w-4 h-4 mr-2" />
               )}
-              AI 解牌建議
+              {t('journalEditor.aiInterpretation')}
             </Button>
             <div className="flex gap-2">
               <Button variant="outline" onClick={onCancel}>
-                取消
+                {t('journalEditor.cancel')}
               </Button>
               <Button
                 className="bg-purple-700 hover:bg-purple-800"
@@ -346,7 +360,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                 onClick={handleSave}
               >
                 <Save className="w-4 h-4 mr-2" />
-                儲存日記
+                {t('journalEditor.save')}
               </Button>
             </div>
           </div>
@@ -356,7 +370,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2 text-purple-700">
                   <Sparkles className="w-4 h-4" />
-                  AI 解牌建議
+                  {t('journalEditor.aiInterpretation')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-foreground/90 whitespace-pre-wrap">
@@ -369,13 +383,19 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       {/* Quick card reference */}{' '}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">快速參考</CardTitle>
+          <CardTitle className="text-lg">
+            {t('journalEditor.quickReference')}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="tarot" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="tarot">Tarot</TabsTrigger>
-              <TabsTrigger value="lenormand">Lenormand</TabsTrigger>
+              <TabsTrigger value="tarot">
+                {t('journalEditor.classicTarot')}
+              </TabsTrigger>
+              <TabsTrigger value="lenormand">
+                {t('journalEditor.lenormand')}
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="tarot">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">

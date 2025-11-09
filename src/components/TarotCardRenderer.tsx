@@ -1,5 +1,16 @@
 import React from 'react';
 import { TAROT_CARDS } from '@/types/tarot';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+
 // import all the tarot card images
 import tarotFool from '@/assets/tarot/major_arcana/fool.png';
 import tarotMagician from '@/assets/tarot/major_arcana/magician.png';
@@ -202,28 +213,72 @@ export const TarotCardRenderer: React.FC<TarotCardRendererProps> = ({
   };
 
   return (
-    <div className="inline-block mx-1">
-      <div
-        className={`${sizeClasses[size]} relative transition-transform hover:scale-105 cursor-pointer`}
-        title={`${card.name}${isReverse ? ' (Reverse)' : ''}`}
-      >
-        <img
-          src={imageSrc}
-          alt={card.name}
-          className={`w-full h-full object-cover rounded-lg shadow-lg border border-border/20 ${
-            isReverse ? 'transform rotate-180' : ''
-          }`}
-        />
-        {/* {isReverse && (
-          <div className="absolute top-1 left-1 bg-destructive text-destructive-foreground text-xs px-1 rounded">
-            逆位
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="inline-block mx-1 cursor-pointer">
+          <div
+            className={`${sizeClasses[size]} relative transition-transform hover:scale-105`}
+            title={`${card.name}${isReverse ? ' (Reverse)' : ''}`}
+          >
+            <img
+              src={imageSrc}
+              alt={card.name}
+              className={`w-full h-full object-cover rounded-lg shadow-lg border border-border/20 ${
+                isReverse ? 'transform rotate-180' : ''
+              }`}
+            />
           </div>
-        )} */}
-      </div>
-      <p className="text-xs text-center mt-1 text-muted-foreground">
-        {card.name}
-      </p>
-    </div>
+          <p className="text-xs text-center mt-1 text-muted-foreground">
+            {card.name}
+          </p>
+        </div>
+      </DialogTrigger>
+      <DialogContent className="max-w-3xl">
+        <ScrollArea className="max-h-[80vh] p-4">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold mb-4">
+              {card.name}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="flex flex-col items-center">
+              <img
+                src={imageSrc}
+                alt={card.name}
+                className="w-52 h-96 object-cover rounded-lg shadow-2xl border-4 border-border/20"
+              />
+              <div className="mt-4 flex flex-wrap gap-2 justify-center">
+                {card.keywords.map((keyword) => (
+                  <Badge key={keyword} variant="secondary">
+                    {keyword}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-semibold text-lg mb-2 border-b pb-2 text-primary">
+                  正位解釋
+                </h3>
+                <DialogDescription className="text-base text-foreground/80">
+                  {card.meaning}
+                </DialogDescription>
+              </div>
+              {card.reverseMeaning && (
+                <div>
+                  <h3 className="font-semibold text-lg mb-2 border-b pb-2 text-destructive">
+                    逆位解釋
+                  </h3>
+                  <DialogDescription className="text-base text-foreground/80">
+                    {card.reverseMeaning}
+                  </DialogDescription>
+                </div>
+              )}
+            </div>
+          </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -2,8 +2,10 @@ import 'https://deno.land/x/xhr@0.1.0/mod.ts';
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { load } from 'https://deno.land/std@0.204.0/dotenv/mod.ts';
 
+// Load environment variables once at the start
 const env = await load();
 const LOVABLE_API = env['LOVABLE_API'];
+const LOVABLE_API_KEY = env['LOVABLE_API_KEY'];
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,11 +14,24 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // Early exit if API keys are not configured
+    if (!LOVABLE_API_KEY || !LOVABLE_API) {
+      console.error('LOVABLE_API_KEY or LOVABLE_API not found in environment variables.');
+      return new Response(
+        JSON.stringify({ error: 'AI 服務未正確設定。' }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
     const { cards, category } = await req.json();
 
     if (!cards || cards.length === 0) {
@@ -29,12 +44,6 @@ serve(async (req) => {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         }
       );
-    }
-
-    const env = await load();
-    const LOVABLE_API_KEY = env['LOVABLE_API_KEY'];
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY not found in .env file');
     }
 
     const categoryContext = {
