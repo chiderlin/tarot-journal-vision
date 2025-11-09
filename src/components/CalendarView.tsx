@@ -21,6 +21,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { parseSyntax } from './SyntaxRenderer';
+import { useTranslation } from 'react-i18next';
 
 interface CalendarViewProps {
   entries: JournalEntry[];
@@ -38,7 +39,10 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const { t } = useTranslation();
+  const daysOfWeek = t('calendarView.daysOfWeek', {
+    returnObjects: true,
+  }) as string[];
   const calendarDays = useMemo(() => {
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(currentMonth);
@@ -84,7 +88,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
       {/* Calendar Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">
-          {format(currentMonth, 'yyyy年 M月')}
+          {format(currentMonth, t('calendarView.monthFormat'))}
         </h2>
         <div className="flex gap-2">
           <Button
@@ -94,11 +98,8 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => setCurrentMonth(new Date())}
-          >
-            今天
+          <Button variant="outline" onClick={() => setCurrentMonth(new Date())}>
+            {t('calendarView.today')}
           </Button>
           <Button
             variant="outline"
@@ -113,7 +114,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
       {/* Calendar Grid */}
       <Card className="overflow-hidden">
         <div className="bg-muted/50 grid grid-cols-7 border-b">
-          {['日', '一', '二', '三', '四', '五', '六'].map((day) => (
+          {daysOfWeek.map((day) => (
             <div
               key={day}
               className="p-3 text-center text-sm font-medium text-muted-foreground"
@@ -166,7 +167,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                   ))}
                   {dayEntries.length > 3 && (
                     <div className="text-xs text-muted-foreground pl-1.5">
-                      +{dayEntries.length - 3} 更多
+                      +{dayEntries.length - 3} {t('calendarView.more')}
                     </div>
                   )}
                 </div>
@@ -181,18 +182,20 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {selectedDate && format(selectedDate, 'yyyy年 M月d日')}
+              {selectedDate &&
+                format(selectedDate, t('calendarView.dialogTitleFormat'))}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <p className="text-sm text-muted-foreground">
-                {entriesForSelectedDate.length}/5 篇日記
+                {entriesForSelectedDate.length}
+                {t('calendarView.entriesCount')}
               </p>
               {entriesForSelectedDate.length < 5 && (
                 <Button onClick={handleAddEntry}>
                   <Plus className="w-4 h-4 mr-2" />
-                  新增日記
+                  {t('calendarView.addEntry')}
                 </Button>
               )}
             </div>
@@ -226,9 +229,12 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                       </div>
                     </div>
                     <div className="text-sm space-y-1">
-                      {entry.content.split('\n').slice(0, 3).map((line, index) => (
-                        <div key={index}>{parseSyntax(line)}</div>
-                      ))}
+                      {entry.content
+                        .split('\n')
+                        .slice(0, 3)
+                        .map((line, index) => (
+                          <div key={index}>{parseSyntax(line)}</div>
+                        ))}
                       {entry.content.split('\n').length > 3 && (
                         <p className="text-muted-foreground italic">...</p>
                       )}
@@ -238,8 +244,10 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-                <p className="text-sm">這天還沒有日記</p>
-                <p className="text-xs mt-2">點擊上方按鈕來新增一篇吧！</p>
+                <p className="text-sm">{t('calendarView.noEntries.title')}</p>
+                <p className="text-xs mt-2">
+                  {t('calendarView.noEntries.description')}
+                </p>
               </div>
             )}
           </div>

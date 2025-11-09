@@ -394,7 +394,7 @@
       "name": "權杖二",
       "keywords": ["未來規劃", "進展", "決定", "發現"],
       "meaning": "代表未來規劃、做出決定和發現你的道路。你已經取得了一些成就，現在正展望未來。",
-      "reverseMeaning": "對未知的恐懼、缺乏規劃、個人目標、謹慎行事。"
+      "reverseMeaning": "對未知的恐惧、缺乏規劃、個人目標、謹慎行事。"
     },
     "wands_3": {
       "name": "權杖三",
@@ -511,5 +511,62 @@
   "tarotCardRenderer": {
     "upright": "正位解釋",
     "reversed": "逆位解釋"
+  },
+  "analysisView": {
+    "noData": {
+      "title": "尚無數據可供分析",
+      "description": "請先新增一些日記條目。"
+    },
+    "majorArcana": "大秘儀",
+    "minorArcana": "小秘儀",
+    "wands": "權杖",
+    "cups": "聖杯",
+    "swords": "寶劍",
+    "pentacles": "錢幣",
+    "arcanaDistributionTitle": "大秘儀 vs. 小秘儀",
+    "suitsDistributionTitle": "四元素分佈",
+    "noDataAvailable": "尚無數據"
+  },
+  "calendarView": {
+    "today": "今天",
+    "daysOfWeek": ["日", "一", "二", "三", "四", "五", "六"],
+    "more": " 更多",
+    "entriesCount": "/5 篇日記",
+    "addEntry": "新增日記",
+    "noEntries": {
+      "title": "這天還沒有日記",
+      "description": "點擊上方按鈕來新增一篇吧！"
+    },
+    "dialogTitle": "的日記",
+    "monthFormat": "yyyy年 M月",
+    "dialogTitleFormat": "yyyy年 M月d日"
+  },
+  "journalList": {
+    "searchPlaceholder": "搜尋日記...",
+    "categorySelectPlaceholder": "選擇分類",
+    "allCategories": "所有分類",
+    "sortByDate": "依日期排序",
+    "sortByTitle": "依標題排序",
+    "totalEntries": "筆日記",
+    "noEntriesFound": "沒有找到符合條件的日記",
+    "dateFormat": "yyyy/MM/dd"
+  },
+  "indexPage": {
+    "deleteConfirmation": "確定要刪除這篇日記嗎？",
+    "title": "塔羅日記",
+    "subtitle": "記錄你的塔羅旅程，用 # 語法輕鬆插入牌卡圖片",
+    "newEntryButton": "開始新的日記",
+    "listView": "列表",
+    "calendarView": "行事曆",
+    "analysisView": "更多分析",
+    "totalEntriesCardTitle": "總計日記",
+    "entriesCountSuffix": "篇日記",
+    "mostFrequentCardTitle": "最常出現的牌",
+    "cardOccurrence": "次",
+    "noData": "尚無數據",
+    "categoryStatsTitle": "分類統計",
+    "welcomeTitle": "開始你的塔羅日記之旅",
+    "welcomeMessage": "記錄你的塔羅解讀、靈感和成長。使用 # 語法快速插入牌卡圖片，讓你的日記更加生動。",
+    "createFirstEntryButton": "創建第一篇日記"
   }
 }

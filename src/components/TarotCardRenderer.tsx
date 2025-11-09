@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useTranslation } from 'react-i18next';
 
 // import all the tarot card images
 import tarotFool from '@/assets/tarot/major_arcana/fool.png';
@@ -195,6 +196,7 @@ export const TarotCardRenderer: React.FC<TarotCardRendererProps> = ({
   isReverse = false,
   size = 'small',
 }) => {
+  const { t } = useTranslation();
   const card = TAROT_CARDS[cardName.toLowerCase()];
   const imageSrc = cardImages[cardName.toLowerCase()];
 
@@ -258,7 +260,7 @@ export const TarotCardRenderer: React.FC<TarotCardRendererProps> = ({
             <div className="space-y-6">
               <div>
                 <h3 className="font-semibold text-lg mb-2 border-b pb-2 text-primary">
-                  正位解釋
+                  {t('tarotCardRenderer.upright')}
                 </h3>
                 <DialogDescription className="text-base text-foreground/80">
                   {card.meaning}
@@ -267,7 +269,7 @@ export const TarotCardRenderer: React.FC<TarotCardRendererProps> = ({
               {card.reverseMeaning && (
                 <div>
                   <h3 className="font-semibold text-lg mb-2 border-b pb-2 text-destructive">
-                    逆位解釋
+                    {t('tarotCardRenderer.reversed')}
                   </h3>
                   <DialogDescription className="text-base text-foreground/80">
                     {card.reverseMeaning}

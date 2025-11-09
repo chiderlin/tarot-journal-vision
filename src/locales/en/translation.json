@@ -670,5 +670,62 @@
   "tarotCardRenderer": {
     "upright": "Upright",
     "reversed": "Reversed"
+  },
+  "analysisView": {
+    "noData": {
+      "title": "No Data for Analysis",
+      "description": "Please add some journal entries first."
+    },
+    "majorArcana": "Major Arcana",
+    "minorArcana": "Minor Arcana",
+    "wands": "Wands",
+    "cups": "Cups",
+    "swords": "Swords",
+    "pentacles": "Pentacles",
+    "arcanaDistributionTitle": "Major vs. Minor Arcana",
+    "suitsDistributionTitle": "Four Elements Distribution",
+    "noDataAvailable": "No data available"
+  },
+  "calendarView": {
+    "today": "Today",
+    "daysOfWeek": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "more": "more",
+    "entriesCount": "/5 entries",
+    "addEntry": "Add Entry",
+    "noEntries": {
+      "title": "No entries for this day",
+      "description": "Click the button above to add one!"
+    },
+    "dialogTitle": "Entries for",
+    "monthFormat": "MMMM yyyy",
+    "dialogTitleFormat": "MMMM d, yyyy"
+  },
+  "journalList": {
+    "searchPlaceholder": "Search journals...",
+    "categorySelectPlaceholder": "Select a category",
+    "allCategories": "All Categories",
+    "sortByDate": "Sort by Date",
+    "sortByTitle": "Sort by Title",
+    "totalEntries": "Total entries",
+    "noEntriesFound": "No matching entries found",
+    "dateFormat": "MMM d, yyyy"
+  },
+  "indexPage": {
+    "deleteConfirmation": "Are you sure you want to delete this journal entry?",
+    "title": "Tarot Journal",
+    "subtitle": "Record your tarot journey and easily insert card images using # syntax",
+    "newEntryButton": "Start a New Journal",
+    "listView": "List",
+    "calendarView": "Calendar",
+    "analysisView": "More Analysis",
+    "totalEntriesCardTitle": "Total Journals",
+    "entriesCountSuffix": "entries",
+    "mostFrequentCardTitle": "Most Frequent Card",
+    "cardOccurrence": "Appeared times",
+    "noData": "No data yet",
+    "categoryStatsTitle": "Category Statistics",
+    "welcomeTitle": "Begin Your Tarot Journal Journey",
+    "welcomeMessage": "Record your tarot readings, insights, and growth. Use the # syntax to quickly insert card images and make your journal more vivid.",
+    "createFirstEntryButton": "Create Your First Journal Entry"
   }
 }

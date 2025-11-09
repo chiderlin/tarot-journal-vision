@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,8 +18,8 @@ import {
   PieChart,
 } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { TAROT_LANG_MAPPING } from '@/types/lang_map';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 const Index = () => {
   const [entries, setEntries] = useLocalStorage<JournalEntry[]>(
@@ -34,6 +34,7 @@ const Index = () => {
     'list' | 'calendar' | 'editor' | 'analysis'
   >('list');
   const [editingEntry, setEditingEntry] = useState<JournalEntry | undefined>();
+  const { t } = useTranslation();
 
   const handleSaveEntry = (
     entryData: Omit<JournalEntry, 'id' | 'createdAt' | 'updatedAt'>
@@ -87,7 +88,7 @@ const Index = () => {
   };
 
   const handleDeleteEntry = (id: string) => {
-    if (confirm('確定要刪除這篇日記嗎？')) {
+    if (confirm(t('indexPage.deleteConfirmation'))) {
       setEntries(entries.filter((entry) => entry.id !== id));
     }
   };
@@ -103,6 +104,8 @@ const Index = () => {
     ...category,
     count: entries.filter((entry) => entry.category === category.name).length,
   }));
+
+  
 
   // Most frequent cards
   const cardFrequency: Record<string, number> = {};
@@ -144,10 +147,10 @@ const Index = () => {
         <div className="text-center py-12">
           <h1 className="text-5xl font-bold mb-4 text-gray-600 ">
             <Sparkles className="inline w-12 h-12 mr-4 text-primary text-yellow-500" />
-            塔羅日記
+            {t('indexPage.title')}
           </h1>
           <p className="text-xl text-muted-foreground mb-8">
-            記錄你的塔羅旅程，用 # 語法輕鬆插入牌卡圖片
+            {t('indexPage.subtitle')}
           </p>
           <Button
             variant="default"
@@ -156,7 +159,7 @@ const Index = () => {
             className="bg-purple-800 hover:bg-purple-700"
           >
             <Plus className="w-5 h-5 mr-2" />
-            開始新的日記
+            {t('indexPage.newEntryButton')}
           </Button>
         </div>
 
@@ -165,21 +168,22 @@ const Index = () => {
             type="single"
             value={currentView}
             onValueChange={(view) => {
-              if (view) setCurrentView(view as 'list' | 'calendar' | 'analysis');
+              if (view)
+                setCurrentView(view as 'list' | 'calendar' | 'analysis');
             }}
             defaultValue="list"
           >
             <ToggleGroupItem value="list" aria-label="List view">
               <List className="h-4 w-4 mr-2" />
-              列表
+              {t('indexPage.listView')}
             </ToggleGroupItem>
             <ToggleGroupItem value="calendar" aria-label="Calendar view">
               <CalendarDays className="h-4 w-4 mr-2" />
-              行事曆
+              {t('indexPage.calendarView')}
             </ToggleGroupItem>
             <ToggleGroupItem value="analysis" aria-label="Analysis view">
               <PieChart className="h-4 w-4 mr-2" />
-              更多分析
+              {t('indexPage.analysisView')}
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
@@ -191,14 +195,16 @@ const Index = () => {
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg flex items-center">
                   <BookOpen className="w-5 h-5 mr-2 text-primary" />
-                  總計日記
+                  {t('indexPage.totalEntriesCardTitle')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-purple-600">
                   {totalEntries}
                 </div>
-                <p className="text-muted-foreground text-sm">篇日記</p>
+                <p className="text-muted-foreground text-sm">
+                  {t('indexPage.entriesCountSuffix')}
+                </p>
               </CardContent>
             </Card>
 
@@ -206,7 +212,7 @@ const Index = () => {
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg flex items-start">
                   <TrendingUp className="w-5 h-5 mr-2 text-accent text-black" />
-                  最常出現的牌
+                  {t('indexPage.mostFrequentCardTitle')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -214,25 +220,32 @@ const Index = () => {
                   <div>
                     <div className="text-m text-gray-900 capitalize">
                       {mostFrequentCards
-                        .map(
-                          ([cardName]) =>
-                            TAROT_LANG_MAPPING[cardName]?.name || cardName
+                        .map(([cardName]) =>
+                          t(`tarotCards.${cardName}.name`, {
+                            defaultValue: cardName,
+                          })
                         )
                         .join(', ')}
                     </div>
                     <p className="text-muted-foreground  text-sm">
-                      出現 {mostFrequentCards[0][1]} 次
+                      {t('indexPage.cardOccurrence', {
+                        count: mostFrequentCards[0][1],
+                      })}
                     </p>
                   </div>
                 ) : (
-                  <p className="text-muted-foreground">尚無數據</p>
+                  <p className="text-muted-foreground">
+                    {t('indexPage.noData')}
+                  </p>
                 )}
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg">分類統計</CardTitle>
+                <CardTitle className="text-lg">
+                  {t('indexPage.categoryStatsTitle')}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-1">
@@ -242,7 +255,11 @@ const Index = () => {
                       className="flex justify-between items-center"
                     >
                       <span className="text-m">
-                        {category.icon} - {category.name}
+                        {category.icon} -{' '}
+                        {t(
+                          `journalEditor.categories.${category.name}`,
+                          category.name
+                        )}
                       </span>
                       <span className="text-sm font-medium">
                         {category.count}
@@ -276,24 +293,27 @@ const Index = () => {
 
         {currentView === 'analysis' && <AnalysisView entries={entries} />}
 
-        {entries.length === 0 && currentView !== 'calendar' && currentView !== 'analysis' && (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">🔮</div>
-            <h2 className="text-2xl font-bold mb-4">開始你的塔羅日記之旅</h2>
-            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-              記錄你的塔羅解讀、靈感和成長。使用 #
-              語法快速插入牌卡圖片，讓你的日記更加生動。
-            </p>
-            <Button
-              variant="default"
-              size="lg"
-              onClick={() => setCurrentView('editor')}
-            >
-              <Plus className="w-5 h-5 mr-2" />
-              創建第一篇日記
-            </Button>
-          </div>
-        )}
+        {entries.length === 0 &&
+          currentView !== 'calendar' &&
+          currentView !== 'analysis' && (
+            <div className="text-center py-16">
+              <div className="text-6xl mb-4">🔮</div>
+              <h2 className="text-2xl font-bold mb-4">
+                {t('indexPage.welcomeTitle')}
+              </h2>
+              <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                {t('indexPage.welcomeMessage')}
+              </p>
+              <Button
+                variant="default"
+                size="lg"
+                onClick={() => setCurrentView('editor')}
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                {t('indexPage.createFirstEntryButton')}
+              </Button>
+            </div>
+          )}
       </div>
     </div>
   );
