@@ -22,14 +22,13 @@ serve(async (req) => {
   try {
     // Early exit if API keys are not configured
     if (!LOVABLE_API_KEY || !LOVABLE_API) {
-      console.error('LOVABLE_API_KEY or LOVABLE_API not found in environment variables.');
-      return new Response(
-        JSON.stringify({ error: 'AI 服務未正確設定。' }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
+      console.error(
+        'LOVABLE_API_KEY or LOVABLE_API not found in environment variables.'
       );
+      return new Response(JSON.stringify({ error: 'AI 服務未正確設定。' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const { cards, category } = await req.json();
@@ -67,8 +66,8 @@ serve(async (req) => {
 
     const userPrompt = `抽到的牌：${cards.join(', ')}
       分類：${category} (${
-      categoryContext[category as keyof typeof categoryContext] || '綜合運勢'
-    })
+        categoryContext[category as keyof typeof categoryContext] || '綜合運勢'
+      })
 
 請提供詳細的塔羅牌解讀。
 注意：傳回來的text不要有任何的markdown語法。

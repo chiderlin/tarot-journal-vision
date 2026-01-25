@@ -197,8 +197,9 @@ export const TarotCardRenderer: React.FC<TarotCardRendererProps> = ({
   size = 'small',
 }) => {
   const { t } = useTranslation();
-  const card = TAROT_CARDS[cardName.toLowerCase()];
-  const imageSrc = cardImages[cardName.toLowerCase()];
+  const cardKey = cardName.toLowerCase();
+  const card = TAROT_CARDS[cardKey];
+  const imageSrc = cardImages[cardKey];
 
   if (!card || !imageSrc) {
     return (
@@ -214,24 +215,33 @@ export const TarotCardRenderer: React.FC<TarotCardRendererProps> = ({
     large: 'w-32 h-56',
   };
 
+  // Get translated card name
+  const translatedName = t(`tarotCards.${cardKey}.name`, {
+    defaultValue: card.name,
+  });
+
+  // Get upright/reversed label
+  const uprightLabel = t('tarotCardRenderer.upright', 'Upright');
+  const reversedLabel = t('tarotCardRenderer.reversed', 'Reversed');
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <div className="inline-block mx-1 cursor-pointer">
           <div
             className={`${sizeClasses[size]} relative transition-transform hover:scale-105`}
-            title={`${card.name}${isReverse ? ' (Reverse)' : ''}`}
+            title={`${translatedName}${isReverse ? ` (${reversedLabel})` : ''}`}
           >
             <img
               src={imageSrc}
-              alt={card.name}
+              alt={translatedName}
               className={`w-full h-full object-cover rounded-lg shadow-lg border border-border/20 ${
                 isReverse ? 'transform rotate-180' : ''
               }`}
             />
           </div>
           <p className="text-xs text-center mt-1 text-muted-foreground">
-            {card.name}
+            {translatedName}
           </p>
         </div>
       </DialogTrigger>
@@ -239,19 +249,24 @@ export const TarotCardRenderer: React.FC<TarotCardRendererProps> = ({
         <ScrollArea className="max-h-[80vh] p-4">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold mb-4">
-              {card.name}
+              {translatedName}
             </DialogTitle>
           </DialogHeader>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="flex flex-col items-center">
               <img
                 src={imageSrc}
-                alt={card.name}
+                alt={translatedName}
                 className="w-52 h-96 object-cover rounded-lg shadow-2xl border-4 border-border/20"
               />
               <div className="mt-4 flex flex-wrap gap-2 justify-center">
-                {card.keywords.map((keyword) => (
-                  <Badge key={keyword} variant="secondary">
+                {(
+                  t(`tarotCards.${cardKey}.keywords`, {
+                    defaultValue: card.keywords,
+                    returnObjects: true,
+                  }) as string[]
+                ).map((keyword, index) => (
+                  <Badge key={index} variant="secondary">
                     {keyword}
                   </Badge>
                 ))}
@@ -260,19 +275,23 @@ export const TarotCardRenderer: React.FC<TarotCardRendererProps> = ({
             <div className="space-y-6">
               <div>
                 <h3 className="font-semibold text-lg mb-2 border-b pb-2 text-primary">
-                  {t('tarotCardRenderer.upright')}
+                  {uprightLabel}
                 </h3>
                 <DialogDescription className="text-base text-foreground/80">
-                  {card.meaning}
+                  {t(`tarotCards.${cardKey}.meaning`, {
+                    defaultValue: card.meaning,
+                  })}
                 </DialogDescription>
               </div>
               {card.reverseMeaning && (
                 <div>
                   <h3 className="font-semibold text-lg mb-2 border-b pb-2 text-destructive">
-                    {t('tarotCardRenderer.reversed')}
+                    {reversedLabel}
                   </h3>
                   <DialogDescription className="text-base text-foreground/80">
-                    {card.reverseMeaning}
+                    {t(`tarotCards.${cardKey}.reverseMeaning`, {
+                      defaultValue: card.reverseMeaning,
+                    })}
                   </DialogDescription>
                 </div>
               )}

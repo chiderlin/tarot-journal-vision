@@ -104,8 +104,9 @@ const Index = () => {
     ...category,
     count: entries.filter((entry) => entry.category === category.name).length,
   }));
-
-  
+  const sortedCategoryCounts = [...categoryCounts].sort(
+    (a, b) => b.count - a.count
+  );
 
   // Most frequent cards
   const cardFrequency: Record<string, number> = {};
@@ -114,12 +115,23 @@ const Index = () => {
       cardFrequency[card] = (cardFrequency[card] || 0) + 1;
     });
   });
-  let mostFrequentCards: [string, number][] = [];
+
+  // Get the single most frequent card (or first one if there's a tie)
+  // Sort by frequency descending, then by card name alphabetically for consistency
+  let mostFrequentCard: { name: string; count: number } | null = null;
   if (Object.keys(cardFrequency).length > 0) {
-    const maxFrequency = Math.max(...Object.values(cardFrequency));
-    mostFrequentCards = Object.entries(cardFrequency).filter(
-      ([, freq]) => freq === maxFrequency
+    const sortedCards = Object.entries(cardFrequency).sort(
+      ([nameA, countA], [nameB, countB]) => {
+        // First sort by count (descending)
+        if (countB !== countA) {
+          return countB - countA;
+        }
+        // If counts are equal, sort alphabetically by name for consistency
+        return nameA.localeCompare(nameB);
+      }
     );
+    const [topCardName, topCardCount] = sortedCards[0];
+    mostFrequentCard = { name: topCardName, count: topCardCount };
   }
 
   if (currentView === 'editor') {
@@ -216,20 +228,22 @@ const Index = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {mostFrequentCards.length > 0 ? (
+                {mostFrequentCard ? (
                   <div>
                     <div className="text-m text-gray-900 capitalize">
-                      {mostFrequentCards
-                        .map(([cardName]) =>
-                          t(`tarotCards.${cardName}.name`, {
-                            defaultValue: cardName,
-                          })
-                        )
-                        .join(', ')}
+                      {/* Try tarot cards first, then lenormand cards */}
+                      {t(`tarotCards.${mostFrequentCard.name}.name`, {
+                        defaultValue: t(
+                          `lenormandCards.${mostFrequentCard.name}.name`,
+                          {
+                            defaultValue: mostFrequentCard.name,
+                          }
+                        ),
+                      })}
                     </div>
                     <p className="text-muted-foreground  text-sm">
                       {t('indexPage.cardOccurrence', {
-                        count: mostFrequentCards[0][1],
+                        count: mostFrequentCard.count,
                       })}
                     </p>
                   </div>
@@ -249,7 +263,7 @@ const Index = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-1">
-                  {categoryCounts.slice(0, 3).map((category) => (
+                  {sortedCategoryCounts.slice(0, 3).map((category) => (
                     <div
                       key={category.id}
                       className="flex justify-between items-center"
