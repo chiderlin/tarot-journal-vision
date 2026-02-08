@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +6,6 @@ import { JournalEditor } from '@/components/JournalEditor';
 import { JournalList } from '@/components/JournalList';
 import { CalendarView } from '@/components/CalendarView';
 import { AnalysisView } from '@/components/AnalysisView';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { JournalEntry, Category, DEFAULT_CATEGORIES } from '@/types/tarot';
 import {
   Plus,
@@ -16,56 +15,138 @@ import {
   List,
   CalendarDays,
   PieChart,
+  LogOut,
 } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
+import { supabase } from '@/integrations/supabase/client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 const Index = () => {
-  const [entries, setEntries] = useLocalStorage<JournalEntry[]>(
-    'tarot-journal-entries',
-    []
-  );
-  const [categories] = useLocalStorage<Category[]>(
-    'tarot-journal-categories',
-    DEFAULT_CATEGORIES
-  );
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [currentView, setCurrentView] = useState<
     'list' | 'calendar' | 'editor' | 'analysis'
   >('list');
   const [editingEntry, setEditingEntry] = useState<JournalEntry | undefined>();
-  const { t } = useTranslation();
+
+  // Fetch entries from Supabase
+  const { data: entries = [], isLoading } = useQuery({
+    queryKey: ['journal-entries'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('journal_entries')
+        .select('*')
+        .order('date', { ascending: false });
+
+      if (error) {
+        toast.error('Failed to fetch entries');
+        throw error;
+      }
+      
+      return (data || []).map((item) => ({
+        ...item,
+        createdAt: item.created_at,
+        updatedAt: item.updated_at,
+      })) as JournalEntry[];
+    },
+  });
+
+  // Create entry mutation
+  const createEntryMutation = useMutation({
+    mutationFn: async (newEntry: Omit<JournalEntry, 'id' | 'createdAt' | 'updatedAt'>) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('No user found');
+
+      const { data, error } = await supabase
+        .from('journal_entries')
+        .insert({
+          ...newEntry,
+          user_id: user.id,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
+      toast.success(t('journalEditor.saveSuccess') || 'Entry saved successfully');
+      setCurrentView('list');
+      setEditingEntry(undefined);
+    },
+    onError: (error) => {
+      console.error('Error creating entry:', error);
+      toast.error('Failed to create entry');
+    },
+  });
+
+  // Update entry mutation
+  const updateEntryMutation = useMutation({
+    mutationFn: async (entry: JournalEntry) => {
+      const { error } = await supabase
+        .from('journal_entries')
+        .update({
+          title: entry.title,
+          content: entry.content,
+          category: entry.category,
+          date: entry.date,
+          cards: entry.cards,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', entry.id);
+
+      if (error) throw error;
+      return entry;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
+      toast.success(t('journalEditor.saveSuccess') || 'Entry updated successfully');
+      setCurrentView('list');
+      setEditingEntry(undefined);
+    },
+    onError: (error) => {
+      console.error('Error updating entry:', error);
+      toast.error('Failed to update entry');
+    },
+  });
+
+  // Delete entry mutation
+  const deleteEntryMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase
+        .from('journal_entries')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      return id;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
+      toast.success('Entry deleted successfully');
+    },
+    onError: (error) => {
+      console.error('Error deleting entry:', error);
+      toast.error('Failed to delete entry');
+    },
+  });
 
   const handleSaveEntry = (
     entryData: Omit<JournalEntry, 'id' | 'createdAt' | 'updatedAt'>
   ) => {
-    const now = new Date().toISOString();
-
     if (editingEntry && editingEntry.id) {
-      // Update existing entry
-      const updatedEntries = entries.map((entry) =>
-        entry.id === editingEntry.id
-          ? {
-              ...editingEntry,
-              ...entryData,
-              updatedAt: now,
-            }
-          : entry
-      );
-      setEntries(updatedEntries);
-    } else {
-      // Create new entry
-      const newEntry: JournalEntry = {
+      updateEntryMutation.mutate({
+        ...editingEntry,
         ...entryData,
-        id: crypto.randomUUID(),
-        createdAt: now,
-        updatedAt: now,
-      };
-      setEntries([newEntry, ...entries]);
+        updatedAt: new Date().toISOString(), // This is just for local typings, DB handles it
+      });
+    } else {
+      createEntryMutation.mutate(entryData);
     }
-
-    setCurrentView('list');
-    setEditingEntry(undefined);
   };
 
   const handleEditEntry = (entry: JournalEntry) => {
@@ -78,18 +159,18 @@ const Index = () => {
       id: '', // Empty id signifies a new entry
       title: '',
       content: '',
-      category: categories[0]?.name || '',
+      category: DEFAULT_CATEGORIES[0]?.name || '',
       date: format(date, 'yyyy-MM-dd'),
       cards: [],
-      createdAt: '', // Will be set on save
-      updatedAt: '', // Will be set on save
+      createdAt: '',
+      updatedAt: '',
     });
     setCurrentView('editor');
   };
 
   const handleDeleteEntry = (id: string) => {
     if (confirm(t('indexPage.deleteConfirmation'))) {
-      setEntries(entries.filter((entry) => entry.id !== id));
+      deleteEntryMutation.mutate(id);
     }
   };
 
@@ -98,8 +179,15 @@ const Index = () => {
     setEditingEntry(undefined);
   };
 
+  const handleSignOut = async () => {
+      await supabase.auth.signOut();
+  };
+
   // Statistics
   const totalEntries = entries.length;
+  // Use DEFAULT_CATEGORIES for now as we don't have a categories table
+  const categories = DEFAULT_CATEGORIES;
+    
   const categoryCounts = categories.map((category) => ({
     ...category,
     count: entries.filter((entry) => entry.category === category.name).length,
@@ -111,7 +199,7 @@ const Index = () => {
   // Most frequent cards
   const cardFrequency: Record<string, number> = {};
   entries.forEach((entry) => {
-    entry.cards.forEach((card) => {
+    entry.cards?.forEach((card) => {
       cardFrequency[card] = (cardFrequency[card] || 0) + 1;
     });
   });
@@ -152,8 +240,11 @@ const Index = () => {
   return (
     <div className="min-h-screen simple-bg">
       <div className="container mx-auto p-4 space-y-8">
-        <div className="flex justify-end">
+        <div className="flex justify-end items-center gap-4">
           <LanguageSwitcher />
+          <Button variant="ghost" size="icon" onClick={handleSignOut} title={t('auth.signOut') || "Sign Out"}>
+            <LogOut className="h-5 w-5" />
+          </Button>
         </div>
         {/* Header */}
         <div className="text-center py-12">
@@ -201,7 +292,7 @@ const Index = () => {
         </div>
 
         {/* Statistics */}
-        {currentView !== 'analysis' && totalEntries > 0 && (
+        {currentView !== 'analysis' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card>
               <CardHeader className="pb-2">
@@ -211,12 +302,18 @@ const Index = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-purple-600">
-                  {totalEntries}
-                </div>
-                <p className="text-muted-foreground text-sm">
-                  {t('indexPage.entriesCountSuffix')}
-                </p>
+                {isLoading ? (
+                    <div className="text-sm text-muted-foreground">Loading...</div>
+                ) : (
+                    <>
+                    <div className="text-3xl font-bold text-purple-600">
+                    {totalEntries}
+                    </div>
+                    <p className="text-muted-foreground text-sm">
+                    {t('indexPage.entriesCountSuffix')}
+                    </p>
+                    </>
+                )}
               </CardContent>
             </Card>
 
@@ -287,47 +384,53 @@ const Index = () => {
         )}
 
         {/* Main Content */}
-        {currentView === 'list' && (
-          <JournalList
-            entries={entries}
-            categories={categories}
-            onEdit={handleEditEntry}
-            onDelete={handleDeleteEntry}
-          />
+        {isLoading ? (
+             <div className="text-center py-12">Loading entries...</div>
+        ) : (
+            <>
+                {currentView === 'list' && (
+                <JournalList
+                    entries={entries}
+                    categories={categories}
+                    onEdit={handleEditEntry}
+                    onDelete={handleDeleteEntry}
+                />
+                )}
+
+                {currentView === 'calendar' && (
+                <CalendarView
+                    entries={entries}
+                    onDateSelect={handleNewEntryForDate}
+                    onEntryEdit={handleEditEntry}
+                    onEntryDelete={handleDeleteEntry}
+                />
+                )}
+
+                {currentView === 'analysis' && <AnalysisView entries={entries} />}
+
+                {entries.length === 0 &&
+                currentView !== 'calendar' &&
+                currentView !== 'analysis' && (
+                    <div className="text-center py-16">
+                    <div className="text-6xl mb-4">🔮</div>
+                    <h2 className="text-2xl font-bold mb-4">
+                        {t('indexPage.welcomeTitle')}
+                    </h2>
+                    <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                        {t('indexPage.welcomeMessage')}
+                    </p>
+                    <Button
+                        variant="default"
+                        size="lg"
+                        onClick={() => setCurrentView('editor')}
+                    >
+                        <Plus className="w-5 h-5 mr-2" />
+                        {t('indexPage.createFirstEntryButton')}
+                    </Button>
+                    </div>
+                )}
+            </>
         )}
-
-        {currentView === 'calendar' && (
-          <CalendarView
-            entries={entries}
-            onDateSelect={handleNewEntryForDate}
-            onEntryEdit={handleEditEntry}
-            onEntryDelete={handleDeleteEntry}
-          />
-        )}
-
-        {currentView === 'analysis' && <AnalysisView entries={entries} />}
-
-        {entries.length === 0 &&
-          currentView !== 'calendar' &&
-          currentView !== 'analysis' && (
-            <div className="text-center py-16">
-              <div className="text-6xl mb-4">🔮</div>
-              <h2 className="text-2xl font-bold mb-4">
-                {t('indexPage.welcomeTitle')}
-              </h2>
-              <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                {t('indexPage.welcomeMessage')}
-              </p>
-              <Button
-                variant="default"
-                size="lg"
-                onClick={() => setCurrentView('editor')}
-              >
-                <Plus className="w-5 h-5 mr-2" />
-                {t('indexPage.createFirstEntryButton')}
-              </Button>
-            </div>
-          )}
       </div>
     </div>
   );

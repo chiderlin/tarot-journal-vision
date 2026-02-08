@@ -750,5 +750,17 @@
     "welcomeTitle": "開始你的塔羅日記之旅",
     "welcomeMessage": "記錄你的塔羅解讀、靈感和成長。使用 # 語法快速插入牌卡圖片，讓你的日記更加生動。",
     "createFirstEntryButton": "創建第一篇日記"
+  },
+  "auth": {
+    "createAccount": "建立帳號",
+    "welcomeBack": "歡迎回來",
+    "signUpDescription": "在下方輸入您的電子郵件以建立帳號",
+    "signInDescription": "在下方輸入您的電子郵件以登入您的帳號",
+    "email": "電子郵件",
+    "password": "密碼",
+    "signUp": "註冊",
+    "signIn": "登入",
+    "alreadyHaveAccount": "已經有帳號了嗎？登入",
+    "dontHaveAccount": "還沒有帳號嗎？註冊"
   }
 }

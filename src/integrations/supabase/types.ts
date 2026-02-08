@@ -13,9 +13,69 @@ export type Database = {
     PostgrestVersion: "13.0.5"
   }
   public: {
-    Tables: {
-      [_ in never]: never
-    }
+      Tables: {
+        profiles: {
+          Row: {
+            id: string;
+            email: string;
+            created_at: string;
+          };
+          Insert: {
+            id: string;
+            email: string;
+            created_at?: string;
+          };
+          Update: {
+            id?: string;
+            email?: string;
+            created_at?: string;
+          };
+          Relationships: [];
+        };
+        journal_entries: {
+          Row: {
+            id: string;
+            user_id: string;
+            title: string;
+            content: string | null;
+            date: string;
+            category: string;
+            cards: string[] | null;
+            created_at: string;
+            updated_at: string;
+          };
+          Insert: {
+            id?: string;
+            user_id: string;
+            title: string;
+            content?: string | null;
+            date: string;
+            category: string;
+            cards?: string[] | null;
+            created_at?: string;
+            updated_at?: string;
+          };
+          Update: {
+            id?: string;
+            user_id?: string;
+            title?: string;
+            content?: string | null;
+            date?: string;
+            category?: string;
+            cards?: string[] | null;
+            created_at?: string;
+            updated_at?: string;
+          };
+          Relationships: [
+            {
+              foreignKeyName: "journal_entries_user_id_fkey";
+              columns: ["user_id"];
+              referencedRelation: "users";
+              referencedColumns: ["id"];
+            }
+          ];
+        };
+      };
     Views: {
       [_ in never]: never
     }

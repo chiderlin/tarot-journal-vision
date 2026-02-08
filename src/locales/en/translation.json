@@ -913,6 +913,18 @@
     "categoryStatsTitle": "Category Statistics",
     "welcomeTitle": "Begin Your Tarot Journal Journey",
     "welcomeMessage": "Record your tarot readings, insights, and growth. Use the # syntax to quickly insert card images and make your journal more vivid.",
-    "createFirstEntryButton": "Create Your First Journal Entry"
+    "createFirstEntryButton": "Create First Entry"
+  },
+  "auth": {
+    "createAccount": "Create an Account",
+    "welcomeBack": "Welcome Back",
+    "signUpDescription": "Enter your email below to create your account",
+    "signInDescription": "Enter your email below to sign in to your account",
+    "email": "Email",
+    "password": "Password",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "alreadyHaveAccount": "Already have an account? Sign In",
+    "dontHaveAccount": "Don't have an account? Sign Up"
   }
 }
