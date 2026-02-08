@@ -1,67 +1,81 @@
-# Tarot Journal Vision (塔羅日記)
 
-一個現代化的塔羅牌日記網頁應用程式，讓使用者可以記錄每日的抽牌、撰寫心得並透過視覺化的方式回顧。
+# Tarot Journal Vision (塔羅日記) 🔮
 
-Progress:
+一個現代化的塔羅牌日記網頁應用程式，結合了 **Supabase 雲端資料庫** 與 **Google Gemini AI 智能解牌**，讓使用者可以記錄每日的抽牌、撰寫心得，並獲得深度的靈感洞察。
 
-- 建立 supabase -> for 更多分析 query
+## ✨ 主要功能 (Features)
 
-DONE:
+### 1. 🎴 雙系統牌卡支援
+- **完整偉特塔羅 (Rider-Waite Tarot)**：78 張牌義詳解 (正位/逆位)。
+- **雷諾曼卡 (Lenormand)**：36 張牌義詳解。
+- **國際化支援 (i18n)**：完整的中英文介面切換。
 
-- 完整雷諾曼牌（Lenormand）國際化支援：
-  - 新增36張雷諾曼牌的完整中文翻譯（牌名、關鍵詞、牌義）
-  - 新增36張雷諾曼牌的完整英文翻譯
-  - 升級 LenormandCardRenderer 組件支援 i18n，包含可點擊彈窗顯示詳細牌義
-  - 修復雷諾曼牌圖片無法顯示問題（改用 import 方式載入圖片）
-  - 「最常出現牌」功能現在同時支援塔羅牌和雷諾曼牌的翻譯顯示
-- 修復「最常出現牌」統計和顯示邏輯：
-  - 當多張牌頻率相同時，按字母順序排序確保一致性（避免隨機顯示）
-  - 正確顯示出現次數「出現 X 次」格式
-  - 支援中英文雙語顯示
-- 不同主題對不同主題的牌有相對應解釋(LLM)
-- 完成每個牌的基本解釋：預計點擊每張卡片時會放大圖示顯示個別牌卡資訊。
-- 完成 JournalEditor 頁面雙語
-- 完成其他頁面雙語重構
-- 新增英文,中文語系
+### 2. 📝 雲端日記 (Cloud Journaling)
+- **Supabase Integration**：資料庫雲端同步，不再怕換電腦資料不見。
+- **所見即所得編輯器**：支援 `#t-fool` 等語法快速插入牌卡圖示。
+- **CRUD 功能**：完整的日記新增、修改、刪除、查詢功能。
 
-## ✨ 功能特色
+### 3. 🤖 AI Oracle (智能解牌)
+- **AI 解析**：整合 **Google Gemini Pro** 模型。
+- **即時洞察**：按下一鍵，AI 根據你的牌陣與問題提供「整體能量」、「牌陣解析」與「行動建議」。
+- **使用限制**：每人每日限用 3 次，保持覺察與節制。
 
-- **每日抽牌與記錄**: 輕鬆記錄你的每日塔羅牌，並寫下你的想法與感受。
-- **日記編輯器**: 提供一個功能豐富的編輯器來撰寫和格式化你的日記內容。
-- **日曆視圖**: 透過日曆快速瀏覽過去的抽牌記錄與日記。
-- **塔羅牌庫**: 內建完整的偉特塔羅牌圖庫，方便查閱。
-- **響應式設計**: 在桌面和行動裝置上都有良好的使用體驗。
+### 4. 🔐 用戶系統 (Authentication)
+- **Email 註冊/登入**：支援 Supabase Auth。
+- **Developer Quick Login**：開發測試專用的快速登入通道。
+- **資料隱私 (RLS)**：透過 Row Level Security 確保每位用戶只能看見自己的日記。
 
-## 技術棧
+### 5. 📊 數據視覺化
+- **日曆視圖**：透過月曆回顧過去的能量流動。
+- **統計分析**：查看最常出現的牌卡與元素分佈。
 
-- **前端框架**: [React](https://react.dev/)
-- **建構工具**: [Vite](https://vitejs.dev/)
-- **程式語言**: [TypeScript](https://www.typescriptlang.org/)
-- **CSS 框架**: [Tailwind CSS](https://tailwindcss.com/)
-- **UI 元件庫**: [shadcn/ui](https://ui.shadcn.com/)
-- **路由**: [React Router](https://reactrouter.com/)
-- **表單處理**: [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/)
-- **非同步狀態管理**: [TanStack Query](https://tanstack.com/query)
+---
 
-## 🚀 快速開始
+## 🛠 技術棧 (Tech Stack)
 
-1.  **安裝依賴**
+- **Frontend**: [React](https://react.dev/), [Vite](https://vitejs.dev/), [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
+- **State Management**: [TanStack Query](https://tanstack.com/query)
+- **Backend (BaaS)**: [Supabase](https://supabase.com/) (PostgreSQL + Auth)
+- **AI**: [Google Gemini API](https://ai.google.dev/)
+- **Deployment**: [GitHub Pages](https://pages.github.com/) + GitHub Actions
 
-    ```bash
-    npm install
-    ```
+---
 
-2.  **啟動本地開發伺服器**
+## 🚀 快速開始 (Quick Start)
 
-    ```bash
-    npm run dev
-    ```
+### 1. 安裝依賴
+```bash
+npm install
+```
 
-3.  在瀏覽器中打開 Vite 提供的本地網址 (通常是 `http://localhost:5173`)。
+### 2. 設定環境變數 (.env)
+請在專案根目錄建立 `.env` 檔案，並填入以下資訊：
 
-## 📜 可用腳本
+```env
+VITE_SUPABASE_URL="你的_Supabase_URL"
+VITE_SUPABASE_PUBLISHABLE_KEY="你的_Supabase_Anon_Key"
+VITE_GOOGLE_AI_KEY="你的_Google_Gemini_API_Key"
+```
 
-- `npm run dev`: 在開發模式下啟動應用程式。
-- `npm run build`: 將應用程式打包成生產環境的靜態檔案。
-- `npm run lint`: 執行 ESLint 檢查程式碼風格。
-- `npm run preview`: 在本地預覽生產環境的打包結果。
+
+## 🗓️ 未來規劃 (Roadmap)
+
+### 🔜 近期優先 (Priority High)
+- [ ] **AI 每日指引 (Daily Guidance)**：每日登入時提供一句靈性指引。
+- [ ] **首頁列表優化**：優化長篇日記在列表頁的顯示方式 (文字截斷或摘要)。
+- [ ] **Markdown 渲染增強**：支援更豐富的文字格式 (粗體、清單等)。
+
+### 📊 深度分析 (Deep Insights)
+- [ ] **共時性分析**：偵測特定時間段內反覆出現的牌 (例如：「這週你抽到了 3 次『寶劍三』」)。
+- [ ] **能量熱力圖**：以視覺化方式呈現每週/每月的元素分佈 (火/水/風/土)。
+- [ ] **關鍵字雲**：分析日記中最常出現的心情關鍵字。
+
+### 👤 社群與分享 (Social)
+- [ ] **分享卡片 (Shareable Cards)**：將日記或抽牌結果生成精美的圖片，方便分享到社群媒體。
+- [ ] **個人檔案**：自訂頭像與暱稱。
+
+### ⚡️ 效能優化 (Performance)
+- [ ] **無限捲動 (Infinite Scroll)**：優化大量日記的載入效能。
+- [ ] **PWA 支援**：支援離線瀏覽與安裝到手機桌面。

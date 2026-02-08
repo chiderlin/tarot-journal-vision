@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TarotCardRenderer } from './TarotCardRenderer';
 import { LenormandCardRenderer } from './LenormandCardRenderer';
@@ -126,6 +126,22 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
     }, 0);
   };
 
+  const [usageCount, setUsageCount] = useState(0);
+
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const STORAGE_KEY = 'tarot_ai_usage';
+    const storedUsage = localStorage.getItem(STORAGE_KEY);
+    if (storedUsage) {
+      const usage = JSON.parse(storedUsage);
+      if (usage.date === today) {
+        setUsageCount(usage.count);
+      } else {
+         setUsageCount(0);
+      }
+    }
+  }, []);
+
   // AI 解牌功能
   const handleAIInterpretation = async () => {
     const cards = extractCards(content);
@@ -139,24 +155,52 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       return;
     }
 
+    // Rate Limiting Check
+    const today = new Date().toISOString().split('T')[0];
+    const STORAGE_KEY = 'tarot_ai_usage';
+    const storedUsage = localStorage.getItem(STORAGE_KEY);
+    let usage = storedUsage ? JSON.parse(storedUsage) : { date: today, count: 0 };
+
+    if (usage.date !== today) {
+      usage = { date: today, count: 0 };
+    }
+
+    if (usage.count >= 3) {
+       toast({
+        title: t('journalEditor.toast.rateLimitExceeded') || 'Rate Limit Exceeded',
+        description: t('journalEditor.toast.dailyLimitReached') || 'You have reached the daily limit of 3 AI interpretations.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsLoadingAI(true);
     try {
-      const { data, error } = await supabase.functions.invoke(
-        'tarot-interpretation',
-        {
-          body: { cards, category },
-        }
-      );
+      // Dynamic import to avoid dependency cycle if any, though not expected here.
+      // Better to import at top, but for replace_file_content clarity...
+      // Actually, I should add the import at the top. 
+      // I will assume I added the import in a separate step or I will use a dynamic import here if possible? 
+      // No, let's just use the function, I'll add the import in a separate replace call.
+      const { getTarotInterpretation } = await import('@/services/ai');
 
-      if (error) throw error;
+      const interpretation = await getTarotInterpretation({
+        cards,
+        context: category,
+        question: title,
+      });
 
-      if (data?.interpretation) {
-        setAiInterpretation(data.interpretation);
-        toast({
-          title: t('journalEditor.toast.aiSuccessTitle'),
-          description: t('journalEditor.toast.aiSuccessDescription'),
-        });
-      }
+      setAiInterpretation(interpretation);
+      
+      // Update usage count
+      usage.count += 1;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(usage));
+      setUsageCount(usage.count);
+
+      toast({
+        title: t('journalEditor.toast.aiSuccessTitle'),
+        description: t('journalEditor.toast.aiSuccessDescription'),
+      });
+      
     } catch (error) {
       console.error('AI interpretation error:', error);
       toast({
@@ -348,7 +392,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
               ) : (
                 <Sparkles className="w-4 h-4 mr-2" />
               )}
-              {t('journalEditor.aiInterpretation')}
+              {t('journalEditor.aiInterpretation')} ({usageCount}/3)
             </Button>
             <div className="flex gap-2">
               <Button variant="outline" onClick={onCancel}>
@@ -367,13 +411,36 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 
           {aiInterpretation && (
             <Card className="bg-purple-50/50 border-purple-200">
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2 text-purple-700">
-                  <Sparkles className="w-4 h-4" />
-                  {t('journalEditor.aiInterpretation')}
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base flex items-center justify-between text-purple-700">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" />
+                    {t('journalEditor.aiInterpretation')}
+                  </div>
+                  <Button
+                    variant="ghost" 
+                    size="sm"
+                    className="text-purple-700 hover:text-purple-900 hover:bg-purple-100"
+                    onClick={() => {
+                        const newContent = `${content}\n\n🤖 AI 解牌：\n${aiInterpretation}`;
+                        setContent(newContent);
+                        toast({
+                            title: "已加入日記",
+                            description: "AI 解析內容已附加到您的日記中。",
+                        });
+                        // Smooth scroll to bottom of textarea
+                        setTimeout(() => {
+                           if (textareaRef.current) {
+                               textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+                           }
+                        }, 100);
+                    }}
+                  >
+                    📝 {t('journalEditor.appendToJournal') || "加入日記"}
+                  </Button>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-foreground/90 whitespace-pre-wrap">
+              <CardContent className="text-sm text-foreground/90 whitespace-pre-wrap pt-0">
                 {aiInterpretation}
               </CardContent>
             </Card>

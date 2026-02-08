@@ -677,8 +677,11 @@
       "aiSuccessTitle": "AI 解牌完成",
       "aiSuccessDescription": "已生成塔羅牌解析建議",
       "aiErrorTitle": "解牌失敗",
-      "aiErrorDescription": "請稍後再試"
+      "aiErrorDescription": "請稍後再試",
+      "rateLimitExceeded": "超過使用限制",
+      "dailyLimitReached": "您已達到每日 5 次 AI 解牌的限制。"
     },
+    "appendToJournal": "加入日記",
     "quickReference": "快速參考",
     "classicTarot": "經典塔羅牌",
     "lenormand": "雷諾曼",

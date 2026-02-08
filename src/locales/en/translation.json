@@ -840,9 +840,12 @@
       "addTagsFirst": "Please add Tarot card tags in the content first (e.g., #t-fool, #t-magician)",
       "aiSuccessTitle": "AI Interpretation Complete",
       "aiSuccessDescription": "AI interpretation suggestion has been generated.",
-      "aiErrorTitle": "Interpretation Failed",
-      "aiErrorDescription": "Please try again later"
+      "aiErrorTitle": "Error",
+      "aiErrorDescription": "Please try again later.",
+      "rateLimitExceeded": "Rate Limit Exceeded",
+      "dailyLimitReached": "You have reached the daily limit of 5 AI interpretations."
     },
+    "appendToJournal": "Append to Journal",
     "quickReference": "Quick Reference",
     "classicTarot": "Classic Tarot",
     "lenormand": "Lenormand",
