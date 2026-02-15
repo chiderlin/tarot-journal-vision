@@ -18,6 +18,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { parseSyntax } from './SyntaxRenderer';
+import { MarkdownRenderer } from './MarkdownRenderer';
 import {
   JournalEntry,
   Category,
@@ -57,16 +58,10 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 
   // Extract card names from content
   const extractCards = (text: string): string[] => {
-    const regex = /#(?:t|l)-([\w-]+)/g;
+    const regex = /#((?:t|l)-[\w-]+)/g;
     const matches = Array.from(text.matchAll(regex));
-    const cardNames = matches.map((match) => {
-      const cardName = match[1];
-      if (cardName.endsWith('-reverse')) {
-        return cardName.slice(0, -'-reverse'.length);
-      }
-      return cardName;
-    });
-    return [...new Set(cardNames)];
+    const cardTags = matches.map((match) => match[1]);
+    return [...new Set(cardTags)];
   };
 
   const handleSave = () => {
@@ -348,34 +343,23 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                     </Card>
                   )}
                 </div>
-                {/* Real-time preview */}{' '}
+                {/* Real-time preview */}
                 <div className="min-h-[300px] p-4 border rounded-md bg-muted/30 overflow-auto">
                   <div className="text-sm font-medium mb-2 text-muted-foreground">
                     {t('journalEditor.realtimePreview')}
                   </div>
-                  <div className="prose prose-sm max-w-none text-foreground">
-                    {content.split('\n').map((line, index) => (
-                      <p key={index} className="mb-2 leading-relaxed">
-                        {parseSyntax(line)}
-                      </p>
-                    ))}
-                    {!content && (
-                      <p className="text-muted-foreground italic">
-                        {t('journalEditor.startTyping')}
-                      </p>
-                    )}
-                  </div>
+                  {content ? (
+                    <MarkdownRenderer content={content} />
+                  ) : (
+                    <p className="text-muted-foreground italic">
+                      {t('journalEditor.startTyping')}
+                    </p>
+                  )}
                 </div>
               </div>
             ) : (
               <div className="min-h-[300px] p-4 border rounded-md bg-background/30 overflow-auto">
-                <div className="prose prose-sm max-w-none text-foreground">
-                  {content.split('\n').map((line, index) => (
-                    <p key={index} className="mb-2 leading-relaxed">
-                      {parseSyntax(line)}
-                    </p>
-                  ))}
-                </div>
+                <MarkdownRenderer content={content} />
               </div>
             )}
           </div>

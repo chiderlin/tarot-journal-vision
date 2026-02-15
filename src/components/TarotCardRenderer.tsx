@@ -227,9 +227,9 @@ export const TarotCardRenderer: React.FC<TarotCardRendererProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="inline-block mx-1 cursor-pointer">
-          <div
-            className={`${sizeClasses[size]} relative transition-transform hover:scale-105`}
+        <span className="inline-block mx-1 cursor-pointer align-top">
+          <span
+            className={`${sizeClasses[size]} relative transition-transform hover:scale-105 inline-block`}
             title={`${translatedName}${isReverse ? ` (${reversedLabel})` : ''}`}
           >
             <img
@@ -239,11 +239,11 @@ export const TarotCardRenderer: React.FC<TarotCardRendererProps> = ({
                 isReverse ? 'transform rotate-180' : ''
               }`}
             />
-          </div>
-          <p className="text-xs text-center mt-1 text-muted-foreground">
+          </span>
+          <span className="text-xs text-center mt-1 text-muted-foreground block">
             {translatedName}
-          </p>
-        </div>
+          </span>
+        </span>
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <ScrollArea className="max-h-[80vh] p-4">

@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { DailyGuidance } from '@/components/DailyGuidance';
 
 const Index = () => {
   const { t } = useTranslation();
@@ -264,6 +265,11 @@ const Index = () => {
             <Plus className="w-5 h-5 mr-2" />
             {t('indexPage.newEntryButton')}
           </Button>
+        </div>
+
+        {/* Daily Guidance */}
+        <div className="max-w-4xl mx-auto">
+          <DailyGuidance />
         </div>
 
         <div className="flex justify-center mb-8">

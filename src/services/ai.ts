@@ -72,3 +72,59 @@ export const getTarotInterpretation = async ({ question, cards, context }: AIInp
     throw error;
   }
 };
+
+export const generateDailyGuidance = async () => {
+  if (!apiKey) {
+    throw new Error('Google AI Key is not configured.');
+  }
+  
+  const currentLang = i18next.language || 'en';
+  const language = currentLang.startsWith('zh') ? 'zh-TW' : 'en';
+
+  const prompt = `
+  Role: Daily Life Advisor
+  Task: Generate a single "今日宜" (Today's Recommendation) style sentence.
+  
+  Constraints:
+  1. Language: ${language} (MUST be ${language === 'zh-TW' ? 'Traditional Chinese' : 'English'}).
+  2. Format: 
+     - For zh-TW: MUST start with "今日宜:" followed by a short, actionable suggestion
+     - For en: Use "Today, try:" or "Today's suggestion:" format
+  3. Length: Keep the suggestion part short and sweet (5-10 words after the prefix).
+  4. Tone: Warm, gentle, practical, and relatable.
+  5. Content Categories:
+     - Self-care (rest, eat well, take breaks)
+     - Emotional wellness (be patient with yourself, let go, accept)
+     - Small actions (do one small thing, reach out to someone, try something new)
+     - Mindfulness (slow down, notice small joys, be present)
+     - Permission to rest (it's okay to do nothing, take it easy)
+  6. Style: Simple, direct, human. Avoid being preachy or overly philosophical.
+  
+  Example Output (zh-TW):
+  "今日宜:好好睡個午覺"
+  "今日宜:喝一杯熱茶,慢慢來"
+  "今日宜:對自己說「辛苦了」"
+  "今日宜:做一件拖很久的小事"
+  "今日宜:什麼都不做也沒關係"
+  "今日宜:傳訊息給想念的人"
+  "今日宜:允許自己不完美"
+  
+  Example Output (en):
+  "Today, try: taking a proper lunch break"
+  "Today's suggestion: say something kind to yourself"
+  "Today, try: doing one thing you've been putting off"
+  "Today's suggestion: it's okay to rest"
+  "Today, try: texting someone you miss"
+  
+  Generate ONE suggestion only.
+  `;
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text().trim();
+  } catch (error) {
+    console.error('Error generating daily guidance:', error);
+    throw error;
+  }
+};
