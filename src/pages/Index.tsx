@@ -96,6 +96,9 @@ const Index = () => {
           category: entry.category,
           date: entry.date,
           cards: entry.cards,
+          emotions: entry.emotions,
+          primary_emotion: entry.primary_emotion,
+          emotion_intensities: entry.emotion_intensities as any,
           updated_at: new Date().toISOString(),
         })
         .eq('id', entry.id);

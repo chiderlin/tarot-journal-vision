@@ -12,7 +12,17 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { parseSyntax } from './SyntaxRenderer';
 import { JournalEntry, Category } from '@/types/tarot';
-import { Edit, Trash2, Search, Calendar, Tag, ChevronDown, ChevronUp, Share2 } from 'lucide-react';
+import { EMOTIONS, EmotionKey } from '@/types/emotions';
+import {
+  Edit,
+  Trash2,
+  Search,
+  Calendar,
+  Tag,
+  ChevronDown,
+  ChevronUp,
+  Share2,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { ShareDialog } from './ShareDialog';
@@ -33,17 +43,19 @@ export const JournalList: React.FC<JournalListProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'date' | 'title'>('date');
-  const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set());
+  const [expandedEntries, setExpandedEntries] = useState<Set<string>>(
+    new Set()
+  );
   const [shareEntry, setShareEntry] = useState<JournalEntry | null>(null);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const { t } = useTranslation();
-  
+
   const filteredAndSortedEntries = entries
     .filter((entry) => {
-      const matchesSearch = 
+      const matchesSearch =
         entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         entry.content.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = 
+      const matchesCategory =
         selectedCategory === 'all' || entry.category === selectedCategory;
       return matchesSearch && matchesCategory;
     })
@@ -73,17 +85,17 @@ export const JournalList: React.FC<JournalListProps> = ({
   };
 
   const getPreviewLines = (content: string, maxLines: number = 3) => {
-    const lines = content.split('\n').filter(line => line.trim() !== '');
+    const lines = content.split('\n').filter((line) => line.trim() !== '');
     return lines.slice(0, maxLines).join('\n');
   };
 
   const shouldShowExpandButton = (content: string, maxLines: number = 3) => {
-    const lines = content.split('\n').filter(line => line.trim() !== '');
+    const lines = content.split('\n').filter((line) => line.trim() !== '');
     return lines.length > maxLines;
   };
 
   const toggleExpand = (entryId: string) => {
-    setExpandedEntries(prev => {
+    setExpandedEntries((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(entryId)) {
         newSet.delete(entryId);
@@ -180,7 +192,9 @@ export const JournalList: React.FC<JournalListProps> = ({
             const categoryInfo = getCategoryInfo(entry.category);
             const isExpanded = expandedEntries.has(entry.id);
             const showExpandButton = shouldShowExpandButton(entry.content);
-            const displayContent = isExpanded ? entry.content : getPreviewLines(entry.content);
+            const displayContent = isExpanded
+              ? entry.content
+              : getPreviewLines(entry.content);
 
             return (
               <Card
@@ -240,9 +254,40 @@ export const JournalList: React.FC<JournalListProps> = ({
                 </CardHeader>
 
                 <CardContent>
+                  {/* 情緒標籤 */}
+                  {entry.emotions && entry.emotions.length > 0 && (
+                    <div className="flex gap-2 mb-4 flex-wrap">
+                      {entry.emotions.map((emotion) => {
+                        const emotionData = EMOTIONS[emotion as EmotionKey];
+                        const isPrimary = emotion === entry.primary_emotion;
+                        const intensity =
+                          entry.emotion_intensities?.[emotion] || 5;
+
+                        return (
+                          <Badge
+                            key={emotion}
+                            className={`inline-flex items-center gap-1 text-white ${
+                              isPrimary ? 'ring-2 ring-yellow-400' : ''
+                            }`}
+                            style={{ backgroundColor: emotionData.color }}
+                          >
+                            {emotionData.emoji} {emotionData.name}
+                            {isPrimary && ' ★'}
+                            <span className="text-xs ml-1 opacity-80">
+                              {intensity}/10
+                            </span>
+                          </Badge>
+                        );
+                      })}
+                    </div>
+                  )}
+
                   {/* Content preview */}
-                  <MarkdownRenderer content={displayContent} className="text-sm" />
-                  
+                  <MarkdownRenderer
+                    content={displayContent}
+                    className="text-sm"
+                  />
+
                   {/* Expand/Collapse button */}
                   {showExpandButton && (
                     <Button

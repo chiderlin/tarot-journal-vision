@@ -14,6 +14,9 @@ export interface JournalEntry {
   category: string;
   date: string;
   cards: string[]; // Array of card names that appear in this entry
+  emotions?: string[]; // Array of selected emotions (max 3)
+  primary_emotion?: string | null; // Main emotion
+  emotion_intensities?: Record<string, number>; // Intensity for each emotion (1-10)
   createdAt: string;
   updatedAt: string;
 }

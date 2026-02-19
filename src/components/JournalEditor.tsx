@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TarotCardRenderer } from './TarotCardRenderer';
 import { LenormandCardRenderer } from './LenormandCardRenderer';
+import { EmotionSelector } from './EmotionSelector';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -43,6 +44,13 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 }) => {
   const [title, setTitle] = useState(entry?.title || '');
   const [content, setContent] = useState(entry?.content || '');
+  const [emotions, setEmotions] = useState<string[]>(entry?.emotions || []);
+  const [primaryEmotion, setPrimaryEmotion] = useState<string | null>(
+    entry?.primary_emotion || null
+  );
+  const [emotionIntensities, setEmotionIntensities] = useState<
+    Record<string, number>
+  >(entry?.emotion_intensities || {});
 
   const [showPreview, setShowPreview] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -72,6 +80,9 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       category,
       date: entry?.date || new Date().toISOString().split('T')[0],
       cards,
+      emotions,
+      primary_emotion: primaryEmotion,
+      emotion_intensities: emotionIntensities,
     });
   };
 
@@ -132,7 +143,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       if (usage.date === today) {
         setUsageCount(usage.count);
       } else {
-         setUsageCount(0);
+        setUsageCount(0);
       }
     }
   }, []);
@@ -154,16 +165,21 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
     const today = new Date().toISOString().split('T')[0];
     const STORAGE_KEY = 'tarot_ai_usage';
     const storedUsage = localStorage.getItem(STORAGE_KEY);
-    let usage = storedUsage ? JSON.parse(storedUsage) : { date: today, count: 0 };
+    let usage = storedUsage
+      ? JSON.parse(storedUsage)
+      : { date: today, count: 0 };
 
     if (usage.date !== today) {
       usage = { date: today, count: 0 };
     }
 
     if (usage.count >= 3) {
-       toast({
-        title: t('journalEditor.toast.rateLimitExceeded') || 'Rate Limit Exceeded',
-        description: t('journalEditor.toast.dailyLimitReached') || 'You have reached the daily limit of 3 AI interpretations.',
+      toast({
+        title:
+          t('journalEditor.toast.rateLimitExceeded') || 'Rate Limit Exceeded',
+        description:
+          t('journalEditor.toast.dailyLimitReached') ||
+          'You have reached the daily limit of 3 AI interpretations.',
         variant: 'destructive',
       });
       return;
@@ -173,8 +189,8 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
     try {
       // Dynamic import to avoid dependency cycle if any, though not expected here.
       // Better to import at top, but for replace_file_content clarity...
-      // Actually, I should add the import at the top. 
-      // I will assume I added the import in a separate step or I will use a dynamic import here if possible? 
+      // Actually, I should add the import at the top.
+      // I will assume I added the import in a separate step or I will use a dynamic import here if possible?
       // No, let's just use the function, I'll add the import in a separate replace call.
       const { getTarotInterpretation } = await import('@/services/ai');
 
@@ -185,7 +201,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       });
 
       setAiInterpretation(interpretation);
-      
+
       // Update usage count
       usage.count += 1;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(usage));
@@ -195,7 +211,6 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
         title: t('journalEditor.toast.aiSuccessTitle'),
         description: t('journalEditor.toast.aiSuccessDescription'),
       });
-      
     } catch (error) {
       console.error('AI interpretation error:', error);
       toast({
@@ -274,6 +289,16 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
               </Select>
             </div>
           </div>
+
+          {/* 情緒選擇器 */}
+          <EmotionSelector
+            selectedEmotions={emotions}
+            primaryEmotion={primaryEmotion}
+            emotionIntensities={emotionIntensities}
+            onEmotionsChange={setEmotions}
+            onPrimaryEmotionChange={setPrimaryEmotion}
+            onIntensitiesChange={setEmotionIntensities}
+          />
 
           <div className="relative">
             <label className="text-sm font-medium mb-2 block">
@@ -402,25 +427,26 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                     {t('journalEditor.aiInterpretation')}
                   </div>
                   <Button
-                    variant="ghost" 
+                    variant="ghost"
                     size="sm"
                     className="text-purple-700 hover:text-purple-900 hover:bg-purple-100"
                     onClick={() => {
-                        const newContent = `${content}\n\n🤖 AI 解牌：\n${aiInterpretation}`;
-                        setContent(newContent);
-                        toast({
-                            title: "已加入日記",
-                            description: "AI 解析內容已附加到您的日記中。",
-                        });
-                        // Smooth scroll to bottom of textarea
-                        setTimeout(() => {
-                           if (textareaRef.current) {
-                               textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
-                           }
-                        }, 100);
+                      const newContent = `${content}\n\n🤖 AI 解牌：\n${aiInterpretation}`;
+                      setContent(newContent);
+                      toast({
+                        title: '已加入日記',
+                        description: 'AI 解析內容已附加到您的日記中。',
+                      });
+                      // Smooth scroll to bottom of textarea
+                      setTimeout(() => {
+                        if (textareaRef.current) {
+                          textareaRef.current.scrollTop =
+                            textareaRef.current.scrollHeight;
+                        }
+                      }, 100);
                     }}
                   >
-                    📝 {t('journalEditor.appendToJournal') || "加入日記"}
+                    📝 {t('journalEditor.appendToJournal') || '加入日記'}
                   </Button>
                 </CardTitle>
               </CardHeader>

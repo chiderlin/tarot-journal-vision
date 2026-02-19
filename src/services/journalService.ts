@@ -6,22 +6,25 @@ import type { JournalEntry } from '@/types/tarot';
 // Type alias for the database entry schema
 type JournalEntrySchema =
   Database['public']['Tables']['journal_entries']['Row'];
-type JournalEntryCardSchema =
-  Database['public']['Tables']['journal_entry_cards']['Row'];
 
 // Helper to map from DB schema to application type
-const mapToJournalEntry = (
-  entry: JournalEntrySchema & {
-    journal_entry_cards: Pick<JournalEntryCardSchema, 'card_name'>[];
-  }
-): JournalEntry => {
+const mapToJournalEntry = (entry: any): JournalEntry => {
+  // Extract card names from journal_entry_cards array
+  const cards = entry.journal_entry_cards
+    ? (entry.journal_entry_cards as any[]).map((card: any) => card.card_name)
+    : entry.cards || [];
+
   return {
     id: entry.id,
     title: entry.title,
     content: entry.content || '',
     category: entry.category || '',
     date: entry.date,
-    cards: entry.journal_entry_cards.map((c) => c.card_name),
+    cards,
+    emotions: entry.emotions || [],
+    primary_emotion: entry.primary_emotion || null,
+    emotion_intensities:
+      (entry.emotion_intensities as Record<string, number>) || {},
     createdAt: entry.created_at,
     updatedAt: entry.updated_at,
   };
@@ -31,7 +34,7 @@ const mapToJournalEntry = (
  * Fetches all journal entries for the current user.
  */
 export const getJournalEntries = async (): Promise<JournalEntry[]> => {
-  const { data, error } = await supabase
+  const { data, error } = await (supabase
     .from('journal_entries')
     .select(
       `
@@ -41,7 +44,7 @@ export const getJournalEntries = async (): Promise<JournalEntry[]> => {
       )
     `
     )
-    .order('date', { ascending: false });
+    .order('date', { ascending: false }) as any);
 
   if (error) {
     console.error('Error fetching journal entries:', error);
@@ -97,13 +100,12 @@ export const createJournalEntry = async (
       journal_entry_id: newEntry.id,
       card_name,
     }));
-    const { error: cardsError } = await supabase
+    const { error: cardsError } = await (supabase
       .from('journal_entry_cards')
-      .insert(cardRecords);
+      .insert(cardRecords) as any);
 
     if (cardsError) {
       console.error('Error inserting cards:', cardsError);
-      // In a real-world scenario, we might want to delete the orphaned entry
       throw cardsError;
     }
   }
@@ -140,10 +142,11 @@ export const updateJournalEntry = async (
   }
 
   // 2. Delete old cards for this entry
-  const { error: deleteError } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error: deleteError } = await (supabase
     .from('journal_entry_cards')
     .delete()
-    .eq('journal_entry_id', id);
+    .eq('journal_entry_id', id) as any);
 
   if (deleteError) {
     console.error('Error deleting old cards:', deleteError);
@@ -156,9 +159,9 @@ export const updateJournalEntry = async (
       journal_entry_id: id,
       card_name,
     }));
-    const { error: insertError } = await supabase
+    const { error: insertError } = await (supabase
       .from('journal_entry_cards')
-      .insert(cardRecords);
+      .insert(cardRecords) as any);
 
     if (insertError) {
       console.error('Error inserting new cards:', insertError);

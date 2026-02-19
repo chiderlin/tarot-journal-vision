@@ -41,6 +41,9 @@ export type Database = {
             date: string;
             category: string;
             cards: string[] | null;
+            emotions: string[] | null;
+            primary_emotion: string | null;
+            emotion_intensities: Json | null;
             created_at: string;
             updated_at: string;
           };
@@ -52,6 +55,9 @@ export type Database = {
             date: string;
             category: string;
             cards?: string[] | null;
+            emotions?: string[] | null;
+            primary_emotion?: string | null;
+            emotion_intensities?: Json | null;
             created_at?: string;
             updated_at?: string;
           };
@@ -63,6 +69,9 @@ export type Database = {
             date?: string;
             category?: string;
             cards?: string[] | null;
+            emotions?: string[] | null;
+            primary_emotion?: string | null;
+            emotion_intensities?: Json | null;
             created_at?: string;
             updated_at?: string;
           };
