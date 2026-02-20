@@ -60,11 +60,11 @@ const Index = () => {
   });
 
   // Use infinite query for list view
-  const infiniteQuery = useInfiniteJournalEntries();
+  const journalInfiniteQuery = useInfiniteJournalEntries();
   
   // Flatten all pages for the list view
-  const listEntries = infiniteQuery.data?.pages.flatMap(page => page.entries) ?? [];
-  const isLoadingList = infiniteQuery.isLoading;
+  const listEntries = journalInfiniteQuery.data?.pages.flatMap(page => page.entries) ?? [];
+  const isLoadingList = journalInfiniteQuery.isLoading;
 
   // Choose which entries to use based on current view
   const entries = currentView === 'list' ? listEntries : allEntries;
@@ -421,9 +421,9 @@ const Index = () => {
                     categories={categories}
                     onEdit={handleEditEntry}
                     onDelete={handleDeleteEntry}
-                    hasMore={infiniteQuery.hasNextPage}
-                    onLoadMore={infiniteQuery.fetchNextPage}
-                    isFetchingMore={infiniteQuery.isFetchingNextPage}
+                    hasMore={journalInfiniteQuery.hasNextPage}
+                    onLoadMore={journalInfiniteQuery.fetchNextPage}
+                    isFetchingMore={journalInfiniteQuery.isFetchingNextPage}
                 />
                 )}
 

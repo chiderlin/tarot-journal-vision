@@ -72,13 +72,8 @@ export const getPaginatedJournalEntries = async (
   const from = page * pageSize;
   const to = from + pageSize - 1;
 
-  // Get total count
-  const { count } = await supabase
-    .from('journal_entries')
-    .select('*', { count: 'exact', head: true });
-
-  // Get paginated data
-  const { data, error } = await (supabase
+  // Get paginated data with count in a single query
+  const { data, error, count } = await (supabase
     .from('journal_entries')
     .select(
       `
@@ -86,7 +81,8 @@ export const getPaginatedJournalEntries = async (
       journal_entry_cards (
         card_name
       )
-    `
+    `,
+      { count: 'exact' }
     )
     .order('date', { ascending: false })
     .range(from, to) as any);
