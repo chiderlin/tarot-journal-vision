@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,6 +22,7 @@ import {
   ChevronDown,
   ChevronUp,
   Share2,
+  Loader2,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { MarkdownRenderer } from './MarkdownRenderer';
@@ -32,6 +33,9 @@ interface JournalListProps {
   categories: Category[];
   onEdit: (entry: JournalEntry) => void;
   onDelete: (id: string) => void;
+  hasMore?: boolean;
+  onLoadMore?: () => void;
+  isFetchingMore?: boolean;
 }
 
 export const JournalList: React.FC<JournalListProps> = ({
@@ -39,6 +43,9 @@ export const JournalList: React.FC<JournalListProps> = ({
   categories,
   onEdit,
   onDelete,
+  hasMore = false,
+  onLoadMore,
+  isFetchingMore = false,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -49,6 +56,34 @@ export const JournalList: React.FC<JournalListProps> = ({
   const [shareEntry, setShareEntry] = useState<JournalEntry | null>(null);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const { t } = useTranslation();
+  
+  // Ref for intersection observer
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    if (!hasMore || !onLoadMore || isFetchingMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          onLoadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasMore, onLoadMore, isFetchingMore]);
 
   const filteredAndSortedEntries = entries
     .filter((entry) => {
@@ -315,6 +350,26 @@ export const JournalList: React.FC<JournalListProps> = ({
           })
         )}
       </div>
+
+      {/* Infinite Scroll Trigger */}
+      {hasMore && onLoadMore && (
+        <div ref={loadMoreRef} className="flex justify-center py-8">
+          {isFetchingMore ? (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>載入更多日記...</span>
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              onClick={onLoadMore}
+              className="min-w-[200px]"
+            >
+              載入更多
+            </Button>
+          )}
+        </div>
+      )}
 
       {/* Share Dialog */}
       <ShareDialog

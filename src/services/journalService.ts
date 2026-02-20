@@ -54,6 +54,59 @@ export const getJournalEntries = async (): Promise<JournalEntry[]> => {
   return data.map(mapToJournalEntry);
 };
 
+export interface PaginatedJournalEntriesResponse {
+  entries: JournalEntry[];
+  hasMore: boolean;
+  total: number;
+}
+
+/**
+ * Fetches paginated journal entries for the current user.
+ * @param page - Page number (0-indexed)
+ * @param pageSize - Number of entries per page
+ */
+export const getPaginatedJournalEntries = async (
+  page: number = 0,
+  pageSize: number = 10
+): Promise<PaginatedJournalEntriesResponse> => {
+  const from = page * pageSize;
+  const to = from + pageSize - 1;
+
+  // Get total count
+  const { count } = await supabase
+    .from('journal_entries')
+    .select('*', { count: 'exact', head: true });
+
+  // Get paginated data
+  const { data, error } = await (supabase
+    .from('journal_entries')
+    .select(
+      `
+      *,
+      journal_entry_cards (
+        card_name
+      )
+    `
+    )
+    .order('date', { ascending: false })
+    .range(from, to) as any);
+
+  if (error) {
+    console.error('Error fetching paginated journal entries:', error);
+    throw error;
+  }
+
+  const entries = data.map(mapToJournalEntry);
+  const total = count || 0;
+  const hasMore = to < total - 1;
+
+  return {
+    entries,
+    hasMore,
+    total,
+  };
+};
+
 /**
  * Deletes a journal entry by its ID.
  */

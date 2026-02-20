@@ -24,6 +24,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { DailyGuidance } from '@/components/DailyGuidance';
+import { useInfiniteJournalEntries } from '@/hooks/useInfiniteJournalEntries';
 
 const Index = () => {
   const { t } = useTranslation();
@@ -33,8 +34,9 @@ const Index = () => {
   >('list');
   const [editingEntry, setEditingEntry] = useState<JournalEntry | undefined>();
 
-  // Fetch entries from Supabase
-  const { data: entries = [], isLoading } = useQuery({
+  // Fetch ALL entries from Supabase for calendar and analysis views
+  // Only fetched when needed
+  const { data: allEntries = [], isLoading: isLoadingAll } = useQuery({
     queryKey: ['journal-entries'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -53,7 +55,20 @@ const Index = () => {
         updatedAt: item.updated_at,
       })) as JournalEntry[];
     },
+    // Only fetch when viewing calendar or analysis
+    enabled: currentView === 'calendar' || currentView === 'analysis',
   });
+
+  // Use infinite query for list view
+  const infiniteQuery = useInfiniteJournalEntries();
+  
+  // Flatten all pages for the list view
+  const listEntries = infiniteQuery.data?.pages.flatMap(page => page.entries) ?? [];
+  const isLoadingList = infiniteQuery.isLoading;
+
+  // Choose which entries to use based on current view
+  const entries = currentView === 'list' ? listEntries : allEntries;
+  const isLoading = currentView === 'list' ? isLoadingList : isLoadingAll;
 
   // Create entry mutation
   const createEntryMutation = useMutation({
@@ -75,6 +90,7 @@ const Index = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
+      queryClient.invalidateQueries({ queryKey: ['journal-entries-infinite'] });
       toast.success(t('journalEditor.saveSuccess') || 'Entry saved successfully');
       setCurrentView('list');
       setEditingEntry(undefined);
@@ -108,6 +124,7 @@ const Index = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
+      queryClient.invalidateQueries({ queryKey: ['journal-entries-infinite'] });
       toast.success(t('journalEditor.saveSuccess') || 'Entry updated successfully');
       setCurrentView('list');
       setEditingEntry(undefined);
@@ -131,6 +148,7 @@ const Index = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
+      queryClient.invalidateQueries({ queryKey: ['journal-entries-infinite'] });
       toast.success('Entry deleted successfully');
     },
     onError: (error) => {
@@ -403,6 +421,9 @@ const Index = () => {
                     categories={categories}
                     onEdit={handleEditEntry}
                     onDelete={handleDeleteEntry}
+                    hasMore={infiniteQuery.hasNextPage}
+                    onLoadMore={infiniteQuery.fetchNextPage}
+                    isFetchingMore={infiniteQuery.isFetchingNextPage}
                 />
                 )}
 
