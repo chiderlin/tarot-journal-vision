@@ -63,11 +63,11 @@ const Index = () => {
   const journalInfiniteQuery = useInfiniteJournalEntries();
   
   // Flatten all pages for the list view
-  const listEntries = journalInfiniteQuery.data?.pages.flatMap(page => page.entries) ?? [];
+  const paginatedEntries = journalInfiniteQuery.data?.pages.flatMap(page => page.entries) ?? [];
   const isLoadingList = journalInfiniteQuery.isLoading;
 
   // Choose which entries to use based on current view
-  const entries = currentView === 'list' ? listEntries : allEntries;
+  const entries = currentView === 'list' ? paginatedEntries : allEntries;
   const isLoading = currentView === 'list' ? isLoadingList : isLoadingAll;
 
   // Create entry mutation
