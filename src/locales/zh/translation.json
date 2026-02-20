@@ -734,7 +734,9 @@
     "sortByTitle": "依標題排序",
     "totalEntries": "筆日記",
     "noEntriesFound": "沒有找到符合條件的日記",
-    "dateFormat": "yyyy/MM/dd"
+    "dateFormat": "yyyy/MM/dd",
+    "loadingMore": "載入更多日記...",
+    "loadMore": "載入更多"
   },
   "indexPage": {
     "deleteConfirmation": "確定要刪除這篇日記嗎？",

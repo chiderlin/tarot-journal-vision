@@ -357,7 +357,7 @@ export const JournalList: React.FC<JournalListProps> = ({
           {isFetchingMore ? (
             <div className="flex items-center gap-2 text-muted-foreground">
               <Loader2 className="w-5 h-5 animate-spin" />
-              <span>載入更多日記...</span>
+              <span>{t('journalList.loadingMore')}</span>
             </div>
           ) : (
             <Button
@@ -365,7 +365,7 @@ export const JournalList: React.FC<JournalListProps> = ({
               onClick={onLoadMore}
               className="min-w-[200px]"
             >
-              載入更多
+              {t('journalList.loadMore')}
             </Button>
           )}
         </div>

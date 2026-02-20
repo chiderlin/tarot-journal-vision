@@ -63,7 +63,7 @@ VITE_GOOGLE_AI_KEY="Google_Gemini_API_Key"
 
 ### ⚡️ 效能優化 (Performance)
 
-- [v] **無限捲動 (Infinite Scroll)**：優化大量日記的載入效能。
+- [x] **無限捲動 (Infinite Scroll)**：優化大量日記的載入效能。
 - [ ] **PWA 支援**：支援離線瀏覽與安裝到手機桌面。
 - [ ] **離線模式**
 - [ ] **Notion**

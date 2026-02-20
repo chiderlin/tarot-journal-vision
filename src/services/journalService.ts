@@ -98,7 +98,7 @@ export const getPaginatedJournalEntries = async (
 
   const entries = data.map(mapToJournalEntry);
   const total = count || 0;
-  const hasMore = to < total - 1;
+  const hasMore = (page + 1) * pageSize < total;
 
   return {
     entries,
