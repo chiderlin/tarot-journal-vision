@@ -6,6 +6,36 @@ import {
   MAX_EMOTIONS,
 } from '@/types/emotions';
 import { Slider } from '@/components/ui/slider';
+import {
+  Smile,
+  Frown,
+  AlertCircle,
+  Flower2,
+  HelpCircle,
+  Heart,
+  Zap,
+  Minus,
+  AlertTriangle,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
+// 圖標映射
+const iconMap: Record<string, LucideIcon> = {
+  Smile,
+  Frown,
+  AlertCircle,
+  Flower2,
+  HelpCircle,
+  Heart,
+  Zap,
+  Minus,
+};
+
+// 渲染圖標的輔助函數
+const renderIcon = (iconName: string, className: string = 'w-6 h-6') => {
+  const IconComponent = iconMap[iconName];
+  return IconComponent ? <IconComponent className={className} /> : null;
+};
 
 interface EmotionSelectorProps {
   selectedEmotions: string[];
@@ -78,8 +108,9 @@ export const EmotionSelector = ({
         </label>
 
         {selectedEmotions.length >= MAX_EMOTIONS && (
-          <p className="text-xs text-orange-600 mb-2">
-            ⚠️ 已達上限，請移除一個情緒後再選擇其他
+          <p className="text-xs text-orange-600 mb-2 flex items-center gap-1">
+            <AlertTriangle className="w-3 h-3" />{' '}
+            已達上限，請移除一個情緒後再選擇其他
           </p>
         )}
 
@@ -104,7 +135,9 @@ export const EmotionSelector = ({
                 }`}
                 style={isSelected ? { backgroundColor: emotion.color } : {}}
               >
-                <div className="text-2xl">{emotion.emoji}</div>
+                <div className="flex justify-center">
+                  {renderIcon(emotion.icon, 'w-8 h-8')}
+                </div>
                 <div className="text-xs mt-1">{emotion.name}</div>
               </button>
             );
@@ -127,8 +160,9 @@ export const EmotionSelector = ({
               return (
                 <div key={emotion} className="space-y-1">
                   <div className="flex justify-between items-center">
-                    <label className="text-sm font-medium">
-                      {emotionData.emoji} {emotionData.name}
+                    <label className="text-sm font-medium flex items-center gap-2">
+                      {renderIcon(emotionData.icon, 'w-4 h-4')}{' '}
+                      {emotionData.name}
                     </label>
                     <span className="text-xs font-bold">{intensity}/10</span>
                   </div>
@@ -180,7 +214,7 @@ export const EmotionSelector = ({
                   }
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">{emotionData.emoji}</span>
+                    {renderIcon(emotionData.icon, 'w-5 h-5')}
                     <span className="font-medium">{emotionData.name}</span>
                     <span className="text-xs text-gray-500">
                       ({intensity}/10)

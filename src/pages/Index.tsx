@@ -16,7 +16,12 @@ import {
   CalendarDays,
   PieChart,
   LogOut,
+  Briefcase,
+  Heart,
+  Users,
+  Sunrise,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +29,25 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { DailyGuidance } from '@/components/DailyGuidance';
+
+// 分類圖標映射
+const categoryIconMap: Record<string, LucideIcon> = {
+  Briefcase,
+  Heart,
+  Users,
+  Sparkles,
+  Sunrise,
+};
+
+// 渲染分類圖標
+const renderCategoryIcon = (
+  iconName?: string,
+  className: string = 'w-4 h-4'
+) => {
+  if (!iconName) return null;
+  const IconComponent = categoryIconMap[iconName];
+  return IconComponent ? <IconComponent className={className} /> : null;
+};
 
 const Index = () => {
   const { t } = useTranslation();
@@ -46,7 +70,7 @@ const Index = () => {
         toast.error('Failed to fetch entries');
         throw error;
       }
-      
+
       return (data || []).map((item) => ({
         ...item,
         createdAt: item.created_at,
@@ -57,8 +81,12 @@ const Index = () => {
 
   // Create entry mutation
   const createEntryMutation = useMutation({
-    mutationFn: async (newEntry: Omit<JournalEntry, 'id' | 'createdAt' | 'updatedAt'>) => {
-      const { data: { user } } = await supabase.auth.getUser();
+    mutationFn: async (
+      newEntry: Omit<JournalEntry, 'id' | 'createdAt' | 'updatedAt'>
+    ) => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error('No user found');
 
       const { data, error } = await supabase
@@ -75,7 +103,9 @@ const Index = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
-      toast.success(t('journalEditor.saveSuccess') || 'Entry saved successfully');
+      toast.success(
+        t('journalEditor.saveSuccess') || 'Entry saved successfully'
+      );
       setCurrentView('list');
       setEditingEntry(undefined);
     },
@@ -108,7 +138,9 @@ const Index = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['journal-entries'] });
-      toast.success(t('journalEditor.saveSuccess') || 'Entry updated successfully');
+      toast.success(
+        t('journalEditor.saveSuccess') || 'Entry updated successfully'
+      );
       setCurrentView('list');
       setEditingEntry(undefined);
     },
@@ -184,14 +216,14 @@ const Index = () => {
   };
 
   const handleSignOut = async () => {
-      await supabase.auth.signOut();
+    await supabase.auth.signOut();
   };
 
   // Statistics
   const totalEntries = entries.length;
   // Use DEFAULT_CATEGORIES for now as we don't have a categories table
   const categories = DEFAULT_CATEGORIES;
-    
+
   const categoryCounts = categories.map((category) => ({
     ...category,
     count: entries.filter((entry) => entry.category === category.name).length,
@@ -204,7 +236,12 @@ const Index = () => {
   const cardFrequency: Record<string, number> = {};
   entries.forEach((entry) => {
     entry.cards?.forEach((card) => {
-      cardFrequency[card] = (cardFrequency[card] || 0) + 1;
+      // Clean the card name by removing prefixes and suffixes
+      const cleanCardName = card
+        .replace(/^t-/, '')
+        .replace(/^l-/, '')
+        .replace(/-reverse$/, '');
+      cardFrequency[cleanCardName] = (cardFrequency[cleanCardName] || 0) + 1;
     });
   });
 
@@ -246,7 +283,12 @@ const Index = () => {
       <div className="container mx-auto p-4 space-y-8">
         <div className="flex justify-end items-center gap-4">
           <LanguageSwitcher />
-          <Button variant="ghost" size="icon" onClick={handleSignOut} title={t('auth.signOut') || "Sign Out"}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleSignOut}
+            title={t('auth.signOut') || 'Sign Out'}
+          >
             <LogOut className="h-5 w-5" />
           </Button>
         </div>
@@ -312,16 +354,18 @@ const Index = () => {
               </CardHeader>
               <CardContent>
                 {isLoading ? (
-                    <div className="text-sm text-muted-foreground">Loading...</div>
+                  <div className="text-sm text-muted-foreground">
+                    Loading...
+                  </div>
                 ) : (
-                    <>
+                  <>
                     <div className="text-3xl font-bold text-purple-600">
-                    {totalEntries}
+                      {totalEntries}
                     </div>
                     <p className="text-muted-foreground text-sm">
-                    {t('indexPage.entriesCountSuffix')}
+                      {t('indexPage.entriesCountSuffix')}
                     </p>
-                    </>
+                  </>
                 )}
               </CardContent>
             </Card>
@@ -374,8 +418,8 @@ const Index = () => {
                       key={category.id}
                       className="flex justify-between items-center"
                     >
-                      <span className="text-m">
-                        {category.icon} -{' '}
+                      <span className="text-m flex items-center gap-1">
+                        {category.icon && renderCategoryIcon(category.icon)} -{' '}
                         {t(
                           `journalEditor.categories.${category.name}`,
                           category.name
@@ -394,51 +438,53 @@ const Index = () => {
 
         {/* Main Content */}
         {isLoading ? (
-             <div className="text-center py-12">Loading entries...</div>
+          <div className="text-center py-12">Loading entries...</div>
         ) : (
-            <>
-                {currentView === 'list' && (
-                <JournalList
-                    entries={entries}
-                    categories={categories}
-                    onEdit={handleEditEntry}
-                    onDelete={handleDeleteEntry}
-                />
-                )}
+          <>
+            {currentView === 'list' && (
+              <JournalList
+                entries={entries}
+                categories={categories}
+                onEdit={handleEditEntry}
+                onDelete={handleDeleteEntry}
+              />
+            )}
 
-                {currentView === 'calendar' && (
-                <CalendarView
-                    entries={entries}
-                    onDateSelect={handleNewEntryForDate}
-                    onEntryEdit={handleEditEntry}
-                    onEntryDelete={handleDeleteEntry}
-                />
-                )}
+            {currentView === 'calendar' && (
+              <CalendarView
+                entries={entries}
+                onDateSelect={handleNewEntryForDate}
+                onEntryEdit={handleEditEntry}
+                onEntryDelete={handleDeleteEntry}
+              />
+            )}
 
-                {currentView === 'analysis' && <AnalysisView entries={entries} />}
+            {currentView === 'analysis' && <AnalysisView entries={entries} />}
 
-                {entries.length === 0 &&
-                currentView !== 'calendar' &&
-                currentView !== 'analysis' && (
-                    <div className="text-center py-16">
-                    <div className="text-6xl mb-4">🔮</div>
-                    <h2 className="text-2xl font-bold mb-4">
-                        {t('indexPage.welcomeTitle')}
-                    </h2>
-                    <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                        {t('indexPage.welcomeMessage')}
-                    </p>
-                    <Button
-                        variant="default"
-                        size="lg"
-                        onClick={() => setCurrentView('editor')}
-                    >
-                        <Plus className="w-5 h-5 mr-2" />
-                        {t('indexPage.createFirstEntryButton')}
-                    </Button>
-                    </div>
-                )}
-            </>
+            {entries.length === 0 &&
+              currentView !== 'calendar' &&
+              currentView !== 'analysis' && (
+                <div className="text-center py-16">
+                  <div className="mb-4 flex justify-center">
+                    <Sparkles className="w-16 h-16 text-purple-500" />
+                  </div>
+                  <h2 className="text-2xl font-bold mb-4">
+                    {t('indexPage.welcomeTitle')}
+                  </h2>
+                  <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                    {t('indexPage.welcomeMessage')}
+                  </p>
+                  <Button
+                    variant="default"
+                    size="lg"
+                    onClick={() => setCurrentView('editor')}
+                  >
+                    <Plus className="w-5 h-5 mr-2" />
+                    {t('indexPage.createFirstEntryButton')}
+                  </Button>
+                </div>
+              )}
+          </>
         )}
       </div>
     </div>

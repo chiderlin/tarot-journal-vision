@@ -131,14 +131,14 @@ export const LenormandCardRenderer: React.FC<LenormandCardRendererProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div
+        <span
           className={cn(
-            'inline-block mx-1 text-center cursor-pointer',
+            'inline-block mx-1 text-center cursor-pointer align-top',
             className
           )}
         >
-          <div
-            className={`${sizeClasses[size]} relative transition-transform hover:scale-105`}
+          <span
+            className={`${sizeClasses[size]} relative transition-transform hover:scale-105 inline-block`}
             title={translatedName}
           >
             <img
@@ -146,9 +146,11 @@ export const LenormandCardRenderer: React.FC<LenormandCardRendererProps> = ({
               alt={translatedName}
               className="w-full h-full object-cover rounded-lg shadow-lg border border-border/20"
             />
-          </div>
-          <p className="text-xs mt-1 text-muted-foreground">{translatedName}</p>
-        </div>
+          </span>
+          <span className="text-xs mt-1 text-muted-foreground block">
+            {translatedName}
+          </span>
+        </span>
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>

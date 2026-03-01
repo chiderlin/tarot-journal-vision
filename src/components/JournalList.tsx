@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,10 +22,47 @@ import {
   ChevronDown,
   ChevronUp,
   Share2,
+  FileText,
+  Smile,
+  Frown,
+  AlertCircle,
+  Flower2,
+  HelpCircle,
+  Heart,
+  Zap,
+  Minus,
+  Briefcase,
+  Users,
+  Sparkles,
+  Sunrise,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { ShareDialog } from './ShareDialog';
+
+// 圖標映射
+const iconMap: Record<string, LucideIcon> = {
+  Smile,
+  Frown,
+  AlertCircle,
+  Flower2,
+  HelpCircle,
+  Heart,
+  Zap,
+  Minus,
+  Briefcase,
+  Users,
+  Sparkles,
+  Sunrise,
+  FileText,
+};
+
+// 渲染圖標的輔助函數
+const renderIcon = (iconName: string, className: string = 'w-4 h-4') => {
+  const IconComponent = iconMap[iconName];
+  return IconComponent ? <IconComponent className={className} /> : null;
+};
 
 interface JournalListProps {
   entries: JournalEntry[];
@@ -48,6 +85,8 @@ export const JournalList: React.FC<JournalListProps> = ({
   );
   const [shareEntry, setShareEntry] = useState<JournalEntry | null>(null);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [displayedCount, setDisplayedCount] = useState(20); // 初始顯示 20 篇
+  const loadMoreRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
 
   const filteredAndSortedEntries = entries
@@ -71,7 +110,7 @@ export const JournalList: React.FC<JournalListProps> = ({
       categories.find((cat) => cat.name === categoryName) || {
         name: categoryName,
         color: 'hsl(var(--muted))',
-        icon: '📝',
+        icon: 'FileText',
       }
     );
   };
@@ -111,6 +150,44 @@ export const JournalList: React.FC<JournalListProps> = ({
     setShareDialogOpen(true);
   };
 
+  // 無限捲動：當搜尋或分類改變時，重置顯示數量
+  useEffect(() => {
+    setDisplayedCount(20);
+  }, [searchTerm, selectedCategory, sortBy]);
+
+  // 無限捲動：使用 Intersection Observer 監測底部元素
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (
+          first.isIntersecting &&
+          displayedCount < filteredAndSortedEntries.length
+        ) {
+          // 每次載入 20 篇
+          setDisplayedCount((prev) =>
+            Math.min(prev + 20, filteredAndSortedEntries.length)
+          );
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [displayedCount, filteredAndSortedEntries.length]);
+
+  // 只顯示前 N 篇日記
+  const displayedEntries = filteredAndSortedEntries.slice(0, displayedCount);
+
   return (
     <div className="space-y-6">
       {/* Filters */}
@@ -142,11 +219,13 @@ export const JournalList: React.FC<JournalListProps> = ({
                 </SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category.id} value={category.name}>
-                    {category.icon}{' '}
-                    {t(
-                      `journalEditor.categories.${category.name}`,
-                      category.name
-                    )}
+                    <span className="flex items-center gap-1">
+                      {category.icon && renderIcon(category.icon, 'w-4 h-4')}{' '}
+                      {t(
+                        `journalEditor.categories.${category.name}`,
+                        category.name
+                      )}
+                    </span>
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -179,7 +258,7 @@ export const JournalList: React.FC<JournalListProps> = ({
 
       {/* Entries */}
       <div className="grid gap-4">
-        {filteredAndSortedEntries.length === 0 ? (
+        {displayedEntries.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12">
               <p className="text-muted-foreground">
@@ -188,7 +267,7 @@ export const JournalList: React.FC<JournalListProps> = ({
             </CardContent>
           </Card>
         ) : (
-          filteredAndSortedEntries.map((entry) => {
+          displayedEntries.map((entry) => {
             const categoryInfo = getCategoryInfo(entry.category);
             const isExpanded = expandedEntries.has(entry.id);
             const showExpandButton = shouldShowExpandButton(entry.content);
@@ -217,7 +296,8 @@ export const JournalList: React.FC<JournalListProps> = ({
                           }}
                         >
                           <Tag className="w-3 h-3 mr-1" />
-                          {categoryInfo.icon}{' '}
+                          {categoryInfo.icon &&
+                            renderIcon(categoryInfo.icon, 'w-3 h-3')}{' '}
                           {t(
                             `journalEditor.categories.${categoryInfo.name}`,
                             categoryInfo.name
@@ -271,7 +351,8 @@ export const JournalList: React.FC<JournalListProps> = ({
                             }`}
                             style={{ backgroundColor: emotionData.color }}
                           >
-                            {emotionData.emoji} {emotionData.name}
+                            {renderIcon(emotionData.icon, 'w-3 h-3')}{' '}
+                            {emotionData.name}
                             {isPrimary && ' ★'}
                             <span className="text-xs ml-1 opacity-80">
                               {intensity}/10
@@ -313,6 +394,26 @@ export const JournalList: React.FC<JournalListProps> = ({
               </Card>
             );
           })
+        )}
+
+        {/* 載入更多指示器 */}
+        {displayedCount < filteredAndSortedEntries.length && (
+          <div
+            ref={loadMoreRef}
+            className="flex justify-center items-center py-8"
+          >
+            <div className="text-sm text-muted-foreground flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+              <div
+                className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"
+                style={{ animationDelay: '0.2s' }}
+              />
+              <div
+                className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"
+                style={{ animationDelay: '0.4s' }}
+              />
+            </div>
+          </div>
         )}
       </div>
 

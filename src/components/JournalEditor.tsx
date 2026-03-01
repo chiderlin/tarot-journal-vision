@@ -27,7 +27,39 @@ import {
   TAROT_CARDS,
 } from '@/types/tarot';
 import { LENORMAND_CARDS } from '@/types/lenormand';
-import { Save, Eye, EyeOff, Sparkles, Loader2 } from 'lucide-react';
+import {
+  Save,
+  Eye,
+  EyeOff,
+  Sparkles,
+  Loader2,
+  FileText,
+  Briefcase,
+  Heart,
+  Users,
+  Sunrise,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
+// 分類圖標映射
+const categoryIconMap: Record<string, LucideIcon> = {
+  Briefcase,
+  Heart,
+  Users,
+  Sparkles,
+  Sunrise,
+  FileText,
+};
+
+// 渲染分類圖標
+const renderCategoryIcon = (
+  iconName?: string,
+  className: string = 'w-4 h-4'
+) => {
+  if (!iconName) return null;
+  const IconComponent = categoryIconMap[iconName];
+  return IconComponent ? <IconComponent className={className} /> : null;
+};
 
 interface JournalEditorProps {
   entry?: JournalEntry;
@@ -277,12 +309,27 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                 <SelectTrigger className="bg-background/50">
                   <SelectValue
                     placeholder={t('journalEditor.categoryPlaceholder')}
-                  />
+                  >
+                    {category &&
+                      categories.find((cat) => cat.name === category) && (
+                        <div className="flex items-center gap-2">
+                          {renderCategoryIcon(
+                            categories.find((cat) => cat.name === category)
+                              ?.icon,
+                            'w-4 h-4'
+                          )}
+                          {t(`journalEditor.categories.${category}`)}
+                        </div>
+                      )}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.name}>
-                      {cat.icon} {t(`journalEditor.categories.${cat.name}`)}
+                      <span className="flex items-center gap-2">
+                        {cat.icon && renderCategoryIcon(cat.icon, 'w-4 h-4')}
+                        {t(`journalEditor.categories.${cat.name}`)}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -446,7 +493,8 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                       }, 100);
                     }}
                   >
-                    📝 {t('journalEditor.appendToJournal') || '加入日記'}
+                    <FileText className="w-4 h-4 mr-1" />
+                    {t('journalEditor.appendToJournal') || '加入日記'}
                   </Button>
                 </CardTitle>
               </CardHeader>
