@@ -49,7 +49,7 @@ import tarotNineOfWands from '@/assets/tarot/wands/wands_9.png';
 import tarotTenOfWands from '@/assets/tarot/wands/wands_10.png';
 import tarotPageOfWands from '@/assets/tarot/wands/wands_page.png';
 import tarotKnightOfWands from '@/assets/tarot/wands/wands_knight.png';
-import tarotQueebOfWands from '@/assets/tarot/wands/wands_queen.png';
+import tarotQueenOfWands from '@/assets/tarot/wands/wands_queen.png';
 import tarotKingOfWands from '@/assets/tarot/wands/wands_king.png';
 
 import tarotAceOfCups from '@/assets/tarot/cups/cups_ace.png';
@@ -136,7 +136,7 @@ const cardImages: Record<string, string> = {
   wands_10: tarotTenOfWands,
   wands_page: tarotPageOfWands,
   wands_knight: tarotKnightOfWands,
-  wands_queen: tarotQueebOfWands,
+  wands_queen: tarotQueenOfWands,
   wands_king: tarotKingOfWands,
 
   cups_ace: tarotAceOfCups,

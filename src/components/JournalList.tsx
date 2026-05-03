@@ -40,6 +40,8 @@ import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { MarkdownRenderer } from './MarkdownRenderer';
 import { ShareDialog } from './ShareDialog';
+import { TarotCardRenderer } from './TarotCardRenderer';
+import { LenormandCardRenderer } from './LenormandCardRenderer';
 
 // 圖標映射
 const iconMap: Record<string, LucideIcon> = {
@@ -256,8 +258,8 @@ export const JournalList: React.FC<JournalListProps> = ({
         </CardContent>
       </Card>
 
-      {/* Entries */}
-      <div className="grid gap-4">
+      {/* Entries - Gallery View Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayedEntries.length === 0 ? (
           <Card>
             <CardContent className="text-center py-12">
@@ -278,96 +280,95 @@ export const JournalList: React.FC<JournalListProps> = ({
             return (
               <Card
                 key={entry.id}
-                className="hover:shadow-xl transition-all duration-300 group"
+                className="overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col bg-white/50 backdrop-blur-sm border-purple-100"
               >
-                <CardHeader className="pb-3">
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-2">
-                      <CardTitle className="text-xl">{entry.title}</CardTitle>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Calendar className="w-4 h-4" />
-                        {formatDate(entry.date)}
-                        <Badge
-                          variant="secondary"
-                          className="ml-2"
-                          style={{
-                            backgroundColor: `${categoryInfo.color}20`,
-                            color: categoryInfo.color,
-                          }}
-                        >
-                          <Tag className="w-3 h-3 mr-1" />
-                          {categoryInfo.icon &&
-                            renderIcon(categoryInfo.icon, 'w-3 h-3')}{' '}
-                          {t(
-                            `journalEditor.categories.${categoryInfo.name}`,
-                            categoryInfo.name
-                          )}
-                        </Badge>
+                {/* Card "Cover" - Card Previews */}
+                <div className="h-40 bg-gradient-to-br from-purple-100/50 to-indigo-100/50 relative overflow-hidden flex items-center justify-center p-4">
+                  <div className="flex -space-x-8 hover:space-x-2 transition-all duration-500">
+                    {entry.cards && entry.cards.length > 0 ? (
+                      entry.cards.slice(0, 3).map((card, idx) => {
+                        const cleanName = card.replace(/^t-/, '').replace(/^l-/, '').replace(/-reverse$/, '');
+                        const isReverse = card.endsWith('-reverse');
+                        const isLenormand = card.startsWith('l-');
+                        
+                        return (
+                          <div key={idx} className="transform hover:-translate-y-4 hover:scale-110 transition-all duration-300 shadow-lg rounded-lg overflow-hidden">
+                            {isLenormand ? (
+                              <LenormandCardRenderer cardName={cleanName} size="small" />
+                            ) : (
+                              <TarotCardRenderer cardName={cleanName} isReverse={isReverse} size="small" />
+                            )}
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="flex flex-col items-center text-purple-300 gap-2">
+                        <Sparkles className="w-8 h-8 opacity-20" />
+                        <span className="text-xs font-medium uppercase tracking-widest">{t('analysisView.noDataAvailable')}</span>
                       </div>
-                    </div>
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleShare(entry)}
-                        className="text-purple-600 hover:text-purple-700"
-                      >
-                        <Share2 className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onEdit(entry)}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onDelete(entry.id)}
-                        className="text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                    )}
+                  </div>
+                  
+                  {/* Floating Action Buttons */}
+                  <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="h-8 w-8 bg-white/80 backdrop-blur-md"
+                      onClick={() => handleShare(entry)}
+                    >
+                      <Share2 className="h-4 w-4 text-purple-600" />
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="h-8 w-8 bg-white/80 backdrop-blur-md"
+                      onClick={() => onEdit(entry)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className="h-8 w-8 bg-white/80 backdrop-blur-md text-destructive"
+                      onClick={() => onDelete(entry.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                <CardHeader className="p-4 pb-0">
+                  <div className="space-y-1">
+                    <CardTitle className="text-lg line-clamp-1 group-hover:text-purple-600 transition-colors uppercase tracking-tight">
+                      {entry.title}
+                    </CardTitle>
+                    <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-medium">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {formatDate(entry.date)}
+                      </span>
+                      <span className="w-1 h-1 bg-muted-foreground/30 rounded-full" />
+                      <span className="flex items-center gap-1" style={{ color: categoryInfo.color }}>
+                        {categoryInfo.icon && renderIcon(categoryInfo.icon, 'w-3 h-3')}
+                        {t(`journalEditor.categories.${categoryInfo.name}`, categoryInfo.name)}
+                      </span>
                     </div>
                   </div>
                 </CardHeader>
 
-                <CardContent>
-                  {/* 情緒標籤 */}
-                  {entry.emotions && entry.emotions.length > 0 && (
-                    <div className="flex gap-2 mb-4 flex-wrap">
-                      {entry.emotions.map((emotion) => {
-                        const emotionData = EMOTIONS[emotion as EmotionKey];
-                        const isPrimary = emotion === entry.primary_emotion;
-                        const intensity =
-                          entry.emotion_intensities?.[emotion] || 5;
-
-                        return (
-                          <Badge
-                            key={emotion}
-                            className={`inline-flex items-center gap-1 text-white ${
-                              isPrimary ? 'ring-2 ring-yellow-400' : ''
-                            }`}
-                            style={{ backgroundColor: emotionData.color }}
-                          >
-                            {renderIcon(emotionData.icon, 'w-3 h-3')}{' '}
-                            {emotionData.name}
-                            {isPrimary && ' ★'}
-                            <span className="text-xs ml-1 opacity-80">
-                              {intensity}/10
-                            </span>
-                          </Badge>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {/* Content preview */}
-                  <MarkdownRenderer
-                    content={displayContent}
-                    className="text-sm"
-                  />
+                <CardContent className="p-4 flex-grow flex flex-col gap-3 overflow-hidden">
+                  {/* Content area */}
+                  <div className="text-sm text-gray-600 flex-grow">
+                    {isExpanded ? (
+                      <MarkdownRenderer content={entry.content} className="text-sm" />
+                    ) : (
+                      <div className="line-clamp-3 italic opacity-80 border-l-2 border-purple-200 pl-3 py-1">
+                        {entry.content.replace(/#[tl]-[\w-]+/g, '').slice(0, 150)}
+                        {entry.content.length > 150 ? '...' : ''}
+                      </div>
+                    )}
+                  </div>
 
                   {/* Expand/Collapse button */}
                   {showExpandButton && (
@@ -375,20 +376,44 @@ export const JournalList: React.FC<JournalListProps> = ({
                       variant="ghost"
                       size="sm"
                       onClick={() => toggleExpand(entry.id)}
-                      className="mt-3 text-muted-foreground hover:text-foreground"
+                      className="mt-1 text-[10px] h-7 text-muted-foreground hover:text-purple-600 self-start p-0"
                     >
                       {isExpanded ? (
                         <>
-                          <ChevronUp className="w-4 h-4 mr-1" />
+                          <ChevronUp className="w-3 h-3 mr-1" />
                           收合
                         </>
                       ) : (
                         <>
-                          <ChevronDown className="w-4 h-4 mr-1" />
+                          <ChevronDown className="w-3 h-3 mr-1" />
                           展開閱讀
                         </>
                       )}
                     </Button>
+                  )}
+
+                  {/* Emotions Footer */}
+                  {entry.emotions && entry.emotions.length > 0 && (
+                    <div className="flex gap-1.5 flex-wrap mt-auto">
+                      {entry.emotions.slice(0, 3).map((emotion) => {
+                        const emotionData = EMOTIONS[emotion as EmotionKey];
+                        return (
+                          <div
+                            key={emotion}
+                            title={emotionData.name}
+                            className="w-6 h-6 rounded-full flex items-center justify-center text-white shadow-sm"
+                            style={{ backgroundColor: emotionData.color }}
+                          >
+                            {renderIcon(emotionData.icon, 'w-3.5 h-3.5')}
+                          </div>
+                        );
+                      })}
+                      {entry.emotions.length > 3 && (
+                        <span className="text-[10px] text-muted-foreground self-center">
+                          +{entry.emotions.length - 3}
+                        </span>
+                      )}
+                    </div>
                   )}
                 </CardContent>
               </Card>

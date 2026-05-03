@@ -20,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { parseSyntax } from './SyntaxRenderer';
 import { MarkdownRenderer } from './MarkdownRenderer';
+import { OracleChat } from './OracleChat';
 import {
   JournalEntry,
   Category,
@@ -466,42 +467,52 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
           </div>
 
           {aiInterpretation && (
-            <Card className="bg-purple-50/50 border-purple-200">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base flex items-center justify-between text-purple-700">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4" />
-                    {t('journalEditor.aiInterpretation')}
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-purple-700 hover:text-purple-900 hover:bg-purple-100"
-                    onClick={() => {
-                      const newContent = `${content}\n\n🤖 AI 解牌：\n${aiInterpretation}`;
-                      setContent(newContent);
-                      toast({
-                        title: '已加入日記',
-                        description: 'AI 解析內容已附加到您的日記中。',
-                      });
-                      // Smooth scroll to bottom of textarea
-                      setTimeout(() => {
-                        if (textareaRef.current) {
-                          textareaRef.current.scrollTop =
-                            textareaRef.current.scrollHeight;
-                        }
-                      }, 100);
-                    }}
-                  >
-                    <FileText className="w-4 h-4 mr-1" />
-                    {t('journalEditor.appendToJournal') || '加入日記'}
-                  </Button>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-foreground/90 whitespace-pre-wrap pt-0">
-                {aiInterpretation}
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <Card className="bg-purple-50/50 border-purple-200">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base flex items-center justify-between text-purple-700">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4" />
+                      {t('journalEditor.aiInterpretation')}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-purple-700 hover:text-purple-900 hover:bg-purple-100"
+                      onClick={() => {
+                        const newContent = `${content}\n\n🤖 AI 解牌：\n${aiInterpretation}`;
+                        setContent(newContent);
+                        toast({
+                          title: '已加入日記',
+                          description: 'AI 解析內容已附加到您的日記中。',
+                        });
+                        // Smooth scroll to bottom of textarea
+                        setTimeout(() => {
+                          if (textareaRef.current) {
+                            textareaRef.current.scrollTop =
+                              textareaRef.current.scrollHeight;
+                          }
+                        }, 100);
+                      }}
+                    >
+                      <FileText className="w-4 h-4 mr-1" />
+                      {t('journalEditor.appendToJournal') || '加入日記'}
+                    </Button>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-foreground/90 whitespace-pre-wrap pt-0">
+                  {aiInterpretation}
+                </CardContent>
+              </Card>
+
+              {/* The Oracle Chat Component */}
+              <OracleChat
+                cards={extractCards(content)}
+                context={category}
+                journalId={entry?.id || 'new'}
+                initialMessage={aiInterpretation}
+              />
+            </div>
           )}
         </CardContent>
       </Card>

@@ -169,7 +169,6 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
               <Button
                 onClick={handleDownload}
                 disabled={isGenerating || !previewUrl}
-                className="bg-purple-600 hover:bg-purple-700"
               >
                 {isGenerating ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />

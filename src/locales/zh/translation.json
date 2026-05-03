@@ -704,13 +704,32 @@
     },
     "majorArcana": "大秘儀",
     "minorArcana": "小秘儀",
-    "wands": "權杖",
-    "cups": "聖杯",
-    "swords": "寶劍",
-    "pentacles": "錢幣",
+    "wands": "權杖 (火)",
+    "cups": "聖杯 (水)",
+    "swords": "寶劍 (風)",
+    "pentacles": "星幣 (土)",
+    "fire": "火元素",
+    "water": "水元素",
+    "air": "風元素",
+    "earth": "土元素",
     "arcanaDistributionTitle": "大秘儀 vs. 小秘儀",
-    "suitsDistributionTitle": "四元素分佈",
-    "noDataAvailable": "尚無數據"
+    "suitsDistributionTitle": "小阿爾克那花色分佈",
+    "synchronicityTitle": "共時性追蹤：與你有緣的牌卡",
+    "elementalBalanceTitle": "元素能量分佈",
+    "emotionPulseTitle": "情緒與牌組關聯 (近5筆)",
+    "stats": {
+      "totalReadings": "累計占卜次數",
+      "cardsDrawn": "已抽得牌卡",
+      "uniqueCards": "探索牌種",
+      "consistency": "能量持續度"
+    },
+    "noDataAvailable": "尚無數據",
+    "filters": {
+      "all": "全部時間",
+      "withinWeek": "一週內",
+      "withinTwoWeeks": "兩週內",
+      "withinMonth": "一個月內"
+    }
   },
   "calendarView": {
     "today": "今天",
@@ -765,5 +784,11 @@
     "signIn": "登入",
     "alreadyHaveAccount": "已經有帳號了嗎？登入",
     "dontHaveAccount": "還沒有帳號嗎？註冊"
+  },
+  "oracle": {
+    "title": "神諭 (The Oracle)",
+    "thinking": "神諭正在注視著深淵...",
+    "placeholder": "詢問關於這次占卜的問題...",
+    "chatError": "與神諭溝通時發生錯誤。"
   }
 }

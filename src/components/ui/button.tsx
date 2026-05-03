@@ -9,13 +9,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl",
+        default: "bg-gradient-to-r from-purple-700 to-indigo-700 text-primary-foreground hover:from-purple-600 hover:to-indigo-600 shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] transform hover:-translate-y-0.5 active:scale-95",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-border bg-card/50 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground",
+        outline: "border border-purple-200/50 bg-white/30 backdrop-blur-md hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        ghost: "hover:bg-purple-50 hover:text-purple-700",
         link: "text-primary underline-offset-4 hover:underline",
-        mystical: "bg-gradient-to-r from-primary to-accent text-primary-foreground hover:shadow-[0_0_20px_rgba(var(--primary),0.5)] transform hover:scale-105",
+        mystical: "bg-gradient-to-br from-pink-500 via-purple-600 to-indigo-700 text-white shadow-[0_0_20px_rgba(236,72,153,0.4)] hover:shadow-[0_0_30px_rgba(236,72,153,0.6)] transform hover:scale-105 active:scale-95",
       },
       size: {
         default: "h-10 px-4 py-2",

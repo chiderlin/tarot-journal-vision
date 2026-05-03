@@ -1,6 +1,7 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import i18next from 'i18next';
+import { ChatMessage, OracleConfig } from '../types/chat';
 
 // Initialize the API client
 const apiKey = import.meta.env.VITE_GOOGLE_AI_KEY || import.meta.env.GOOGLE_AI_KEY;
@@ -125,6 +126,78 @@ export const generateDailyGuidance = async () => {
     return response.text().trim();
   } catch (error) {
     console.error('Error generating daily guidance:', error);
+    throw error;
+  }
+
+};
+
+export const chatWithOracle = async (
+  messages: ChatMessage[],
+  cards: string[],
+  context: string,
+  config?: Partial<OracleConfig>
+) => {
+  if (!apiKey) {
+    throw new Error('Google AI Key is not configured.');
+  }
+
+  const currentLang = i18next.language || 'en';
+  const language = config?.language || (currentLang.startsWith('zh') ? 'zh-TW' : 'en');
+  const personality = config?.personality || 'psychological'; // Default to something more grounded
+
+  const systemInstruction = `
+  Role: The Oracle — A Wise, Constructive Tarot Mentor.
+  Context: The user drew these cards: ${cards.join(', ')}. The general focus of the reading was: ${context}.
+  
+  Guidelines:
+  1. Directness: Avoid overly vague "mystic" or "astrological" fluff unless it directly explains a card's symbol.
+  2. Substance: Your primary goal is to help the user gain clarity. Use the specific cards drawn to answer the user's question.
+  3. Personality Adjustments:
+     - Psychological (Default): Focus on internal state, motivations, and mental frameworks. 
+     - Practical: Focus on choices, actions, and real-world consequences.
+     - Mystic: Focus on symbolic depth and spiritual transformation (keep this concise and meaningful).
+  4. Behavior: If the user asks for advice (e.g., "should I take this job?"), do not tell them what to do. Instead, use the cards to show them the different energies or potential outcomes they should consider.
+  5. Language: ${language} (Traditional Chinese/English as requested).
+  6. Structure: Use Markdown. Use bold for card names.
+  `;
+
+  // Filter messages to match Gemini's API format { role: 'user' | 'model', parts: [{ text: string }] }
+  let history = messages.slice(0, -1).map(msg => ({
+    role: msg.role === 'model' ? 'model' : 'user',
+    parts: [{ text: msg.content }]
+  }));
+
+  // Gemini requires the first message to be from 'user'
+  if (history.length > 0 && history[0].role === 'model') {
+    history = [
+      {
+        role: 'user',
+        parts: [{ text: `I have drawn these cards: ${cards.join(', ')}. Context: ${context}. Please interpret them.` }]
+      },
+      ...history
+    ];
+  }
+
+  const lastMessage = messages[messages.length - 1].content;
+
+  try {
+    const chat = model.startChat({
+      history,
+      generationConfig: {
+        maxOutputTokens: 2000, // 2000 tokens is plenty for a detailed response
+      },
+    });
+
+    // Send the system instruction as a prompt if it's the first message, 
+    // or include it in the context of the last message for better adherence.
+    const fullPrompt = `System Context: ${systemInstruction}\n\nUser Question: ${lastMessage}`;
+
+    const result = await chat.sendMessage(fullPrompt);
+    const response = await result.response;
+    console.log(response)
+    return response.text();
+  } catch (error) {
+    console.error('Error in chatWithOracle:', error);
     throw error;
   }
 };

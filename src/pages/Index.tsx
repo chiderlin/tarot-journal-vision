@@ -305,7 +305,6 @@ const Index = () => {
             variant="default"
             size="lg"
             onClick={() => setCurrentView('editor')}
-            className="bg-purple-800 hover:bg-purple-700"
           >
             <Plus className="w-5 h-5 mr-2" />
             {t('indexPage.newEntryButton')}

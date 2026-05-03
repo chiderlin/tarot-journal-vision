@@ -868,13 +868,32 @@
     },
     "majorArcana": "Major Arcana",
     "minorArcana": "Minor Arcana",
-    "wands": "Wands",
-    "cups": "Cups",
-    "swords": "Swords",
-    "pentacles": "Pentacles",
+    "wands": "Wands (Fire)",
+    "cups": "Cups (Water)",
+    "swords": "Swords (Air)",
+    "pentacles": "Pentacles (Earth)",
+    "fire": "Fire",
+    "water": "Water",
+    "air": "Air",
+    "earth": "Earth",
     "arcanaDistributionTitle": "Major vs. Minor Arcana",
-    "suitsDistributionTitle": "Four Elements Distribution",
-    "noDataAvailable": "No data available"
+    "suitsDistributionTitle": "Minor Arcana Suits",
+    "synchronicityTitle": "Synchronicity: Cards that follow you",
+    "elementalBalanceTitle": "Elemental Energy Balance",
+    "emotionPulseTitle": "Emotion & Suit Correlation (Recent 5)",
+    "stats": {
+      "totalReadings": "Total Readings",
+      "cardsDrawn": "Cards Drawn",
+      "uniqueCards": "Unique Cards",
+      "consistency": "Consistency"
+    },
+    "noDataAvailable": "No data available",
+    "filters": {
+      "all": "All Time",
+      "withinWeek": "Within 1 week",
+      "withinTwoWeeks": "Within 2 weeks",
+      "withinMonth": "Within 1 month"
+    }
   },
   "calendarView": {
     "today": "Today",
@@ -929,5 +948,11 @@
     "signIn": "Sign In",
     "alreadyHaveAccount": "Already have an account? Sign In",
     "dontHaveAccount": "Don't have an account? Sign Up"
+  },
+  "oracle": {
+    "title": "The Oracle",
+    "thinking": "The Oracle is gazing into the abyss...",
+    "placeholder": "Ask about your reading...",
+    "chatError": "Something went wrong in the connection to the Oracle."
   }
 }
