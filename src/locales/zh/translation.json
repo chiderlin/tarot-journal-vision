@@ -755,6 +755,26 @@
     "noEntriesFound": "沒有找到符合條件的日記",
     "dateFormat": "yyyy/MM/dd"
   },
+  "cardDraw": {
+    "title": "神秘抽牌",
+    "subtitle": "讓宇宙引導你，抽出今天的訊息",
+    "deckTypeLabel": "選擇牌組",
+    "deckType": {
+      "tarot": "塔羅牌",
+      "lenormand": "雷諾曼",
+      "mixed": "混合牌"
+    },
+    "cardCountLabel": "抽幾張？",
+    "tarotCountLabel": "塔羅張數",
+    "lenormandCountLabel": "雷諾曼張數",
+    "drawButton": "開始抽牌",
+    "drawing": "抽牌中...",
+    "writeToJournal": "將此次抽牌寫入日記",
+    "badge": {
+      "tarot": "塔羅",
+      "lenormand": "雷諾曼"
+    }
+  },
   "indexPage": {
     "deleteConfirmation": "確定要刪除這篇日記嗎？",
     "title": "塔羅日記",
@@ -763,6 +783,7 @@
     "listView": "列表",
     "calendarView": "行事曆",
     "analysisView": "更多分析",
+    "drawView": "抽牌",
     "totalEntriesCardTitle": "總計日記",
     "entriesCountSuffix": "篇日記",
     "mostFrequentCardTitle": "最常出現的牌",

@@ -6,6 +6,7 @@ import { JournalEditor } from '@/components/JournalEditor';
 import { JournalList } from '@/components/JournalList';
 import { CalendarView } from '@/components/CalendarView';
 import { AnalysisView } from '@/components/AnalysisView';
+import { CardDrawView } from '@/components/CardDrawView';
 import { JournalEntry, Category, DEFAULT_CATEGORIES } from '@/types/tarot';
 import {
   Plus,
@@ -20,6 +21,7 @@ import {
   Heart,
   Users,
   Sunrise,
+  Shuffle,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -53,8 +55,8 @@ const Index = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [currentView, setCurrentView] = useState<
-    'list' | 'calendar' | 'editor' | 'analysis'
-  >('list');
+    'draw' | 'list' | 'calendar' | 'editor' | 'analysis'
+  >('draw');
   const [editingEntry, setEditingEntry] = useState<JournalEntry | undefined>();
 
   // Fetch entries from Supabase
@@ -322,10 +324,14 @@ const Index = () => {
             value={currentView}
             onValueChange={(view) => {
               if (view)
-                setCurrentView(view as 'list' | 'calendar' | 'analysis');
+                setCurrentView(view as 'list' | 'calendar' | 'analysis' | 'draw');
             }}
             defaultValue="list"
           >
+            <ToggleGroupItem value="draw" aria-label="Draw cards">
+              <Shuffle className="h-4 w-4 mr-2" />
+              {t('indexPage.drawView', '抽牌')}
+            </ToggleGroupItem>
             <ToggleGroupItem value="list" aria-label="List view">
               <List className="h-4 w-4 mr-2" />
               {t('indexPage.listView')}
@@ -338,11 +344,12 @@ const Index = () => {
               <PieChart className="h-4 w-4 mr-2" />
               {t('indexPage.analysisView')}
             </ToggleGroupItem>
+
           </ToggleGroup>
         </div>
 
         {/* Statistics */}
-        {currentView !== 'analysis' && (
+        {currentView !== 'analysis' && currentView !== 'draw' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card>
               <CardHeader className="pb-2">
@@ -459,6 +466,34 @@ const Index = () => {
             )}
 
             {currentView === 'analysis' && <AnalysisView entries={entries} />}
+
+            {currentView === 'draw' && (
+              <CardDrawView
+                onDrawToJournal={(tokens) => {
+                  // Build a pre-populated entry with the drawn cards
+                  const cardContent = tokens
+                    .map((tok) => {
+                      const [prefix, ...rest] = tok.split('-');
+                      const isReverse = rest[rest.length - 1] === 'reverse';
+                      const cardKey = isReverse ? rest.slice(0, -1).join('-') : rest.join('-');
+                      if (prefix === 't') return `#t-${cardKey}${isReverse ? '-reverse' : ''}`;
+                      return `#l-${cardKey}`;
+                    })
+                    .join(' ');
+                  setEditingEntry({
+                    id: '',
+                    title: '',
+                    content: cardContent + '\n\n',
+                    category: DEFAULT_CATEGORIES[0]?.name || '',
+                    date: format(new Date(), 'yyyy-MM-dd'),
+                    cards: tokens,
+                    createdAt: '',
+                    updatedAt: '',
+                  });
+                  setCurrentView('editor');
+                }}
+              />
+            )}
 
             {entries.length === 0 &&
               currentView !== 'calendar' &&

@@ -919,6 +919,26 @@
     "noEntriesFound": "No matching entries found",
     "dateFormat": "MMM d, yyyy"
   },
+  "cardDraw": {
+    "title": "Mystic Card Draw",
+    "subtitle": "Let the universe guide you — draw your message for today",
+    "deckTypeLabel": "Choose Deck",
+    "deckType": {
+      "tarot": "Tarot",
+      "lenormand": "Lenormand",
+      "mixed": "Mixed"
+    },
+    "cardCountLabel": "How many cards?",
+    "tarotCountLabel": "Tarot Count",
+    "lenormandCountLabel": "Lenormand Count",
+    "drawButton": "\u2728 Draw Cards",
+    "drawing": "Drawing...",
+    "writeToJournal": "Write this draw to journal",
+    "badge": {
+      "tarot": "Tarot",
+      "lenormand": "Lenormand"
+    }
+  },
   "indexPage": {
     "deleteConfirmation": "Are you sure you want to delete this journal entry?",
     "title": "Tarot Journal",
@@ -927,6 +947,7 @@
     "listView": "List",
     "calendarView": "Calendar",
     "analysisView": "More Analysis",
+    "drawView": "Draw Cards",
     "totalEntriesCardTitle": "Total Journals",
     "entriesCountSuffix": "entries",
     "mostFrequentCardTitle": "Most Frequent Card",
