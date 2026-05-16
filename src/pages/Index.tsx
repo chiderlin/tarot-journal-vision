@@ -7,6 +7,7 @@ import { JournalList } from '@/components/JournalList';
 import { CalendarView } from '@/components/CalendarView';
 import { AnalysisView } from '@/components/AnalysisView';
 import { CardDrawView } from '@/components/CardDrawView';
+import { CommunityView } from '@/components/CommunityView';
 import { JournalEntry, Category, DEFAULT_CATEGORIES } from '@/types/tarot';
 import {
   Plus,
@@ -22,6 +23,7 @@ import {
   Users,
   Sunrise,
   Shuffle,
+  Globe,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -55,7 +57,7 @@ const Index = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [currentView, setCurrentView] = useState<
-    'draw' | 'list' | 'calendar' | 'editor' | 'analysis'
+    'draw' | 'list' | 'calendar' | 'editor' | 'analysis' | 'community'
   >('draw');
   const [editingEntry, setEditingEntry] = useState<JournalEntry | undefined>();
 
@@ -96,6 +98,8 @@ const Index = () => {
         .insert({
           ...newEntry,
           user_id: user.id,
+          is_public: newEntry.is_public ?? false,
+          post_type: newEntry.post_type ?? 'journal',
         })
         .select()
         .single();
@@ -131,6 +135,8 @@ const Index = () => {
           emotions: entry.emotions,
           primary_emotion: entry.primary_emotion,
           emotion_intensities: entry.emotion_intensities as any,
+          is_public: entry.is_public ?? false,
+          post_type: entry.post_type ?? 'journal',
           updated_at: new Date().toISOString(),
         })
         .eq('id', entry.id);
@@ -324,9 +330,9 @@ const Index = () => {
             value={currentView}
             onValueChange={(view) => {
               if (view)
-                setCurrentView(view as 'list' | 'calendar' | 'analysis' | 'draw');
+                setCurrentView(view as 'draw' | 'list' | 'calendar' | 'analysis' | 'community');
             }}
-            defaultValue="list"
+            defaultValue="draw"
           >
             <ToggleGroupItem value="draw" aria-label="Draw cards">
               <Shuffle className="h-4 w-4 mr-2" />
@@ -344,12 +350,15 @@ const Index = () => {
               <PieChart className="h-4 w-4 mr-2" />
               {t('indexPage.analysisView')}
             </ToggleGroupItem>
-
+            <ToggleGroupItem value="community" aria-label="Community">
+              <Globe className="h-4 w-4 mr-2" />
+              {t('indexPage.communityView', '社群')}
+            </ToggleGroupItem>
           </ToggleGroup>
         </div>
 
         {/* Statistics */}
-        {currentView !== 'analysis' && currentView !== 'draw' && (
+        {currentView !== 'analysis' && currentView !== 'draw' && currentView !== 'community' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card>
               <CardHeader className="pb-2">
@@ -466,6 +475,8 @@ const Index = () => {
             )}
 
             {currentView === 'analysis' && <AnalysisView entries={entries} />}
+
+            {currentView === 'community' && <CommunityView />}
 
             {currentView === 'draw' && (
               <CardDrawView

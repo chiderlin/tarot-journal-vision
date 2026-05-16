@@ -26,6 +26,7 @@ import {
   Category,
   DEFAULT_CATEGORIES,
   TAROT_CARDS,
+  PostType,
 } from '@/types/tarot';
 import { LENORMAND_CARDS } from '@/types/lenormand';
 import {
@@ -39,6 +40,8 @@ import {
   Heart,
   Users,
   Sunrise,
+  Globe,
+  Lock,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -90,6 +93,8 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
   const [cursorPosition, setCursorPosition] = useState(0);
   const [aiInterpretation, setAiInterpretation] = useState('');
   const [isLoadingAI, setIsLoadingAI] = useState(false);
+  const [isPublic, setIsPublic] = useState(entry?.is_public ?? false);
+  const [postType, setPostType] = useState<PostType>(entry?.post_type ?? 'journal');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { toast } = useToast();
   const { t } = useTranslation();
@@ -116,6 +121,8 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       emotions,
       primary_emotion: primaryEmotion,
       emotion_intensities: emotionIntensities,
+      is_public: isPublic,
+      post_type: isPublic ? postType : 'journal',
     });
   };
 
@@ -347,6 +354,47 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
             onPrimaryEmotionChange={setPrimaryEmotion}
             onIntensitiesChange={setEmotionIntensities}
           />
+
+          {/* 公開分享設定 */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 rounded-lg border border-dashed border-border bg-muted/30">
+            <button
+              type="button"
+              onClick={() => setIsPublic(!isPublic)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all border-2 ${
+                isPublic
+                  ? 'bg-indigo-600 text-white border-indigo-600 shadow'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
+              }`}
+            >
+              {isPublic ? <Globe className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+              {isPublic
+                ? t('journalEditor.public', '公開分享到社群')
+                : t('journalEditor.private', '僅自己可見')}
+            </button>
+
+            {isPublic && (
+              <div className="flex flex-wrap gap-2">
+                {([
+                  { key: 'experience', label: t('community.postType.experience', '占卜心得') },
+                  { key: 'insight', label: t('community.postType.insight', '牌義詮釋') },
+                  { key: 'observation', label: t('community.postType.observation', '生活觀察') },
+                ] as { key: PostType; label: string }[]).map(({ key, label }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setPostType(key)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                      postType === key
+                        ? 'bg-purple-600 text-white border-purple-600'
+                        : 'bg-white text-gray-600 border-gray-200 hover:border-purple-300 hover:text-purple-600'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div className="relative">
             <label className="text-sm font-medium mb-2 block">

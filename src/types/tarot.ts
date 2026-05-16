@@ -7,6 +7,8 @@ export interface TarotCard {
   reverseMeaning?: string;
 }
 
+export type PostType = 'journal' | 'experience' | 'insight' | 'observation';
+
 export interface JournalEntry {
   id: string;
   title: string;
@@ -17,6 +19,8 @@ export interface JournalEntry {
   emotions?: string[]; // Array of selected emotions (max 3)
   primary_emotion?: string | null; // Main emotion
   emotion_intensities?: Record<string, number>; // Intensity for each emotion (1-10)
+  is_public?: boolean; // Whether this post is visible in the community
+  post_type?: PostType; // Type of community post
   createdAt: string;
   updatedAt: string;
 }
