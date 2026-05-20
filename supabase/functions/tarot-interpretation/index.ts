@@ -18,7 +18,7 @@ serve(async (req) => {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
       return new Response(JSON.stringify({ error: '未提供授權金鑰' }), {
-        status: 401,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
@@ -42,7 +42,7 @@ serve(async (req) => {
     if (userError || !user) {
       console.error('Auth error:', userError);
       return new Response(JSON.stringify({ error: '登入認證失敗，請重新登入' }), {
-        status: 401,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
@@ -60,7 +60,7 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ error: 'AI 服務金鑰未在後端設定，請聯繫管理員。' }),
         {
-          status: 500,
+          status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         }
       );
@@ -93,7 +93,7 @@ serve(async (req) => {
             limitExceeded: true,
           }),
           {
-            status: 429,
+            status: 200,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
@@ -106,7 +106,7 @@ serve(async (req) => {
             error: '請先在內容中添加塔羅牌標籤（例如：#fool, #magician）',
           }),
           {
-            status: 400,
+            status: 200,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
@@ -242,7 +242,7 @@ serve(async (req) => {
       };
     } else {
       return new Response(JSON.stringify({ error: '不支援的 Action' }), {
-        status: 400,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
@@ -263,6 +263,21 @@ serve(async (req) => {
     if (!geminiResponse.ok) {
       const errorText = await geminiResponse.text();
       console.error('Gemini API returned error:', geminiResponse.status, errorText);
+      
+      // Specially intercept and format Gemini 429 quota exceed errors
+      if (geminiResponse.status === 429) {
+        return new Response(
+          JSON.stringify({
+            error: 'Google AI 服務今日免費額度已達上限（429 Rate Limit）。請稍後再試，或者明天額度重置時再次嘗試！',
+            code: 'GEMINI_QUOTA_EXCEEDED'
+          }),
+          {
+            status: 200,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      }
+      
       throw new Error('Gemini AI 服務呼叫失敗');
     }
 
@@ -296,7 +311,7 @@ serve(async (req) => {
         error: error instanceof Error ? error.message : '未知伺服器錯誤',
       }),
       {
-        status: 500,
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
