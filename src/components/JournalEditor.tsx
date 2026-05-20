@@ -175,17 +175,29 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
   const [usageCount, setUsageCount] = useState(0);
 
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
-    const STORAGE_KEY = 'tarot_ai_usage';
-    const storedUsage = localStorage.getItem(STORAGE_KEY);
-    if (storedUsage) {
-      const usage = JSON.parse(storedUsage);
-      if (usage.date === today) {
-        setUsageCount(usage.count);
-      } else {
-        setUsageCount(0);
+    const fetchUsageCount = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const todayStart = new Date();
+        todayStart.setUTCHours(0, 0, 0, 0);
+
+        const { count, error } = await supabase
+          .from('ai_usage_logs' as any)
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .gte('used_at', todayStart.toISOString());
+
+        if (!error && count !== null) {
+          setUsageCount(count);
+        }
+      } catch (err) {
+        console.error('Error fetching AI usage count:', err);
       }
-    }
+    };
+
+    fetchUsageCount();
   }, []);
 
   // AI 解牌功能
@@ -201,19 +213,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       return;
     }
 
-    // Rate Limiting Check
-    const today = new Date().toISOString().split('T')[0];
-    const STORAGE_KEY = 'tarot_ai_usage';
-    const storedUsage = localStorage.getItem(STORAGE_KEY);
-    let usage = storedUsage
-      ? JSON.parse(storedUsage)
-      : { date: today, count: 0 };
-
-    if (usage.date !== today) {
-      usage = { date: today, count: 0 };
-    }
-
-    if (usage.count >= 3) {
+    if (usageCount >= 3) {
       toast({
         title:
           t('journalEditor.toast.rateLimitExceeded') || 'Rate Limit Exceeded',
@@ -227,11 +227,6 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 
     setIsLoadingAI(true);
     try {
-      // Dynamic import to avoid dependency cycle if any, though not expected here.
-      // Better to import at top, but for replace_file_content clarity...
-      // Actually, I should add the import at the top.
-      // I will assume I added the import in a separate step or I will use a dynamic import here if possible?
-      // No, let's just use the function, I'll add the import in a separate replace call.
       const { getTarotInterpretation } = await import('@/services/ai');
 
       const interpretation = await getTarotInterpretation({
@@ -241,11 +236,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
       });
 
       setAiInterpretation(interpretation);
-
-      // Update usage count
-      usage.count += 1;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(usage));
-      setUsageCount(usage.count);
+      setUsageCount((prev) => prev + 1);
 
       toast({
         title: t('journalEditor.toast.aiSuccessTitle'),
