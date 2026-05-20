@@ -14,7 +14,7 @@ if (!apiKey) {
 }
 
 const genAI = new GoogleGenerativeAI(apiKey || '');
-const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' }); //'gemini-2.5-flash'
 
 interface AIInput {
   question?: string;
@@ -48,7 +48,7 @@ export const getTarotInterpretation = async ({ question, cards, context }: AIInp
   Please analyze the spread and provide a response in the following **Markdown** structure.
   **IMPORTANT:** The response MUST be in the same language as the Language specified in the input. If zh-TW is specified, use Traditional Chinese. If en is specified, use English.
   
-  Keep the total length concise (under 300 words) but impactful.
+  Keep the total length concise (under 80 words) but impactful.
   
   ### 1. 🔮 ${language === 'zh-TW' ? '整體能量' : 'The Core Vibe'}
   A 1-2 sentence summary of the spread's main theme.
@@ -159,6 +159,7 @@ export const chatWithOracle = async (
   4. Behavior: If the user asks for advice (e.g., "should I take this job?"), do not tell them what to do. Instead, use the cards to show them the different energies or potential outcomes they should consider.
   5. Language: ${language} (Traditional Chinese/English as requested).
   6. Structure: Use Markdown. Use bold for card names.
+  7. Keep the total length concise (under 100 words) but impactful.
   `;
 
   // Filter messages to match Gemini's API format { role: 'user' | 'model', parts: [{ text: string }] }
