@@ -2,43 +2,25 @@
   "tarotCards": {
     "fool": {
       "name": "The Fool",
-      "keywords": [
-        "Innocence",
-        "new beginnings",
-        "free spirit"
-      ],
+      "keywords": ["Innocence", "new beginnings", "free spirit"],
       "meaning": "Represents new beginnings, infinite possibilities, and the courage to face the unknown.",
       "reverseMeaning": "Recklessness, carelessness, being taken advantage of."
     },
     "magician": {
       "name": "The Magician",
-      "keywords": [
-        "Willpower",
-        "desire",
-        "creation",
-        "manifestation"
-      ],
+      "keywords": ["Willpower", "desire", "creation", "manifestation"],
       "meaning": "Represents willpower, skill, and the ability to turn ideas into action.",
       "reverseMeaning": "Trickery, illusions, out of touch, manipulation."
     },
     "priestess": {
       "name": "The High Priestess",
-      "keywords": [
-        "Intuition",
-        "unconscious",
-        "inner voice"
-      ],
+      "keywords": ["Intuition", "unconscious", "inner voice"],
       "meaning": "Represents intuition, sacred knowledge, and the subconscious mind.",
       "reverseMeaning": "Secrets, disconnected from intuition, withdrawal and silence."
     },
     "empress": {
       "name": "The Empress",
-      "keywords": [
-        "Femininity",
-        "beauty",
-        "nature",
-        "nurturing"
-      ],
+      "keywords": ["Femininity", "beauty", "nature", "nurturing"],
       "meaning": "Represents femininity, motherhood, fertility, and abundance.",
       "reverseMeaning": "Creative block, dependence on others, emptiness."
     },
@@ -91,13 +73,7 @@
     },
     "strength": {
       "name": "Strength",
-      "keywords": [
-        "Strength",
-        "courage",
-        "patience",
-        "control",
-        "compassion"
-      ],
+      "keywords": ["Strength", "courage", "patience", "control", "compassion"],
       "meaning": "Represents inner strength, courage, compassion, and self-control.",
       "reverseMeaning": "Weakness, self-doubt, lack of self-discipline, raw emotion."
     },
@@ -126,57 +102,31 @@
     },
     "justice": {
       "name": "Justice",
-      "keywords": [
-        "Justice",
-        "fairness",
-        "truth",
-        "cause and effect",
-        "law"
-      ],
+      "keywords": ["Justice", "fairness", "truth", "cause and effect", "law"],
       "meaning": "Represents fairness, truth, and cause and effect.",
       "reverseMeaning": "Unfairness, lack of accountability, dishonesty, injustice."
     },
     "hanged": {
       "name": "The Hanged Man",
-      "keywords": [
-        "Suspension",
-        "restriction",
-        "letting go",
-        "sacrifice"
-      ],
+      "keywords": ["Suspension", "restriction", "letting go", "sacrifice"],
       "meaning": "Represents suspension, new perspectives, and sacrifice.",
       "reverseMeaning": "Stalling, needless sacrifice, resistance to letting go."
     },
     "death": {
       "name": "Death",
-      "keywords": [
-        "Endings",
-        "change",
-        "transformation",
-        "transition"
-      ],
+      "keywords": ["Endings", "change", "transformation", "transition"],
       "meaning": "Represents an end, transformation, and new beginnings, not literal death.",
       "reverseMeaning": "Resistance to change, personal transformation, inner purging."
     },
     "temperance": {
       "name": "Temperance",
-      "keywords": [
-        "Balance",
-        "moderation",
-        "patience",
-        "purpose"
-      ],
+      "keywords": ["Balance", "moderation", "patience", "purpose"],
       "meaning": "Represents balance, moderation, and finding a middle ground.",
       "reverseMeaning": "Imbalance, excess, extremes, lack of long-term vision."
     },
     "devil": {
       "name": "The Devil",
-      "keywords": [
-        "Bondage",
-        "addiction",
-        "sexuality",
-        "materialism"
-      ],
+      "keywords": ["Bondage", "addiction", "sexuality", "materialism"],
       "meaning": "Represents addiction, materialism, and being trapped by your own limitations.",
       "reverseMeaning": "Detachment, breaking free, reclaiming power."
     },
@@ -194,134 +144,73 @@
     },
     "star": {
       "name": "The Star",
-      "keywords": [
-        "Hope",
-        "faith",
-        "purpose",
-        "rejuvenation"
-      ],
+      "keywords": ["Hope", "faith", "purpose", "rejuvenation"],
       "meaning": "Represents hope, inspiration, and spiritual guidance.",
       "reverseMeaning": "Lack of faith, despair, discouragement, disconnection."
     },
     "moon": {
       "name": "The Moon",
-      "keywords": [
-        "Illusion",
-        "fear",
-        "anxiety",
-        "subconscious",
-        "intuition"
-      ],
+      "keywords": ["Illusion", "fear", "anxiety", "subconscious", "intuition"],
       "meaning": "Represents illusion, fear, and the subconscious.",
       "reverseMeaning": "Release of fear, repressed emotion, inner confusion."
     },
     "sun": {
       "name": "The Sun",
-      "keywords": [
-        "Positivity",
-        "fun",
-        "warmth",
-        "success",
-        "vitality"
-      ],
+      "keywords": ["Positivity", "fun", "warmth", "success", "vitality"],
       "meaning": "Represents success, positivity, and vitality.",
       "reverseMeaning": "Inner child, feeling down, overly optimistic."
     },
     "judgement": {
       "name": "Judgement",
-      "keywords": [
-        "Judgement",
-        "rebirth",
-        "inner calling",
-        "absolution"
-      ],
+      "keywords": ["Judgement", "rebirth", "inner calling", "absolution"],
       "meaning": "Represents rebirth, a spiritual awakening, and a call to a higher purpose.",
       "reverseMeaning": "Self-doubt, inner critic, ignoring the call."
     },
     "world": {
       "name": "The World",
-      "keywords": [
-        "Completion",
-        "integration",
-        "accomplishment",
-        "travel"
-      ],
+      "keywords": ["Completion", "integration", "accomplishment", "travel"],
       "meaning": "Represents completion, accomplishment, and fulfillment.",
       "reverseMeaning": "Incompletion, no closure, short-cuts, delays."
     },
     "cups_ace": {
       "name": "Ace of Cups",
-      "keywords": [
-        "Love",
-        "new feelings",
-        "compassion",
-        "creativity"
-      ],
+      "keywords": ["Love", "new feelings", "compassion", "creativity"],
       "meaning": "Represents new beginnings in love, emotions, and creativity. A new relationship or a deeper connection is emerging.",
       "reverseMeaning": "Emotional blockage, repressed feelings, emptiness."
     },
     "cups_2": {
       "name": "Two of Cups",
-      "keywords": [
-        "Partnership",
-        "mutual attraction",
-        "connection"
-      ],
+      "keywords": ["Partnership", "mutual attraction", "connection"],
       "meaning": "Represents a deep connection, partnership, and mutual respect. It often signifies a romantic relationship but can also be a strong friendship or business partnership.",
       "reverseMeaning": "Break-up, disharmony, distrust."
     },
     "cups_3": {
       "name": "Three of Cups",
-      "keywords": [
-        "Celebration",
-        "friendship",
-        "creativity",
-        "collaborations"
-      ],
+      "keywords": ["Celebration", "friendship", "creativity", "collaborations"],
       "meaning": "Represents celebrations, friendship, and creative collaborations. It's a time of happy gatherings and shared joy.",
       "reverseMeaning": "An affair, \"three's a crowd\", isolation, gossip."
     },
     "cups_4": {
       "name": "Four of Cups",
-      "keywords": [
-        "Apathy",
-        "contemplation",
-        "disconnectedness",
-        "meditation"
-      ],
+      "keywords": ["Apathy", "contemplation", "disconnectedness", "meditation"],
       "meaning": "Represents apathy, contemplation, and being offered something that doesn't excite you. A need to re-evaluate.",
       "reverseMeaning": "Sudden awareness, choosing happiness, letting go of regret, ending boredom."
     },
     "cups_5": {
       "name": "Five of Cups",
-      "keywords": [
-        "Loss",
-        "regret",
-        "disappointment",
-        "sadness"
-      ],
+      "keywords": ["Loss", "regret", "disappointment", "sadness"],
       "meaning": "Represents loss, regret, and focusing on what has gone wrong rather than the opportunities that remain.",
       "reverseMeaning": "Moving on, acceptance, finding forgiveness, seeing the positive."
     },
     "cups_6": {
       "name": "Six of Cups",
-      "keywords": [
-        "Nostalgia",
-        "happy memories",
-        "reunion",
-        "innocence"
-      ],
+      "keywords": ["Nostalgia", "happy memories", "reunion", "innocence"],
       "meaning": "Represents nostalgia, childhood memories, and the happiness of the past. It can also mean a reunion with someone from your past.",
       "reverseMeaning": "Stuck in the past, moving forward, leaving home, rose-tinted glasses."
     },
     "cups_7": {
       "name": "Seven of Cups",
-      "keywords": [
-        "Choices",
-        "illusions",
-        "fantasy",
-        "wishful thinking"
-      ],
+      "keywords": ["Choices", "illusions", "fantasy", "wishful thinking"],
       "meaning": "Represents having many choices and opportunities, but also the danger of illusion, fantasy, and wishful thinking.",
       "reverseMeaning": "Temptation, illusion, diversionary tactics, lack of purpose."
     },
@@ -337,23 +226,13 @@
     },
     "cups_9": {
       "name": "Nine of Cups",
-      "keywords": [
-        "Wishes fulfilled",
-        "comfort",
-        "happiness",
-        "satisfaction"
-      ],
+      "keywords": ["Wishes fulfilled", "comfort", "happiness", "satisfaction"],
       "meaning": "Often called the \"wish card,\" it represents satisfaction, contentment, and wishes coming true.",
       "reverseMeaning": "Greed, dissatisfaction, materialism, unrealistic expectations."
     },
     "cups_10": {
       "name": "Ten of Cups",
-      "keywords": [
-        "Lasting happiness",
-        "harmony",
-        "marriage",
-        "family"
-      ],
+      "keywords": ["Lasting happiness", "harmony", "marriage", "family"],
       "meaning": "Represents ultimate emotional fulfillment, happy family life, and harmonious relationships.",
       "reverseMeaning": "Broken home or marriage, disharmony, unhappiness, misalignment of values."
     },
@@ -403,33 +282,19 @@
     },
     "pentacles_ace": {
       "name": "Ace of Pentacles",
-      "keywords": [
-        "New opportunity",
-        "manifestation",
-        "prosperity"
-      ],
+      "keywords": ["New opportunity", "manifestation", "prosperity"],
       "meaning": "Represents a new opportunity for prosperity, abundance, and manifestation. A seed of wealth has been planted.",
       "reverseMeaning": "Lost opportunity, lack of planning, greed, missed chance."
     },
     "pentacles_2": {
       "name": "Two of Pentacles",
-      "keywords": [
-        "Juggling",
-        "prioritization",
-        "adaptability",
-        "balance"
-      ],
+      "keywords": ["Juggling", "prioritization", "adaptability", "balance"],
       "meaning": "Represents balancing priorities, adapting to change, and managing resources. Often involves juggling multiple tasks or financial matters.",
       "reverseMeaning": "Over-committed, disorganization, reprioritization, financial mess."
     },
     "pentacles_3": {
       "name": "Three of Pentacles",
-      "keywords": [
-        "Teamwork",
-        "collaboration",
-        "learning",
-        "implementation"
-      ],
+      "keywords": ["Teamwork", "collaboration", "learning", "implementation"],
       "meaning": "Represents teamwork, collaboration, and the successful completion of the initial phase of a project. Your skills are recognized.",
       "reverseMeaning": "Disharmony, misalignment, working alone, poor quality work."
     },
@@ -446,12 +311,7 @@
     },
     "pentacles_5": {
       "name": "Five of Pentacles",
-      "keywords": [
-        "Financial loss",
-        "poverty",
-        "isolation",
-        "worry"
-      ],
+      "keywords": ["Financial loss", "poverty", "isolation", "worry"],
       "meaning": "Represents financial hardship, poverty, and feeling left out in the cold. A time of worry and insecurity.",
       "reverseMeaning": "Recovery from financial loss, spiritual poverty, forgiveness."
     },
@@ -523,12 +383,7 @@
     },
     "pentacles_knight": {
       "name": "Knight of Pentacles",
-      "keywords": [
-        "Hard work",
-        "productivity",
-        "routine",
-        "conservatism"
-      ],
+      "keywords": ["Hard work", "productivity", "routine", "conservatism"],
       "meaning": "Represents a methodical, hard-working, and reliable person. He achieves success through routine and persistence.",
       "reverseMeaning": "Laziness, boredom, feeling \"stuck\", stagnation."
     },
@@ -545,23 +400,13 @@
     },
     "pentacles_king": {
       "name": "King of Pentacles",
-      "keywords": [
-        "Wealth",
-        "business",
-        "leadership",
-        "security"
-      ],
+      "keywords": ["Wealth", "business", "leadership", "security"],
       "meaning": "Represents an enterprising and successful leader who has achieved wealth and abundance through discipline and hard work.",
       "reverseMeaning": "Financially inept, obsessed with wealth and status, stubborn, corrupt."
     },
     "swords_ace": {
       "name": "Ace of Swords",
-      "keywords": [
-        "Breakthroughs",
-        "new ideas",
-        "mental clarity",
-        "success"
-      ],
+      "keywords": ["Breakthroughs", "new ideas", "mental clarity", "success"],
       "meaning": "Represents a new idea, a breakthrough in understanding, or a moment of mental clarity. The power of intellect to cut through confusion.",
       "reverseMeaning": "Confusion, chaos, lack of clarity, clouded judgment."
     },
@@ -578,34 +423,19 @@
     },
     "swords_3": {
       "name": "Three of Swords",
-      "keywords": [
-        "Heartbreak",
-        "emotional pain",
-        "sorrow",
-        "grief"
-      ],
+      "keywords": ["Heartbreak", "emotional pain", "sorrow", "grief"],
       "meaning": "Represents heartbreak, sorrow, and painful truth. A moment of deep emotional pain that leads to understanding.",
       "reverseMeaning": "Negative self-talk, releasing pain, optimism, forgiveness."
     },
     "swords_4": {
       "name": "Four of Swords",
-      "keywords": [
-        "Rest",
-        "relaxation",
-        "meditation",
-        "recuperation"
-      ],
+      "keywords": ["Rest", "relaxation", "meditation", "recuperation"],
       "meaning": "Represents a need for rest, contemplation, and recuperation. A time to withdraw and recharge your mental batteries.",
       "reverseMeaning": "Exhaustion, burn-out, deep contemplation, stagnation."
     },
     "swords_5": {
       "name": "Five of Swords",
-      "keywords": [
-        "Conflict",
-        "disagreements",
-        "competition",
-        "defeat"
-      ],
+      "keywords": ["Conflict", "disagreements", "competition", "defeat"],
       "meaning": "Represents conflict, defeat, and winning at all costs. A situation where ambition leads to discord and loss for others.",
       "reverseMeaning": "Reconciliation, making amends, past resentment, desire to end conflict."
     },
@@ -644,23 +474,13 @@
     },
     "swords_9": {
       "name": "Nine of Swords",
-      "keywords": [
-        "Anxiety",
-        "worry",
-        "fear",
-        "depression"
-      ],
+      "keywords": ["Anxiety", "worry", "fear", "depression"],
       "meaning": "Represents anxiety, fear, and nightmares. A card of deep mental anguish and worry, often worse in the mind than in reality.",
       "reverseMeaning": "Inner turmoil, deep-seated fears, secrets, releasing worry."
     },
     "swords_10": {
       "name": "Ten of Swords",
-      "keywords": [
-        "Painful endings",
-        "deep wounds",
-        "betrayal",
-        "crisis"
-      ],
+      "keywords": ["Painful endings", "deep wounds", "betrayal", "crisis"],
       "meaning": "Represents a painful ending, betrayal, and hitting rock bottom. While devastating, it signals the end of a cycle and the chance for rebirth.",
       "reverseMeaning": "Recovery, regeneration, resisting an inevitable end, learning from the past."
     },
@@ -710,23 +530,13 @@
     },
     "wands_ace": {
       "name": "Ace of Wands",
-      "keywords": [
-        "Inspiration",
-        "new opportunities",
-        "growth",
-        "potential"
-      ],
+      "keywords": ["Inspiration", "new opportunities", "growth", "potential"],
       "meaning": "Represents a spark of inspiration, new opportunities, and the potential for growth. A time to take action and pursue your passion.",
       "reverseMeaning": "An emerging idea, lack of direction, distractions, delays."
     },
     "wands_2": {
       "name": "Two of Wands",
-      "keywords": [
-        "Future planning",
-        "progress",
-        "decisions",
-        "discovery"
-      ],
+      "keywords": ["Future planning", "progress", "decisions", "discovery"],
       "meaning": "Represents future planning, making decisions, and discovering your path. You have achieved something and are now looking to the future.",
       "reverseMeaning": "Fear of unknown, lack of planning, personal goals, playing it safe."
     },
@@ -743,23 +553,13 @@
     },
     "wands_4": {
       "name": "Four of Wands",
-      "keywords": [
-        "Celebration",
-        "joy",
-        "harmony",
-        "relaxation"
-      ],
+      "keywords": ["Celebration", "joy", "harmony", "relaxation"],
       "meaning": "Represents celebration, harmony, and a happy homecoming. A time of joy and stability.",
       "reverseMeaning": "Personal celebration, inner harmony, conflict with others, transition."
     },
     "wands_5": {
       "name": "Five of Wands",
-      "keywords": [
-        "Conflict",
-        "disagreements",
-        "competition",
-        "tension"
-      ],
+      "keywords": ["Conflict", "disagreements", "competition", "tension"],
       "meaning": "Represents conflict, competition, and disagreements. A clash of ideas and opinions, but often in a low-stakes or creative context.",
       "reverseMeaning": "Inner conflict, conflict avoidance, striving for harmony, releasing tension."
     },
@@ -787,78 +587,43 @@
     },
     "wands_8": {
       "name": "Eight of Wands",
-      "keywords": [
-        "Movement",
-        "action",
-        "alignment",
-        "swift change"
-      ],
+      "keywords": ["Movement", "action", "alignment", "swift change"],
       "meaning": "Represents rapid movement, action, and communication. Things are happening quickly and progress is being made.",
       "reverseMeaning": "Delays, frustration, resisting change, slowing down."
     },
     "wands_9": {
       "name": "Nine of Wands",
-      "keywords": [
-        "Resilience",
-        "courage",
-        "persistence",
-        "boundaries"
-      ],
+      "keywords": ["Resilience", "courage", "persistence", "boundaries"],
       "meaning": "Represents resilience, courage, and persistence in the face of adversity. You are wounded but not defeated.",
       "reverseMeaning": "Inner resources, struggle, overwhelm, defensive, paranoia."
     },
     "wands_10": {
       "name": "Ten of Wands",
-      "keywords": [
-        "Burden",
-        "extra responsibility",
-        "hard work",
-        "completion"
-      ],
+      "keywords": ["Burden", "extra responsibility", "hard work", "completion"],
       "meaning": "Represents carrying a heavy burden, taking on too much responsibility, and the stress of hard work.",
       "reverseMeaning": "Doing it all, carrying the burden, delegation, release."
     },
     "wands_page": {
       "name": "Page of Wands",
-      "keywords": [
-        "Enthusiasm",
-        "exploration",
-        "discovery",
-        "free spirit"
-      ],
+      "keywords": ["Enthusiasm", "exploration", "discovery", "free spirit"],
       "meaning": "Represents enthusiasm, exploration, and a free spirit. A messenger of new ideas and creative energy.",
       "reverseMeaning": "Newly-formed ideas, redirecting energy, self-limiting beliefs, lack of direction."
     },
     "wands_knight": {
       "name": "Knight of Wands",
-      "keywords": [
-        "Energy",
-        "passion",
-        "inspired action",
-        "adventure"
-      ],
+      "keywords": ["Energy", "passion", "inspired action", "adventure"],
       "meaning": "Represents energy, passion, and impulsive action. He is adventurous and eager to pursue his goals.",
       "reverseMeaning": "Passion project, haste, scattered energy, delays, frustration."
     },
     "wands_queen": {
       "name": "Queen of Wands",
-      "keywords": [
-        "Courage",
-        "confidence",
-        "independence",
-        "social butterfly"
-      ],
+      "keywords": ["Courage", "confidence", "independence", "social butterfly"],
       "meaning": "Represents a courageous, confident, and determined person who is a social butterfly and a source of inspiration.",
       "reverseMeaning": "Self-respect, self-confidence, introverted, a shrinking violet, aggressive."
     },
     "wands_king": {
       "name": "King of Wands",
-      "keywords": [
-        "Natural-born leader",
-        "vision",
-        "entrepreneur",
-        "honour"
-      ],
+      "keywords": ["Natural-born leader", "vision", "entrepreneur", "honour"],
       "meaning": "Represents a natural-born leader with a clear vision. He is charismatic, honorable, and inspires others to follow him.",
       "reverseMeaning": "Impulsiveness, haste, ruthless, high expectations, tyrannical."
     }
@@ -866,262 +631,132 @@
   "lenormandCards": {
     "rider": {
       "name": "Rider",
-      "keywords": [
-        "News",
-        "messages",
-        "speed",
-        "activity"
-      ],
+      "keywords": ["News", "messages", "speed", "activity"],
       "meaning": "Represents news, messages, and the arrival of something or someone new. It signifies speed and activity."
     },
     "clover": {
       "name": "Clover",
-      "keywords": [
-        "Luck",
-        "small opportunities",
-        "happiness",
-        "brief moments"
-      ],
+      "keywords": ["Luck", "small opportunities", "happiness", "brief moments"],
       "meaning": "Represents a small stroke of luck, a pleasant surprise, or a brief moment of happiness. It encourages taking a small risk."
     },
     "ship": {
       "name": "Ship",
-      "keywords": [
-        "Travel",
-        "distance",
-        "transitions",
-        "commerce"
-      ],
+      "keywords": ["Travel", "distance", "transitions", "commerce"],
       "meaning": "Represents travel, distance, transitions, and commerce. It can signify a physical journey or a metaphorical one."
     },
     "house": {
       "name": "House",
-      "keywords": [
-        "Home",
-        "family",
-        "stability",
-        "security"
-      ],
+      "keywords": ["Home", "family", "stability", "security"],
       "meaning": "Represents home, family, stability, and security. It is the foundation and core of your life."
     },
     "tree": {
       "name": "Tree",
-      "keywords": [
-        "Health",
-        "growth",
-        "patience",
-        "ancestry"
-      ],
+      "keywords": ["Health", "growth", "patience", "ancestry"],
       "meaning": "Represents health, slow growth, and deep-rooted connections. It advises patience and looking at long-term development."
     },
     "cloud": {
       "name": "Cloud",
-      "keywords": [
-        "Confusion",
-        "uncertainty",
-        "doubt",
-        "problems"
-      ],
+      "keywords": ["Confusion", "uncertainty", "doubt", "problems"],
       "meaning": "Represents confusion, uncertainty, and temporary problems. The situation will clear up soon."
     },
     "snake": {
       "name": "Snake",
-      "keywords": [
-        "Deception",
-        "betrayal",
-        "complications",
-        "desire"
-      ],
+      "keywords": ["Deception", "betrayal", "complications", "desire"],
       "meaning": "Represents deception, complications, and potential betrayal. It advises caution and awareness of your surroundings."
     },
     "coffin": {
       "name": "Coffin",
-      "keywords": [
-        "Endings",
-        "illness",
-        "transformation",
-        "loss"
-      ],
+      "keywords": ["Endings", "illness", "transformation", "loss"],
       "meaning": "Represents endings, illness, and transformation. It signifies the necessary conclusion of a matter to make way for the new."
     },
     "bouquet": {
       "name": "Bouquet",
-      "keywords": [
-        "Gift",
-        "beauty",
-        "appreciation",
-        "invitation"
-      ],
+      "keywords": ["Gift", "beauty", "appreciation", "invitation"],
       "meaning": "Represents a gift, beauty, appreciation, and social invitations. A pleasant surprise or a gesture of kindness."
     },
     "scythe": {
       "name": "Scythe",
-      "keywords": [
-        "Sudden decision",
-        "danger",
-        "cutting away",
-        "harvest"
-      ],
+      "keywords": ["Sudden decision", "danger", "cutting away", "harvest"],
       "meaning": "Represents a sudden, swift decision or action. It can mean danger, but also the need to cut something away quickly."
     },
     "whip": {
       "name": "Whip",
-      "keywords": [
-        "Conflict",
-        "arguments",
-        "repetition",
-        "passion"
-      ],
+      "keywords": ["Conflict", "arguments", "repetition", "passion"],
       "meaning": "Represents conflict, debates, and repetitive actions. It can also signify passion and physical activity."
     },
     "birds": {
       "name": "Birds",
-      "keywords": [
-        "Communication",
-        "gossip",
-        "excitement",
-        "chatter"
-      ],
+      "keywords": ["Communication", "gossip", "excitement", "chatter"],
       "meaning": "Represents verbal communication, gossip, and excitement. A lot of chatter, phone calls, or messages."
     },
     "child": {
       "name": "Child",
-      "keywords": [
-        "New beginning",
-        "smallness",
-        "innocence",
-        "playfulness"
-      ],
+      "keywords": ["New beginning", "smallness", "innocence", "playfulness"],
       "meaning": "Represents a new start, something small, or an actual child. It carries an energy of innocence and playfulness."
     },
     "fox": {
       "name": "Fox",
-      "keywords": [
-        "Cunning",
-        "job",
-        "suspicion",
-        "strategy"
-      ],
+      "keywords": ["Cunning", "job", "suspicion", "strategy"],
       "meaning": "Represents the job or work, but also cunning, suspicion, and the need for strategy. Advises to be clever and cautious."
     },
     "bear": {
       "name": "Bear",
-      "keywords": [
-        "Power",
-        "strength",
-        "finances",
-        "authority"
-      ],
+      "keywords": ["Power", "strength", "finances", "authority"],
       "meaning": "Represents personal power, strength, and authority. It is often linked to finances, diet, and leadership."
     },
     "star": {
       "name": "Star",
-      "keywords": [
-        "Hope",
-        "inspiration",
-        "guidance",
-        "dreams"
-      ],
+      "keywords": ["Hope", "inspiration", "guidance", "dreams"],
       "meaning": "Represents hope, inspiration, and guidance. It suggests following your dreams and having faith in the future."
     },
     "stork": {
       "name": "Stork",
-      "keywords": [
-        "Change",
-        "movement",
-        "relocation",
-        "improvement"
-      ],
+      "keywords": ["Change", "movement", "relocation", "improvement"],
       "meaning": "Represents change, movement, and improvement. It often signifies relocation, a change in perspective, or the arrival of something new."
     },
     "dog": {
       "name": "Dog",
-      "keywords": [
-        "Friendship",
-        "loyalty",
-        "trust",
-        "support"
-      ],
+      "keywords": ["Friendship", "loyalty", "trust", "support"],
       "meaning": "Represents a loyal friend, trust, and support. It signifies a reliable and faithful connection with someone."
     },
     "tower": {
       "name": "Tower",
-      "keywords": [
-        "Authority",
-        "government",
-        "isolation",
-        "structure"
-      ],
+      "keywords": ["Authority", "government", "isolation", "structure"],
       "meaning": "Represents authority, corporations, and official structures. It can also signify isolation or a need for boundaries."
     },
     "garden": {
       "name": "Garden",
-      "keywords": [
-        "Public",
-        "society",
-        "events",
-        "socializing"
-      ],
+      "keywords": ["Public", "society", "events", "socializing"],
       "meaning": "Represents public spaces, social events, and your network. It is about being out in society and meeting people."
     },
     "mountain": {
       "name": "Mountain",
-      "keywords": [
-        "Obstacles",
-        "delays",
-        "challenges",
-        "blockages"
-      ],
+      "keywords": ["Obstacles", "delays", "challenges", "blockages"],
       "meaning": "Represents a significant obstacle, delays, and challenges. It requires patience and perseverance to overcome."
     },
     "crossroads": {
       "name": "Crossroads",
-      "keywords": [
-        "Choices",
-        "decisions",
-        "alternatives",
-        "paths"
-      ],
+      "keywords": ["Choices", "decisions", "alternatives", "paths"],
       "meaning": "Represents a point of decision. There are multiple paths available, and a choice must be made."
     },
     "mice": {
       "name": "Mice",
-      "keywords": [
-        "Theft",
-        "loss",
-        "anxiety",
-        "decay"
-      ],
+      "keywords": ["Theft", "loss", "anxiety", "decay"],
       "meaning": "Represents gradual loss, theft, or decay. It brings anxiety and suggests something is being nibbled away."
     },
     "heart": {
       "name": "Heart",
-      "keywords": [
-        "Love",
-        "passion",
-        "romance",
-        "charity"
-      ],
+      "keywords": ["Love", "passion", "romance", "charity"],
       "meaning": "Represents love, passion, and all matters of the heart. It signifies deep affection and romantic feelings."
     },
     "ring": {
       "name": "Ring",
-      "keywords": [
-        "Commitment",
-        "contract",
-        "partnership",
-        "cycle"
-      ],
+      "keywords": ["Commitment", "contract", "partnership", "cycle"],
       "meaning": "Represents commitment, contracts, and partnerships. It can signify marriage, a business agreement, or a cycle."
     },
     "book": {
       "name": "Book",
-      "keywords": [
-        "Secrets",
-        "knowledge",
-        "education",
-        "projects"
-      ],
+      "keywords": ["Secrets", "knowledge", "education", "projects"],
       "meaning": "Represents secrets, knowledge, and education. Something is hidden or yet to be revealed. It can also point to a project or studies."
     },
     "letter": {
@@ -1136,90 +771,47 @@
     },
     "gentleman": {
       "name": "Gentleman",
-      "keywords": [
-        "Male querent",
-        "partner",
-        "significant man"
-      ],
+      "keywords": ["Male querent", "partner", "significant man"],
       "meaning": "Represents the male querent or a significant man in the querent's life (partner, father, brother)."
     },
     "lady": {
       "name": "Lady",
-      "keywords": [
-        "Female querent",
-        "partner",
-        "significant woman"
-      ],
+      "keywords": ["Female querent", "partner", "significant woman"],
       "meaning": "Represents the female querent or a significant woman in the querent's life (partner, mother, sister)."
     },
     "lily": {
       "name": "Lily",
-      "keywords": [
-        "Peace",
-        "maturity",
-        "sensuality",
-        "family elder"
-      ],
+      "keywords": ["Peace", "maturity", "sensuality", "family elder"],
       "meaning": "Represents peace, maturity, and sensuality. It can also signify an older family member or a period of calm."
     },
     "sun": {
       "name": "Sun",
-      "keywords": [
-        "Success",
-        "vitality",
-        "energy",
-        "optimism"
-      ],
+      "keywords": ["Success", "vitality", "energy", "optimism"],
       "meaning": "Represents success, vitality, and great energy. It is a card of optimism and achieving your goals."
     },
     "moon": {
       "name": "Moon",
-      "keywords": [
-        "Emotions",
-        "intuition",
-        "recognition",
-        "creativity"
-      ],
+      "keywords": ["Emotions", "intuition", "recognition", "creativity"],
       "meaning": "Represents emotions, intuition, and public recognition. It is linked to creativity and psychic abilities."
     },
     "key": {
       "name": "Key",
-      "keywords": [
-        "Solution",
-        "answers",
-        "success",
-        "destiny"
-      ],
+      "keywords": ["Solution", "answers", "success", "destiny"],
       "meaning": "Represents the solution to a problem. It signifies that you have the answer and success is certain."
     },
     "fish": {
       "name": "Fish",
-      "keywords": [
-        "Finances",
-        "business",
-        "abundance",
-        "flow"
-      ],
+      "keywords": ["Finances", "business", "abundance", "flow"],
       "meaning": "Represents finances, business, and abundance. It signifies a flow of money or resources."
     },
     "anchor": {
       "name": "Anchor",
-      "keywords": [
-        "Stability",
-        "security",
-        "long-term",
-        "work"
-      ],
+      "keywords": ["Stability", "security", "long-term", "work"],
       "meaning": "Represents stability, security, and long-term commitment. It can signify reaching a safe harbor or a long-term job."
     },
     "cross": {
       "name": "Cross",
-      "keywords": [
-        "Burdens",
-        "suffering",
-        "destiny",
-        "faith"
-      ],
+      "keywords": ["Burdens", "suffering", "destiny", "faith"],
       "meaning": "Represents burdens, suffering, and challenges that feel destined. It is a call to have faith."
     }
   },
@@ -1251,7 +843,7 @@
       "aiErrorTitle": "Error",
       "aiErrorDescription": "Please try again later.",
       "rateLimitExceeded": "Rate Limit Exceeded",
-      "dailyLimitReached": "You have reached the daily limit of 5 AI interpretations."
+      "dailyLimitReached": "You have reached the daily limit of 3 AI interpretations."
     },
     "appendToJournal": "Append to Journal",
     "quickReference": "Quick Reference",
@@ -1305,15 +897,7 @@
   },
   "calendarView": {
     "today": "Today",
-    "daysOfWeek": [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
-    ],
+    "daysOfWeek": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     "more": "more",
     "entriesCount": "/5 entries",
     "addEntry": "Add Entry",

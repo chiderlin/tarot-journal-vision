@@ -20,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { parseSyntax } from './SyntaxRenderer';
 import { MarkdownRenderer } from './MarkdownRenderer';
-import { OracleChat } from './OracleChat';
+// import { OracleChat } from './OracleChat';
 import {
   JournalEntry,
   Category,
@@ -94,7 +94,9 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
   const [aiInterpretation, setAiInterpretation] = useState('');
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const [isPublic, setIsPublic] = useState(entry?.is_public ?? false);
-  const [postType, setPostType] = useState<PostType>(entry?.post_type ?? 'journal');
+  const [postType, setPostType] = useState<PostType>(
+    entry?.post_type ?? 'journal'
+  );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { toast } = useToast();
   const { t } = useTranslation();
@@ -177,7 +179,9 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
   useEffect(() => {
     const fetchUsageCount = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
         if (!user) return;
 
         const todayStart = new Date();
@@ -357,7 +361,11 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
                   : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
               }`}
             >
-              {isPublic ? <Globe className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+              {isPublic ? (
+                <Globe className="w-4 h-4" />
+              ) : (
+                <Lock className="w-4 h-4" />
+              )}
               {isPublic
                 ? t('journalEditor.public', '公開分享到社群')
                 : t('journalEditor.private', '僅自己可見')}
@@ -365,11 +373,22 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
 
             {isPublic && (
               <div className="flex flex-wrap gap-2">
-                {([
-                  { key: 'experience', label: t('community.postType.experience', '占卜心得') },
-                  { key: 'insight', label: t('community.postType.insight', '牌義詮釋') },
-                  { key: 'observation', label: t('community.postType.observation', '生活觀察') },
-                ] as { key: PostType; label: string }[]).map(({ key, label }) => (
+                {(
+                  [
+                    {
+                      key: 'experience',
+                      label: t('community.postType.experience', '占卜心得'),
+                    },
+                    {
+                      key: 'insight',
+                      label: t('community.postType.insight', '牌義詮釋'),
+                    },
+                    {
+                      key: 'observation',
+                      label: t('community.postType.observation', '生活觀察'),
+                    },
+                  ] as { key: PostType; label: string }[]
+                ).map(({ key, label }) => (
                   <button
                     key={key}
                     type="button"
@@ -480,7 +499,11 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
             <Button
               variant="outline"
               onClick={handleAIInterpretation}
-              disabled={isLoadingAI || extractCards(content).length === 0}
+              disabled={
+                isLoadingAI ||
+                extractCards(content).length === 0 ||
+                usageCount >= 3
+              }
               className="border-purple-500 text-purple-700 hover:bg-purple-50"
             >
               {isLoadingAI ? (
@@ -545,12 +568,12 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
               </Card>
 
               {/* The Oracle Chat Component */}
-              <OracleChat
+              {/* <OracleChat
                 cards={extractCards(content)}
                 context={category}
                 journalId={entry?.id || 'new'}
                 initialMessage={aiInterpretation}
-              />
+              /> */}
             </div>
           )}
         </CardContent>

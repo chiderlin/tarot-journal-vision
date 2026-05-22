@@ -41,10 +41,13 @@ serve(async (req) => {
 
     if (userError || !user) {
       console.error('Auth error:', userError);
-      return new Response(JSON.stringify({ error: '登入認證失敗，請重新登入' }), {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({ error: '登入認證失敗，請重新登入' }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     // 2. Extract request parameters
@@ -52,11 +55,10 @@ serve(async (req) => {
     const { action = 'interpret', language = 'zh-TW' } = body;
 
     // 3. Load Gemini API Key from secure environments
-    const GEMINI_API_KEY =
-      Deno.env.get('VITE_GOOGLE_AI_KEY') || Deno.env.get('GEMINI_API_KEY');
+    const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
 
     if (!GEMINI_API_KEY) {
-      console.error('Missing VITE_GOOGLE_AI_KEY or GEMINI_API_KEY secret.');
+      console.error('Missing GEMINI_API_KEY secret.');
       return new Response(
         JSON.stringify({ error: 'AI 服務金鑰未在後端設定，請聯繫管理員。' }),
         {
@@ -212,16 +214,20 @@ serve(async (req) => {
       // Map message history to Gemini history API structure
       let history = messages.slice(0, -1).map((msg: any) => ({
         role: msg.role === 'model' ? 'model' : 'user',
-        parts: [{ text: msg.content }]
+        parts: [{ text: msg.content }],
       }));
 
       if (history.length > 0 && history[0].role === 'model') {
         history = [
           {
             role: 'user',
-            parts: [{ text: `I have drawn these cards: ${cards.join(', ')}. Context: ${context}. Please interpret them.` }]
+            parts: [
+              {
+                text: `I have drawn these cards: ${cards.join(', ')}. Context: ${context}. Please interpret them.`,
+              },
+            ],
           },
-          ...history
+          ...history,
         ];
       }
 
@@ -230,15 +236,19 @@ serve(async (req) => {
         ...history,
         {
           role: 'user',
-          parts: [{ text: `System Context: ${systemInstruction}\n\nUser Question: ${lastMessage}` }]
-        }
+          parts: [
+            {
+              text: `System Context: ${systemInstruction}\n\nUser Question: ${lastMessage}`,
+            },
+          ],
+        },
       ];
 
       requestBody = {
         contents,
         generationConfig: {
           maxOutputTokens: 2000,
-        }
+        },
       };
     } else {
       return new Response(JSON.stringify({ error: '不支援的 Action' }), {
@@ -247,10 +257,12 @@ serve(async (req) => {
       });
     }
 
-    console.log(`Calling Gemini API securely for action: ${action}, user: ${user.id}`);
+    console.log(
+      `Calling Gemini API securely for action: ${action}, user: ${user.id}`
+    );
 
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: {
@@ -262,14 +274,19 @@ serve(async (req) => {
 
     if (!geminiResponse.ok) {
       const errorText = await geminiResponse.text();
-      console.error('Gemini API returned error:', geminiResponse.status, errorText);
-      
+      console.error(
+        'Gemini API returned error:',
+        geminiResponse.status,
+        errorText
+      );
+
       // Specially intercept and format Gemini 429 quota exceed errors
       if (geminiResponse.status === 429) {
         return new Response(
           JSON.stringify({
-            error: 'Google AI 服務今日免費額度已達上限（429 Rate Limit）。請稍後再試，或者明天額度重置時再次嘗試！',
-            code: 'GEMINI_QUOTA_EXCEEDED'
+            error:
+              'Google AI 服務今日免費額度已達上限（429 Rate Limit）。請稍後再試，或者明天額度重置時再次嘗試！',
+            code: 'GEMINI_QUOTA_EXCEEDED',
           }),
           {
             status: 200,
@@ -277,7 +294,7 @@ serve(async (req) => {
           }
         );
       }
-      
+
       throw new Error('Gemini AI 服務呼叫失敗');
     }
 
@@ -299,7 +316,9 @@ serve(async (req) => {
       }
     }
 
-    console.log(`Secure AI response generated successfully for action: ${action}`);
+    console.log(
+      `Secure AI response generated successfully for action: ${action}`
+    );
 
     return new Response(JSON.stringify({ result: resultText }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

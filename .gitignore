@@ -29,3 +29,4 @@ dist-ssr
 # supabase config
 .temp
 config.toml
+.github/
