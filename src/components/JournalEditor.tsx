@@ -495,7 +495,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
             )}
           </div>
 
-          <div className="flex justify-between items-center gap-2">
+          <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-2">
             <Button
               variant="outline"
               onClick={handleAIInterpretation}
@@ -513,7 +513,7 @@ export const JournalEditor: React.FC<JournalEditorProps> = ({
               )}
               {t('journalEditor.aiInterpretation')} ({usageCount}/3)
             </Button>
-            <div className="flex gap-2">
+            <div className="flex gap-2 ml-auto">
               <Button variant="outline" onClick={onCancel}>
                 {t('journalEditor.cancel')}
               </Button>

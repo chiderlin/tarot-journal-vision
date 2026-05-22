@@ -127,48 +127,123 @@ import lenormandCross from '@/assets/lenormand/36-cross.png';
 
 // ── Image Maps ─────────────────────────────────────────────────────────────
 const tarotImages: Record<string, string> = {
-  fool: tarotFool, magician: tarotMagician, priestess: tarotHighPriestess,
-  empress: tarotEmpress, emperor: tarotEmperor, hierophant: tarotHierophant,
-  lovers: tarotLovers, chariot: tarotChariot, justice: tarotJustice,
-  hermit: tarotHermit, fortune: tarotWheelOfFortune, strength: tarotStrength,
-  hanged: tarotHangedMan, temperance: tarotTemperance, devil: tarotDevil,
-  tower: tarotTower, sun: tarotSun, judgement: tarotJudgement,
-  world: tarotWorld, death: tarotDeath, star: tarotStar, moon: tarotMoon,
-  wands_ace: tarotAceOfWands, wands_2: tarotTwoOfWands, wands_3: tarotThreeOfWands,
-  wands_4: tarotFourOfWands, wands_5: tarotFiveOfWands, wands_6: tarotSixOfWands,
-  wands_7: tarotSevenOfWands, wands_8: tarotEightOfWands, wands_9: tarotNineOfWands,
-  wands_10: tarotTenOfWands, wands_page: tarotPageOfWands, wands_knight: tarotKnightOfWands,
-  wands_queen: tarotQueenOfWands, wands_king: tarotKingOfWands,
-  cups_ace: tarotAceOfCups, cups_2: tarotTwoOfCups, cups_3: tarotThreeOfCups,
-  cups_4: tarotFourOfCups, cups_5: tarotFiveOfCups, cups_6: tarotSixOfCups,
-  cups_7: tarotSevenOfCups, cups_8: tarotEightOfCups, cups_9: tarotNineOfCups,
-  cups_10: tarotTenOfCups, cups_page: tarotPageOfCups, cups_knight: tarotKnightOfCups,
-  cups_queen: tarotQueenOfCups, cups_king: tarotKingOfCups,
-  swords_ace: tarotAceOfSwords, swords_2: tarotTwoOfSwords, swords_3: tarotThreeOfSwords,
-  swords_4: tarotFourOfSwords, swords_5: tarotFiveOfSwords, swords_6: tarotSixOfSwords,
-  swords_7: tarotSevenOfSwords, swords_8: tarotEightOfSwords, swords_9: tarotNineOfSwords,
-  swords_10: tarotTenOfSwords, swords_page: tarotPageOfSwords, swords_knight: tarotKnightOfSwords,
-  swords_queen: tarotQueenOfSwords, swords_king: tarotKingOfSwords,
-  pentacles_ace: tarotAceOfPentacles, pentacles_2: tarotTwoOfPentacles, pentacles_3: tarotThreeOfPentacles,
-  pentacles_4: tarotFourOfPentacles, pentacles_5: tarotFiveOfPentacles, pentacles_6: tarotSixOfPentacles,
-  pentacles_7: tarotSevenOfPentacles, pentacles_8: tarotEightOfPentacles, pentacles_9: tarotNineOfPentacles,
-  pentacles_10: tarotTenOfPentacles, pentacles_page: tarotPageOfPentacles, pentacles_knight: tarotKnightOfPentacles,
-  pentacles_queen: tarotQueenOfPentacles, pentacles_king: tarotKingOfPentacles,
+  fool: tarotFool,
+  magician: tarotMagician,
+  priestess: tarotHighPriestess,
+  empress: tarotEmpress,
+  emperor: tarotEmperor,
+  hierophant: tarotHierophant,
+  lovers: tarotLovers,
+  chariot: tarotChariot,
+  justice: tarotJustice,
+  hermit: tarotHermit,
+  fortune: tarotWheelOfFortune,
+  strength: tarotStrength,
+  hanged: tarotHangedMan,
+  temperance: tarotTemperance,
+  devil: tarotDevil,
+  tower: tarotTower,
+  sun: tarotSun,
+  judgement: tarotJudgement,
+  world: tarotWorld,
+  death: tarotDeath,
+  star: tarotStar,
+  moon: tarotMoon,
+  wands_ace: tarotAceOfWands,
+  wands_2: tarotTwoOfWands,
+  wands_3: tarotThreeOfWands,
+  wands_4: tarotFourOfWands,
+  wands_5: tarotFiveOfWands,
+  wands_6: tarotSixOfWands,
+  wands_7: tarotSevenOfWands,
+  wands_8: tarotEightOfWands,
+  wands_9: tarotNineOfWands,
+  wands_10: tarotTenOfWands,
+  wands_page: tarotPageOfWands,
+  wands_knight: tarotKnightOfWands,
+  wands_queen: tarotQueenOfWands,
+  wands_king: tarotKingOfWands,
+  cups_ace: tarotAceOfCups,
+  cups_2: tarotTwoOfCups,
+  cups_3: tarotThreeOfCups,
+  cups_4: tarotFourOfCups,
+  cups_5: tarotFiveOfCups,
+  cups_6: tarotSixOfCups,
+  cups_7: tarotSevenOfCups,
+  cups_8: tarotEightOfCups,
+  cups_9: tarotNineOfCups,
+  cups_10: tarotTenOfCups,
+  cups_page: tarotPageOfCups,
+  cups_knight: tarotKnightOfCups,
+  cups_queen: tarotQueenOfCups,
+  cups_king: tarotKingOfCups,
+  swords_ace: tarotAceOfSwords,
+  swords_2: tarotTwoOfSwords,
+  swords_3: tarotThreeOfSwords,
+  swords_4: tarotFourOfSwords,
+  swords_5: tarotFiveOfSwords,
+  swords_6: tarotSixOfSwords,
+  swords_7: tarotSevenOfSwords,
+  swords_8: tarotEightOfSwords,
+  swords_9: tarotNineOfSwords,
+  swords_10: tarotTenOfSwords,
+  swords_page: tarotPageOfSwords,
+  swords_knight: tarotKnightOfSwords,
+  swords_queen: tarotQueenOfSwords,
+  swords_king: tarotKingOfSwords,
+  pentacles_ace: tarotAceOfPentacles,
+  pentacles_2: tarotTwoOfPentacles,
+  pentacles_3: tarotThreeOfPentacles,
+  pentacles_4: tarotFourOfPentacles,
+  pentacles_5: tarotFiveOfPentacles,
+  pentacles_6: tarotSixOfPentacles,
+  pentacles_7: tarotSevenOfPentacles,
+  pentacles_8: tarotEightOfPentacles,
+  pentacles_9: tarotNineOfPentacles,
+  pentacles_10: tarotTenOfPentacles,
+  pentacles_page: tarotPageOfPentacles,
+  pentacles_knight: tarotKnightOfPentacles,
+  pentacles_queen: tarotQueenOfPentacles,
+  pentacles_king: tarotKingOfPentacles,
 };
 
 const lenormandImages: Record<string, string> = {
-  rider: lenormandRider, clover: lenormandClover, ship: lenormandShip,
-  house: lenormandHouse, tree: lenormandTree, cloud: lenormandCloud,
-  snake: lenormandSnake, coffin: lenormandCoffin, bouquet: lenormandBouquet,
-  scythe: lenormandScythe, whip: lenormandWhip, birds: lenormandBirds,
-  child: lenormandChild, fox: lenormandFox, bear: lenormandBear,
-  star: lenormandStar, stork: lenormandStork, dog: lenormandDog,
-  tower: lenormandTower, garden: lenormandGarden, mountain: lenormandMountain,
-  crossroads: lenormandCrossroads, mice: lenormandMice, heart: lenormandHeart,
-  ring: lenormandRing, book: lenormandBook, letter: lenormandLetter,
-  gentleman: lenormandGentleman, lady: lenormandLady, lily: lenormandLily,
-  sun: lenormandSun, moon: lenormandMoon, key: lenormandKey,
-  fish: lenormandFish, anchor: lenormandAnchor, cross: lenormandCross,
+  rider: lenormandRider,
+  clover: lenormandClover,
+  ship: lenormandShip,
+  house: lenormandHouse,
+  tree: lenormandTree,
+  cloud: lenormandCloud,
+  snake: lenormandSnake,
+  coffin: lenormandCoffin,
+  bouquet: lenormandBouquet,
+  scythe: lenormandScythe,
+  whip: lenormandWhip,
+  birds: lenormandBirds,
+  child: lenormandChild,
+  fox: lenormandFox,
+  bear: lenormandBear,
+  star: lenormandStar,
+  stork: lenormandStork,
+  dog: lenormandDog,
+  tower: lenormandTower,
+  garden: lenormandGarden,
+  mountain: lenormandMountain,
+  crossroads: lenormandCrossroads,
+  mice: lenormandMice,
+  heart: lenormandHeart,
+  ring: lenormandRing,
+  book: lenormandBook,
+  letter: lenormandLetter,
+  gentleman: lenormandGentleman,
+  lady: lenormandLady,
+  lily: lenormandLily,
+  sun: lenormandSun,
+  moon: lenormandMoon,
+  key: lenormandKey,
+  fish: lenormandFish,
+  anchor: lenormandAnchor,
+  cross: lenormandCross,
 };
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -200,7 +275,9 @@ interface CardDrawViewProps {
 }
 
 // ── Component ──────────────────────────────────────────────────────────────
-export const CardDrawView: React.FC<CardDrawViewProps> = ({ onDrawToJournal }) => {
+export const CardDrawView: React.FC<CardDrawViewProps> = ({
+  onDrawToJournal,
+}) => {
   const { t } = useTranslation();
 
   const [deckType, setDeckType] = useState<DeckType>('tarot');
@@ -270,7 +347,9 @@ export const CardDrawView: React.FC<CardDrawViewProps> = ({ onDrawToJournal }) =
   }) => (
     <div className="flex flex-col items-center gap-2">
       {label && (
-        <span className="text-xs text-muted-foreground font-medium">{label}</span>
+        <span className="text-xs text-muted-foreground font-medium">
+          {label}
+        </span>
       )}
       <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map((n) => (
@@ -291,46 +370,74 @@ export const CardDrawView: React.FC<CardDrawViewProps> = ({ onDrawToJournal }) =
   );
 
   // ── Card display ───────────────────────────────────────────────────────────
-  const DrawnCardDisplay = ({ card, index }: { card: DrawnCard; index: number }) => {
+  const DrawnCardDisplay = ({
+    card,
+    index,
+  }: {
+    card: DrawnCard;
+    index: number;
+  }) => {
     const isTarot = card.type === 'tarot';
-    const imageSrc = isTarot ? tarotImages[card.key] : lenormandImages[card.key];
-    const cardData = isTarot ? TAROT_CARDS[card.key] : LENORMAND_CARDS[card.key];
+    const imageSrc = isTarot
+      ? tarotImages[card.key]
+      : lenormandImages[card.key];
+    const cardData = isTarot
+      ? TAROT_CARDS[card.key]
+      : LENORMAND_CARDS[card.key];
 
     const translatedName = isTarot
-      ? t(`tarotCards.${card.key}.name`, { defaultValue: cardData?.name ?? card.key })
-      : t(`lenormandCards.${card.key}.name`, { defaultValue: cardData?.name ?? card.key });
+      ? t(`tarotCards.${card.key}.name`, {
+          defaultValue: cardData?.name ?? card.key,
+        })
+      : t(`lenormandCards.${card.key}.name`, {
+          defaultValue: cardData?.name ?? card.key,
+        });
 
     const keywords = isTarot
       ? (t(`tarotCards.${card.key}.keywords`, {
-          defaultValue: (cardData as typeof TAROT_CARDS[string])?.keywords ?? [],
+          defaultValue:
+            (cardData as (typeof TAROT_CARDS)[string])?.keywords ?? [],
           returnObjects: true,
         }) as string[])
       : (t(`lenormandCards.${card.key}.keywords`, {
-          defaultValue: (cardData as typeof LENORMAND_CARDS[string])?.keywords ?? [],
+          defaultValue:
+            (cardData as (typeof LENORMAND_CARDS)[string])?.keywords ?? [],
           returnObjects: true,
         }) as string[]);
 
     const meaning = isTarot
-      ? (card.isReverse
-          ? t(`tarotCards.${card.key}.reverseMeaning`, {
-              defaultValue: (cardData as typeof TAROT_CARDS[string])?.reverseMeaning ?? '',
-            })
-          : t(`tarotCards.${card.key}.meaning`, { defaultValue: cardData?.meaning ?? '' }))
-      : t(`lenormandCards.${card.key}.meaning`, { defaultValue: cardData?.meaning ?? '' });
+      ? card.isReverse
+        ? t(`tarotCards.${card.key}.reverseMeaning`, {
+            defaultValue:
+              (cardData as (typeof TAROT_CARDS)[string])?.reverseMeaning ?? '',
+          })
+        : t(`tarotCards.${card.key}.meaning`, {
+            defaultValue: cardData?.meaning ?? '',
+          })
+      : t(`lenormandCards.${card.key}.meaning`, {
+          defaultValue: cardData?.meaning ?? '',
+        });
 
     return (
       <div
         className="flex flex-col items-center gap-3 animate-in fade-in slide-in-from-bottom-4"
-        style={{ animationDelay: `${index * 80}ms`, animationFillMode: 'backwards' }}
+        style={{
+          animationDelay: `${index * 80}ms`,
+          animationFillMode: 'backwards',
+        }}
       >
         <div className="relative group">
           {/* deck type badge */}
-          <span className={`absolute -top-2 -right-2 z-10 text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow ${
-            isTarot
-              ? 'bg-indigo-100 text-indigo-700 border border-indigo-300'
-              : 'bg-amber-100 text-amber-700 border border-amber-300'
-          }`}>
-            {isTarot ? t('cardDraw.badge.tarot', '塔羅') : t('cardDraw.badge.lenormand', '雷諾曼')}
+          <span
+            className={`absolute -top-2 -right-2 z-10 text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow ${
+              isTarot
+                ? 'bg-indigo-100 text-indigo-700 border border-indigo-300'
+                : 'bg-amber-100 text-amber-700 border border-amber-300'
+            }`}
+          >
+            {isTarot
+              ? t('cardDraw.badge.tarot', '塔羅')
+              : t('cardDraw.badge.lenormand', '雷諾曼')}
           </span>
 
           {/* card image */}
@@ -352,10 +459,16 @@ export const CardDrawView: React.FC<CardDrawViewProps> = ({ onDrawToJournal }) =
 
         {/* card info */}
         <div className="text-center max-w-[120px]">
-          <p className="font-semibold text-sm text-gray-800 leading-tight">{translatedName}</p>
+          <p className="font-semibold text-sm text-gray-800 leading-tight">
+            {translatedName}
+          </p>
           <div className="flex flex-wrap gap-1 justify-center mt-1">
             {keywords.slice(0, 2).map((kw, i) => (
-              <Badge key={i} variant="secondary" className="text-[10px] px-1.5 py-0">
+              <Badge
+                key={i}
+                variant="secondary"
+                className="text-[10px] px-1.5 py-0"
+              >
                 {kw}
               </Badge>
             ))}
@@ -392,15 +505,31 @@ export const CardDrawView: React.FC<CardDrawViewProps> = ({ onDrawToJournal }) =
             <p className="text-sm font-semibold text-gray-700 text-center">
               {t('cardDraw.deckTypeLabel', '選擇牌組')}
             </p>
-            <div className="flex gap-3 justify-center">
+            <div className="flex flex-wrap gap-3 justify-center">
               {[
-                { key: 'tarot' as DeckType, icon: Wand2, label: t('cardDraw.deckType.tarot', '塔羅牌') },
-                { key: 'lenormand' as DeckType, icon: BookOpen, label: t('cardDraw.deckType.lenormand', '雷諾曼') },
-                { key: 'mixed' as DeckType, icon: Layers, label: t('cardDraw.deckType.mixed', '混合牌') },
+                {
+                  key: 'tarot' as DeckType,
+                  icon: Wand2,
+                  label: t('cardDraw.deckType.tarot', '塔羅牌'),
+                },
+                {
+                  key: 'lenormand' as DeckType,
+                  icon: BookOpen,
+                  label: t('cardDraw.deckType.lenormand', '雷諾曼'),
+                },
+                {
+                  key: 'mixed' as DeckType,
+                  icon: Layers,
+                  label: t('cardDraw.deckType.mixed', '混合牌'),
+                },
               ].map(({ key, icon: Icon, label }) => (
                 <button
                   key={key}
-                  onClick={() => { setDeckType(key); setHasDrawn(false); setDrawnCards([]); }}
+                  onClick={() => {
+                    setDeckType(key);
+                    setHasDrawn(false);
+                    setDrawnCards([]);
+                  }}
                   className={`flex flex-col items-center gap-1.5 px-5 py-3 rounded-xl border-2 text-sm font-medium transition-all ${
                     deckType === key
                       ? 'bg-purple-600 text-white border-purple-600 shadow-md'
@@ -424,7 +553,7 @@ export const CardDrawView: React.FC<CardDrawViewProps> = ({ onDrawToJournal }) =
                 <CountSelector value={cardCount} onChange={setCardCount} />
               </div>
             ) : (
-              <div className="flex gap-10 justify-center">
+              <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 justify-center items-center">
                 <div className="space-y-2 text-center">
                   <p className="text-sm font-semibold text-gray-700">
                     {t('cardDraw.tarotCountLabel', '塔羅張數')}
@@ -435,7 +564,10 @@ export const CardDrawView: React.FC<CardDrawViewProps> = ({ onDrawToJournal }) =
                   <p className="text-sm font-semibold text-gray-700">
                     {t('cardDraw.lenormandCountLabel', '雷諾曼張數')}
                   </p>
-                  <CountSelector value={lenormandCount} onChange={setLenormandCount} />
+                  <CountSelector
+                    value={lenormandCount}
+                    onChange={setLenormandCount}
+                  />
                 </div>
               </div>
             )}
@@ -449,7 +581,9 @@ export const CardDrawView: React.FC<CardDrawViewProps> = ({ onDrawToJournal }) =
               disabled={isAnimating}
               className="px-10 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-purple-200 transition-all duration-200"
             >
-              <Shuffle className={`w-5 h-5 mr-2 ${isAnimating ? 'animate-spin' : ''}`} />
+              <Shuffle
+                className={`w-5 h-5 mr-2 ${isAnimating ? 'animate-spin' : ''}`}
+              />
               {isAnimating
                 ? t('cardDraw.drawing', '抽牌中...')
                 : t('cardDraw.drawButton', '開始抽牌')}
@@ -483,27 +617,36 @@ export const CardDrawView: React.FC<CardDrawViewProps> = ({ onDrawToJournal }) =
             {drawnCards
               .filter((c) => c.type === 'tarot')
               .map((card, i) => (
-                <DrawnCardDisplay key={`t-${card.key}-${i}`} card={card} index={i} />
+                <DrawnCardDisplay
+                  key={`t-${card.key}-${i}`}
+                  card={card}
+                  index={i}
+                />
               ))}
           </div>
 
           {/* Lenormand section divider (mixed mode) */}
-          {deckType === 'mixed' && drawnCards.some((c) => c.type === 'lenormand') && (
-            <div className="flex items-center gap-2 my-2">
-              <span className="h-px flex-1 bg-amber-200" />
-              <span className="text-xs font-semibold text-amber-500 px-2">
-                {t('cardDraw.deckType.lenormand', '雷諾曼卡')}
-              </span>
-              <span className="h-px flex-1 bg-amber-200" />
-            </div>
-          )}
+          {deckType === 'mixed' &&
+            drawnCards.some((c) => c.type === 'lenormand') && (
+              <div className="flex items-center gap-2 my-2">
+                <span className="h-px flex-1 bg-amber-200" />
+                <span className="text-xs font-semibold text-amber-500 px-2">
+                  {t('cardDraw.deckType.lenormand', '雷諾曼卡')}
+                </span>
+                <span className="h-px flex-1 bg-amber-200" />
+              </div>
+            )}
 
           {/* Lenormand cards */}
           <div className="flex flex-wrap justify-center gap-6">
             {drawnCards
               .filter((c) => c.type === 'lenormand')
               .map((card, i) => (
-                <DrawnCardDisplay key={`l-${card.key}-${i}`} card={card} index={i} />
+                <DrawnCardDisplay
+                  key={`l-${card.key}-${i}`}
+                  card={card}
+                  index={i}
+                />
               ))}
           </div>
 

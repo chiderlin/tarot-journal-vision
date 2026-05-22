@@ -287,16 +287,29 @@ export const JournalList: React.FC<JournalListProps> = ({
                   <div className="flex -space-x-8 hover:space-x-2 transition-all duration-500">
                     {entry.cards && entry.cards.length > 0 ? (
                       entry.cards.slice(0, 3).map((card, idx) => {
-                        const cleanName = card.replace(/^t-/, '').replace(/^l-/, '').replace(/-reverse$/, '');
+                        const cleanName = card
+                          .replace(/^t-/, '')
+                          .replace(/^l-/, '')
+                          .replace(/-reverse$/, '');
                         const isReverse = card.endsWith('-reverse');
                         const isLenormand = card.startsWith('l-');
-                        
+
                         return (
-                          <div key={idx} className="transform hover:-translate-y-4 hover:scale-110 transition-all duration-300 shadow-lg rounded-lg overflow-hidden">
+                          <div
+                            key={idx}
+                            className="transform hover:-translate-y-4 hover:scale-110 transition-all duration-300 shadow-lg rounded-lg overflow-hidden"
+                          >
                             {isLenormand ? (
-                              <LenormandCardRenderer cardName={cleanName} size="small" />
+                              <LenormandCardRenderer
+                                cardName={cleanName}
+                                size="small"
+                              />
                             ) : (
-                              <TarotCardRenderer cardName={cleanName} isReverse={isReverse} size="small" />
+                              <TarotCardRenderer
+                                cardName={cleanName}
+                                isReverse={isReverse}
+                                size="small"
+                              />
                             )}
                           </div>
                         );
@@ -304,13 +317,15 @@ export const JournalList: React.FC<JournalListProps> = ({
                     ) : (
                       <div className="flex flex-col items-center text-purple-300 gap-2">
                         <Sparkles className="w-8 h-8 opacity-20" />
-                        <span className="text-xs font-medium uppercase tracking-widest">{t('analysisView.noDataAvailable')}</span>
+                        <span className="text-xs font-medium uppercase tracking-widest">
+                          {t('analysisView.noDataAvailable')}
+                        </span>
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Floating Action Buttons */}
-                  <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute top-2 right-2 flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
                     <Button
                       variant="secondary"
                       size="icon"
@@ -349,9 +364,16 @@ export const JournalList: React.FC<JournalListProps> = ({
                         {formatDate(entry.date)}
                       </span>
                       <span className="w-1 h-1 bg-muted-foreground/30 rounded-full" />
-                      <span className="flex items-center gap-1" style={{ color: categoryInfo.color }}>
-                        {categoryInfo.icon && renderIcon(categoryInfo.icon, 'w-3 h-3')}
-                        {t(`journalEditor.categories.${categoryInfo.name}`, categoryInfo.name)}
+                      <span
+                        className="flex items-center gap-1"
+                        style={{ color: categoryInfo.color }}
+                      >
+                        {categoryInfo.icon &&
+                          renderIcon(categoryInfo.icon, 'w-3 h-3')}
+                        {t(
+                          `journalEditor.categories.${categoryInfo.name}`,
+                          categoryInfo.name
+                        )}
                       </span>
                     </div>
                   </div>
@@ -361,10 +383,15 @@ export const JournalList: React.FC<JournalListProps> = ({
                   {/* Content area */}
                   <div className="text-sm text-gray-600 flex-grow">
                     {isExpanded ? (
-                      <MarkdownRenderer content={entry.content} className="text-sm" />
+                      <MarkdownRenderer
+                        content={entry.content}
+                        className="text-sm"
+                      />
                     ) : (
                       <div className="line-clamp-3 italic opacity-80 border-l-2 border-purple-200 pl-3 py-1">
-                        {entry.content.replace(/#[tl]-[\w-]+/g, '').slice(0, 150)}
+                        {entry.content
+                          .replace(/#[tl]-[\w-]+/g, '')
+                          .slice(0, 150)}
                         {entry.content.length > 150 ? '...' : ''}
                       </div>
                     )}

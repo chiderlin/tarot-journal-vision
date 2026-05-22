@@ -87,7 +87,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
     <div className="space-y-4">
       {/* Calendar Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-lg sm:text-2xl font-bold">
           {format(currentMonth, t('calendarView.monthFormat'))}
         </h2>
         <div className="flex gap-2">
@@ -113,11 +113,11 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
 
       {/* Calendar Grid */}
       <Card className="overflow-hidden">
-        <div className="bg-muted/50 grid grid-cols-7 border-b">
+        <div className="bg-muted/50 grid grid-cols-7 border-b overflow-x-auto">
           {daysOfWeek.map((day) => (
             <div
               key={day}
-              className="p-3 text-center text-sm font-medium text-muted-foreground"
+              className="p-1.5 sm:p-3 text-center text-xs sm:text-sm font-medium text-muted-foreground"
             >
               {day}
             </div>
@@ -133,7 +133,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               <div
                 key={index}
                 onClick={() => handleDateClick(day)}
-                className={`min-h-[120px] border-b border-r p-2 cursor-pointer hover:bg-muted/30 transition-colors ${
+                className={`min-h-[60px] sm:min-h-[120px] border-b border-r p-1 sm:p-2 cursor-pointer hover:bg-muted/30 transition-colors ${
                   isOtherMonth ? 'bg-muted/10' : ''
                 } ${index % 7 === 6 ? 'border-r-0' : ''} ${
                   index >= calendarDays.length - 7 ? 'border-b-0' : ''
@@ -141,22 +141,25 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               >
                 <div className="flex justify-between items-start mb-1">
                   <span
-                    className={`text-sm font-medium ${
+                    className={`text-xs sm:text-sm font-medium ${
                       isOtherMonth
                         ? 'text-muted-foreground/50'
                         : isTodayDate
-                        ? 'bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center'
-                        : ''
+                          ? 'bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center'
+                          : ''
                     }`}
                   >
                     {format(day, 'd')}
                   </span>
+                  {dayEntries.length > 0 && (
+                    <span className="block sm:hidden w-1.5 h-1.5 rounded-full bg-primary mt-0.5" />
+                  )}
                 </div>
                 <div className="space-y-1">
                   {dayEntries.slice(0, 3).map((entry) => (
                     <div
                       key={entry.id}
-                      className="text-xs p-1.5 bg-primary/10 rounded truncate hover:bg-primary/20 transition-colors"
+                      className="text-[10px] sm:text-xs p-1 sm:p-1.5 bg-primary/10 rounded truncate hover:bg-primary/20 transition-colors hidden sm:block"
                       onClick={(e) => {
                         e.stopPropagation();
                         onEntryEdit(entry);
@@ -179,7 +182,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
 
       {/* Date Detail Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl w-[95vw] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {selectedDate &&

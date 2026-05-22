@@ -301,12 +301,12 @@ const Index = () => {
           </Button>
         </div>
         {/* Header */}
-        <div className="text-center py-12">
-          <h1 className="text-5xl font-bold mb-4 text-gray-600 ">
-            <Sparkles className="inline w-12 h-12 mr-4 text-primary text-yellow-500" />
+        <div className="text-center py-8 sm:py-12">
+          <h1 className="text-3xl sm:text-5xl font-bold mb-4 text-gray-600">
+            <Sparkles className="inline w-8 h-8 sm:w-12 sm:h-12 mr-2 sm:mr-4 text-primary text-yellow-500" />
             {t('indexPage.title')}
           </h1>
-          <p className="text-xl text-muted-foreground mb-8">
+          <p className="text-base sm:text-xl text-muted-foreground mb-8 px-4">
             {t('indexPage.subtitle')}
           </p>
           <Button
@@ -325,131 +325,173 @@ const Index = () => {
         </div>
 
         <div className="flex justify-center mb-8">
-          <ToggleGroup
-            type="single"
-            value={currentView}
-            onValueChange={(view) => {
-              if (view)
-                setCurrentView(view as 'draw' | 'list' | 'calendar' | 'analysis' | 'community');
-            }}
-            defaultValue="draw"
-          >
-            <ToggleGroupItem value="draw" aria-label="Draw cards">
-              <Shuffle className="h-4 w-4 mr-2" />
-              {t('indexPage.drawView', '抽牌')}
-            </ToggleGroupItem>
-            <ToggleGroupItem value="list" aria-label="List view">
-              <List className="h-4 w-4 mr-2" />
-              {t('indexPage.listView')}
-            </ToggleGroupItem>
-            <ToggleGroupItem value="calendar" aria-label="Calendar view">
-              <CalendarDays className="h-4 w-4 mr-2" />
-              {t('indexPage.calendarView')}
-            </ToggleGroupItem>
-            <ToggleGroupItem value="analysis" aria-label="Analysis view">
-              <PieChart className="h-4 w-4 mr-2" />
-              {t('indexPage.analysisView')}
-            </ToggleGroupItem>
-            <ToggleGroupItem value="community" aria-label="Community">
-              <Globe className="h-4 w-4 mr-2" />
-              {t('indexPage.communityView', '社群')}
-            </ToggleGroupItem>
-          </ToggleGroup>
+          <div className="overflow-x-auto w-full flex justify-center">
+            <ToggleGroup
+              type="single"
+              value={currentView}
+              onValueChange={(view) => {
+                if (view)
+                  setCurrentView(
+                    view as
+                      | 'draw'
+                      | 'list'
+                      | 'calendar'
+                      | 'analysis'
+                      | 'community'
+                  );
+              }}
+              defaultValue="draw"
+              className="flex-nowrap"
+            >
+              <ToggleGroupItem
+                value="draw"
+                aria-label="Draw cards"
+                className="text-xs sm:text-sm px-2 sm:px-3"
+              >
+                <Shuffle className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">
+                  {t('indexPage.drawView', '抽牌')}
+                </span>
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="list"
+                aria-label="List view"
+                className="text-xs sm:text-sm px-2 sm:px-3"
+              >
+                <List className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">
+                  {t('indexPage.listView')}
+                </span>
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="calendar"
+                aria-label="Calendar view"
+                className="text-xs sm:text-sm px-2 sm:px-3"
+              >
+                <CalendarDays className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">
+                  {t('indexPage.calendarView')}
+                </span>
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="analysis"
+                aria-label="Analysis view"
+                className="text-xs sm:text-sm px-2 sm:px-3"
+              >
+                <PieChart className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">
+                  {t('indexPage.analysisView')}
+                </span>
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="community"
+                aria-label="Community"
+                className="text-xs sm:text-sm px-2 sm:px-3"
+              >
+                <Globe className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">
+                  {t('indexPage.communityView', '社群')}
+                </span>
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
         </div>
 
         {/* Statistics */}
-        {currentView !== 'analysis' && currentView !== 'draw' && currentView !== 'community' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex items-center">
-                  <BookOpen className="w-5 h-5 mr-2 text-primary" />
-                  {t('indexPage.totalEntriesCardTitle')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {isLoading ? (
-                  <div className="text-sm text-muted-foreground">
-                    Loading...
-                  </div>
-                ) : (
-                  <>
-                    <div className="text-3xl font-bold text-purple-600">
-                      {totalEntries}
+        {currentView !== 'analysis' &&
+          currentView !== 'draw' &&
+          currentView !== 'community' && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-center">
+                    <BookOpen className="w-5 h-5 mr-2 text-primary" />
+                    {t('indexPage.totalEntriesCardTitle')}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {isLoading ? (
+                    <div className="text-sm text-muted-foreground">
+                      Loading...
                     </div>
-                    <p className="text-muted-foreground text-sm">
-                      {t('indexPage.entriesCountSuffix')}
-                    </p>
-                  </>
-                )}
-              </CardContent>
-            </Card>
+                  ) : (
+                    <>
+                      <div className="text-3xl font-bold text-purple-600">
+                        {totalEntries}
+                      </div>
+                      <p className="text-muted-foreground text-sm">
+                        {t('indexPage.entriesCountSuffix')}
+                      </p>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex items-start">
-                  <TrendingUp className="w-5 h-5 mr-2 text-accent text-black" />
-                  {t('indexPage.mostFrequentCardTitle')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {mostFrequentCard ? (
-                  <div>
-                    <div className="text-m text-gray-900 capitalize">
-                      {/* Try tarot cards first, then lenormand cards */}
-                      {t(`tarotCards.${mostFrequentCard.name}.name`, {
-                        defaultValue: t(
-                          `lenormandCards.${mostFrequentCard.name}.name`,
-                          {
-                            defaultValue: mostFrequentCard.name,
-                          }
-                        ),
-                      })}
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-start">
+                    <TrendingUp className="w-5 h-5 mr-2 text-accent text-black" />
+                    {t('indexPage.mostFrequentCardTitle')}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {mostFrequentCard ? (
+                    <div>
+                      <div className="text-m text-gray-900 capitalize">
+                        {/* Try tarot cards first, then lenormand cards */}
+                        {t(`tarotCards.${mostFrequentCard.name}.name`, {
+                          defaultValue: t(
+                            `lenormandCards.${mostFrequentCard.name}.name`,
+                            {
+                              defaultValue: mostFrequentCard.name,
+                            }
+                          ),
+                        })}
+                      </div>
+                      <p className="text-muted-foreground  text-sm">
+                        {t('indexPage.cardOccurrence', {
+                          count: mostFrequentCard.count,
+                        })}
+                      </p>
                     </div>
-                    <p className="text-muted-foreground  text-sm">
-                      {t('indexPage.cardOccurrence', {
-                        count: mostFrequentCard.count,
-                      })}
+                  ) : (
+                    <p className="text-muted-foreground">
+                      {t('indexPage.noData')}
                     </p>
-                  </div>
-                ) : (
-                  <p className="text-muted-foreground">
-                    {t('indexPage.noData')}
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+                  )}
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">
-                  {t('indexPage.categoryStatsTitle')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-1">
-                  {sortedCategoryCounts.slice(0, 3).map((category) => (
-                    <div
-                      key={category.id}
-                      className="flex justify-between items-center"
-                    >
-                      <span className="text-m flex items-center gap-1">
-                        {category.icon && renderCategoryIcon(category.icon)} -{' '}
-                        {t(
-                          `journalEditor.categories.${category.name}`,
-                          category.name
-                        )}
-                      </span>
-                      <span className="text-sm font-medium">
-                        {category.count}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">
+                    {t('indexPage.categoryStatsTitle')}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-1">
+                    {sortedCategoryCounts.slice(0, 3).map((category) => (
+                      <div
+                        key={category.id}
+                        className="flex justify-between items-center"
+                      >
+                        <span className="text-m flex items-center gap-1">
+                          {category.icon && renderCategoryIcon(category.icon)} -{' '}
+                          {t(
+                            `journalEditor.categories.${category.name}`,
+                            category.name
+                          )}
+                        </span>
+                        <span className="text-sm font-medium">
+                          {category.count}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
         {/* Main Content */}
         {isLoading ? (
@@ -486,8 +528,11 @@ const Index = () => {
                     .map((tok) => {
                       const [prefix, ...rest] = tok.split('-');
                       const isReverse = rest[rest.length - 1] === 'reverse';
-                      const cardKey = isReverse ? rest.slice(0, -1).join('-') : rest.join('-');
-                      if (prefix === 't') return `#t-${cardKey}${isReverse ? '-reverse' : ''}`;
+                      const cardKey = isReverse
+                        ? rest.slice(0, -1).join('-')
+                        : rest.join('-');
+                      if (prefix === 't')
+                        return `#t-${cardKey}${isReverse ? '-reverse' : ''}`;
                       return `#l-${cardKey}`;
                     })
                     .join(' ');
