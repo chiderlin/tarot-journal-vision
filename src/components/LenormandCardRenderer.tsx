@@ -13,83 +13,10 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-// Import all lenormand card images
-import lenormandRider from '@/assets/lenormand/1-rider.png';
-import lenormandClover from '@/assets/lenormand/2-clover.png';
-import lenormandShip from '@/assets/lenormand/3-ship.png';
-import lenormandHouse from '@/assets/lenormand/4-house.png';
-import lenormandTree from '@/assets/lenormand/5-tree.png';
-import lenormandCloud from '@/assets/lenormand/6-cloud.png';
-import lenormandSnake from '@/assets/lenormand/7-snake.png';
-import lenormandCoffin from '@/assets/lenormand/8-coffin.png';
-import lenormandBouquet from '@/assets/lenormand/9-bouquet.png';
-import lenormandScythe from '@/assets/lenormand/10-scythe.png';
-import lenormandWhip from '@/assets/lenormand/11-whip.png';
-import lenormandBirds from '@/assets/lenormand/12-birds.png';
-import lenormandChild from '@/assets/lenormand/13-child.png';
-import lenormandFox from '@/assets/lenormand/14-fox.png';
-import lenormandBear from '@/assets/lenormand/15-bear.png';
-import lenormandStar from '@/assets/lenormand/16-star.png';
-import lenormandStork from '@/assets/lenormand/17-stork.png';
-import lenormandDog from '@/assets/lenormand/18-dog.png';
-import lenormandTower from '@/assets/lenormand/19-tower.png';
-import lenormandGarden from '@/assets/lenormand/20-garden.png';
-import lenormandMountain from '@/assets/lenormand/21-mountain.png';
-import lenormandCrossroads from '@/assets/lenormand/22-crossroads.png';
-import lenormandMice from '@/assets/lenormand/23-mice.png';
-import lenormandHeart from '@/assets/lenormand/24-heart.png';
-import lenormandRing from '@/assets/lenormand/25-ring.png';
-import lenormandBook from '@/assets/lenormand/26-book.png';
-import lenormandLetter from '@/assets/lenormand/27-letter.png';
-import lenormandGentleman from '@/assets/lenormand/28-gentleman.png';
-import lenormandLady from '@/assets/lenormand/29-lady.png';
-import lenormandLily from '@/assets/lenormand/30-lily.png';
-import lenormandSun from '@/assets/lenormand/31-sun.png';
-import lenormandMoon from '@/assets/lenormand/32-moon.png';
-import lenormandKey from '@/assets/lenormand/33-key.png';
-import lenormandFish from '@/assets/lenormand/34-fish.png';
-import lenormandAnchor from '@/assets/lenormand/35-anchor.png';
-import lenormandCross from '@/assets/lenormand/36-cross.png';
+import { lenormandImages } from '@/lib/cardImages';
 
-// Map card names to their images
-const cardImages: Record<string, string> = {
-  rider: lenormandRider,
-  clover: lenormandClover,
-  ship: lenormandShip,
-  house: lenormandHouse,
-  tree: lenormandTree,
-  cloud: lenormandCloud,
-  snake: lenormandSnake,
-  coffin: lenormandCoffin,
-  bouquet: lenormandBouquet,
-  scythe: lenormandScythe,
-  whip: lenormandWhip,
-  birds: lenormandBirds,
-  child: lenormandChild,
-  fox: lenormandFox,
-  bear: lenormandBear,
-  star: lenormandStar,
-  stork: lenormandStork,
-  dog: lenormandDog,
-  tower: lenormandTower,
-  garden: lenormandGarden,
-  mountain: lenormandMountain,
-  crossroads: lenormandCrossroads,
-  mice: lenormandMice,
-  heart: lenormandHeart,
-  ring: lenormandRing,
-  book: lenormandBook,
-  letter: lenormandLetter,
-  gentleman: lenormandGentleman,
-  lady: lenormandLady,
-  lily: lenormandLily,
-  sun: lenormandSun,
-  moon: lenormandMoon,
-  key: lenormandKey,
-  fish: lenormandFish,
-  anchor: lenormandAnchor,
-  cross: lenormandCross,
-};
+// Map card names to their images (loaded from S3)
+const cardImages: Record<string, string> = lenormandImages;
 
 interface LenormandCardRendererProps {
   cardName: string;
